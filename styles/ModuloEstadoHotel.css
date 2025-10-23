@@ -4,6 +4,10 @@
     gap: 1rem;
 }
 .estado-hotel-slot{
-    background-color: blueviolet;
+    background-color: rgb(1, 91, 1);
+    color: white;
+    font-weight: bold;
     height: 11rem;
+    border-radius: 1rem;
+    padding: 0.5rem;
 }
