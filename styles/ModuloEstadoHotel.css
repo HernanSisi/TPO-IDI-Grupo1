@@ -1,0 +1,9 @@
+.estado-general-hotel{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 1rem;
+}
+.estado-hotel-slot{
+    background-color: blueviolet;
+    height: 11rem;
+}
