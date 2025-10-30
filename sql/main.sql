@@ -107,17 +107,17 @@ CREATE TABLE Reserva_Huesped(
 );
 
 -- Tabla: Proovedor — Registra proveedores (CUIL/CUIT, contacto, razón social y email).
-CREATE TABLE Proovedor(
-    CUIL_CUIT_Proovedor VARCHAR(15) PRIMARY KEY,
-    Nombre_Proovedor VARCHAR(100) NOT NULL,
-    Telefono_Proovedor VARCHAR(20) NOT NULL,
-    Razon_Social_Proovedor VARCHAR(150) NOT NULL,
-    Email_Proovedor VARCHAR(100) NOT NULL UNIQUE
-        CONSTRAINT chk_Email_Formato_Proovedor
+CREATE TABLE Proveedor(
+    CUIL_CUIT_Proveedor VARCHAR(15) PRIMARY KEY,
+    Nombre_Proveedor VARCHAR(100) NOT NULL,
+    Telefono_Proveedor VARCHAR(20) NOT NULL,
+    Razon_Social_Proveedor VARCHAR(150) NOT NULL,
+    Email_Proveedor VARCHAR(100) NOT NULL UNIQUE
+        CONSTRAINT chk_Email_Formato_Proveedor
         CHECK (
-            Email_Proovedor LIKE '%@%._%'
-            AND CHARINDEX(' ', Email_Proovedor) = 0
-            AND LEN(Email_Proovedor) BETWEEN 5 AND 100)
+            Email_Proveedor LIKE '%@%._%'
+            AND CHARINDEX(' ', Email_Proveedor) = 0
+            AND LEN(Email_Proveedor) BETWEEN 5 AND 100)
 );   
 
 -- Tabla: Producto — Catálogo de productos con precio, stock y umbral de alerta.
@@ -133,7 +133,7 @@ CREATE TABLE Producto(
 CREATE TABLE Pedido(
     ID_Pedido INT IDENTITY(1,1) PRIMARY KEY,
     Fecha_Pedido DATETIME NOT NULL DEFAULT GETDATE(),
-    CUIL_CUIT_Proovedor VARCHAR(15) NOT NULL CONSTRAINT FK_Pedido_Proovedor FOREIGN KEY REFERENCES Proovedor(CUIL_CUIT_Proovedor)
+    CUIL_CUIT_Proveedor VARCHAR(15) NOT NULL CONSTRAINT FK_Pedido_Proveedor FOREIGN KEY REFERENCES Proveedor(CUIL_CUIT_Proveedor)
 );
 
 -- Tabla: Pedido_Producto — Detalle de productos en cada pedido (cantidad y costo por unidad).
