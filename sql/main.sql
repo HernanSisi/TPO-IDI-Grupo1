@@ -1,4 +1,4 @@
-
+use hotel
 -- Tabla: Categoria — Define categorías de huéspedes con su nombre y descuento aplicable.
 CREATE TABLE Categoria(
     ID_Categoria INT IDENTITY(1,1) PRIMARY KEY,
@@ -43,13 +43,18 @@ CREATE TABLE HUESPED (
         FOREIGN KEY (ID_Categoria) REFERENCES Categoria(ID_Categoria)
 );
 
+CREATE TABLE TipoHabitacion(
+    ID_Tipo_Habitacion INT PRIMARY KEY IDENTITY(1,1),
+    Nombre_Tipo_Habitacion VARCHAR(50) NOT NULL,
+    Precio_Habitacion DECIMAL(10,2) NOT NULL CHECK (Precio_Habitacion >= 0),
+    Capacidad_Habitacion INT NOT NULL CHECK (Capacidad_Habitacion > 0)
+)
 -- Tabla: Habitacion — Define habitaciones (número, estado, tipo, precio y capacidad).
 CREATE TABLE Habitacion(
     ID_Nro_Habitacion INT PRIMARY KEY,
     Estado_Habitacion BIT NOT NULL DEFAULT 1,
-    Tipo_Habitacion VARCHAR(50) NOT NULL,
-    Precio_Habitacion DECIMAL(10,2) NOT NULL CHECK (Precio_Habitacion >= 0),
-    Capacidad_Habitacion INT NOT NULL CHECK (Capacidad_Habitacion > 0)
+    Tipo_Habitacion INT FOREIGN KEY REFERENCES TipoHabitacion(ID_Tipo_Habitacion),
+    
 )
 
 
@@ -154,7 +159,8 @@ CREATE TABLE Gasto(
     Cantidad_Producto INT NOT NULL CHECK (Cantidad_Producto > 0),
     ID_Personal VARCHAR(15) NOT NULL CONSTRAINT FK_Gasto_Personal FOREIGN KEY REFERENCES Personal(CUIL_Personal),
     ID_Reserva INT NOT NULL CONSTRAINT FK_Gasto_Reserva FOREIGN KEY REFERENCES Reserva(ID_Reserva),
-    Origen_Gasto INT NOT NULL CONSTRAINT FK_Gasto_Origen FOREIGN KEY REFERENCES Origen(ID_Origen)
+    Origen_Gasto INT NOT NULL CONSTRAINT FK_Gasto_Origen FOREIGN KEY REFERENCES Origen(ID_Origen),
+    Estado_Gasto BIT NOT NULL DEFAULT 1
 );
 
 -- Tabla INTERMEDIA: Cobro_Gasto — Relaciona cobros con gastos (cada gasto puede tener un cobro asociado).
