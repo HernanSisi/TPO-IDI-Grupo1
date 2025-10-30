@@ -1,3 +1,4 @@
+
 -- Tabla: Categoria — Define categorías de huéspedes con su nombre y descuento aplicable.
 CREATE TABLE Categoria(
     ID_Categoria INT IDENTITY(1,1) PRIMARY KEY,
@@ -9,9 +10,9 @@ CREATE TABLE Categoria(
 
 -- Tabla: Rol — Define los roles del personal (nombre y descripción).
 CREATE TABLE Rol(
-ID_Rol INT IDENTITY(1,1) PRIMARY KEY,
-Nombre_Rol VARCHAR(50) NOT NULL UNIQUE,
-Descripcion_Rol VARCHAR(200) NOT NULL
+	ID_Rol INT IDENTITY(1,1) PRIMARY KEY,
+	Nombre_Rol VARCHAR(50) NOT NULL UNIQUE,
+	Descripcion_Rol VARCHAR(200) NOT NULL
 )
 
 
@@ -109,9 +110,8 @@ CREATE TABLE Reserva_Huesped(
 -- Tabla: Proovedor — Registra proveedores (CUIL/CUIT, contacto, razón social y email).
 CREATE TABLE Proveedor(
     CUIL_CUIT_Proveedor VARCHAR(15) PRIMARY KEY,
-    Nombre_Proveedor VARCHAR(100) NOT NULL,
+	Razon_Social_Proveedor VARCHAR(150) NOT NULL, --Una razón social es el nombre legal/ de fantasía de una persona jurídica.
     Telefono_Proveedor VARCHAR(20) NOT NULL,
-    Razon_Social_Proveedor VARCHAR(150) NOT NULL,
     Email_Proveedor VARCHAR(100) NOT NULL UNIQUE
         CONSTRAINT chk_Email_Formato_Proveedor
         CHECK (
@@ -136,7 +136,7 @@ CREATE TABLE Pedido(
     CUIL_CUIT_Proveedor VARCHAR(15) NOT NULL CONSTRAINT FK_Pedido_Proveedor FOREIGN KEY REFERENCES Proveedor(CUIL_CUIT_Proveedor)
 );
 
--- Tabla: Pedido_Producto — Detalle de productos en cada pedido (cantidad y costo por unidad).
+-- Tabla INTERMEDIA: Pedido_Producto — Detalle de productos en cada pedido (cantidad y costo por unidad).
 CREATE TABLE Pedido_Producto(
     ID_Pedido INT NOT NULL CONSTRAINT FK_PedidoProducto_Pedido FOREIGN KEY REFERENCES Pedido(ID_Pedido),
     ID_Producto INT NOT NULL CONSTRAINT FK_PedidoProducto_Producto FOREIGN KEY REFERENCES Producto(ID_Producto),
@@ -157,7 +157,7 @@ CREATE TABLE Gasto(
     Origen_Gasto INT NOT NULL CONSTRAINT FK_Gasto_Origen FOREIGN KEY REFERENCES Origen(ID_Origen)
 );
 
--- Tabla: Cobro_Gasto — Relaciona cobros con gastos (cada gasto puede tener un cobro asociado).
+-- Tabla INTERMEDIA: Cobro_Gasto — Relaciona cobros con gastos (cada gasto puede tener un cobro asociado).
 CREATE TABLE Cobro_Gasto(
     ID_Cobro INT NOT NULL CONSTRAINT FK_CobroGasto_Cobro FOREIGN KEY REFERENCES Cobro(ID_Cobro),
     ID_Gasto INT NOT NULL UNIQUE CONSTRAINT FK_CobroGasto_Gasto FOREIGN KEY REFERENCES Gasto(ID_Gasto),
