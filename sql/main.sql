@@ -1,4 +1,3 @@
-use hotel
 -- Tabla: Categoria — Define categorías de huéspedes con su nombre y descuento aplicable.
 CREATE TABLE Categoria(
     ID_Categoria INT IDENTITY(1,1) PRIMARY KEY,
@@ -24,7 +23,8 @@ CREATE TABLE Origen(
 
 -- Tabla: HUESPED — Registra huéspedes (CUIL, email, nombres, apellidos, fecha de nacimiento y categoría).
 CREATE TABLE HUESPED (
-    CUIL_Huesped VARCHAR(15) PRIMARY KEY,
+    ID_Huesped INT PRIMARY KEY IDENTITY(1,1),
+    Cedula_Huesped VARCHAR(50) NOT NULL UNIQUE,
     Estado_Huesped BIT NOT NULL DEFAULT 1,
     Email_Huesped VARCHAR(100) NOT NULL UNIQUE
         CONSTRAINT chk_Email_Formato
@@ -74,7 +74,8 @@ CREATE TABLE Cobro(
 
 -- Tabla: Personal — Registra al personal (CUIL, email, datos personales, fecha de contratación y rol).
 CREATE TABLE Personal(
-    CUIL_Personal VARCHAR(15) PRIMARY KEY,
+    ID_Personal INT PRIMARY KEY IDENTITY(1,1),
+    Cedula_Personal VARCHAR(50) NOT NULL UNIQUE,
     Estado_Personal BIT NOT NULL DEFAULT 1,
     Email_Personal VARCHAR(100) NOT NULL UNIQUE
         CONSTRAINT chk_Email_Formato_Personal
@@ -98,7 +99,7 @@ CREATE TABLE Personal(
 CREATE TABLE Reserva(
     ID_Reserva INT IDENTITY(1,1) PRIMARY KEY,
     Fecha_Reserva DATETIME NOT NULL DEFAULT GETDATE(),
-    Titular_Reserva VARCHAR(15) NOT NULL CONSTRAINT FK_Reserva_Huesped FOREIGN KEY REFERENCES HUESPED(CUIL_Huesped),
+    Titular_Reserva INT NOT NULL CONSTRAINT FK_Reserva_Huesped FOREIGN KEY REFERENCES HUESPED(ID_Huesped),
     ID_Habitacion INT NOT NULL CONSTRAINT FK_Reserva_Habitacion FOREIGN KEY REFERENCES Habitacion(ID_Nro_Habitacion),
     Fecha_CheckIn DATETIME NOT NULL,
     Fecha_CheckOut DATETIME NOT NULL,
@@ -108,8 +109,8 @@ CREATE TABLE Reserva(
 -- Tabla: Reserva_Huesped — Relación N:N entre reservas y huéspedes (participantes en una reserva).
 CREATE TABLE Reserva_Huesped(
     ID_Reserva INT NOT NULL CONSTRAINT FK_ReservaHuesped_Reserva FOREIGN KEY REFERENCES Reserva(ID_Reserva),
-    CUIL_Huesped VARCHAR(15) NOT NULL CONSTRAINT FK_ReservaHuesped_Huesped FOREIGN KEY REFERENCES HUESPED(CUIL_Huesped),
-    PRIMARY KEY (ID_Reserva, CUIL_Huesped)
+    ID_Huesped INT NOT NULL CONSTRAINT FK_ReservaHuesped_Huesped FOREIGN KEY REFERENCES HUESPED(ID_Huesped),
+    PRIMARY KEY (ID_Reserva, ID_Huesped)
 );
 
 -- Tabla: Proovedor — Registra proveedores (CUIL/CUIT, contacto, razón social y email).
@@ -157,7 +158,7 @@ CREATE TABLE Gasto(
     Fecha_Gasto DATETIME NOT NULL DEFAULT GETDATE(),
     Producto_Gasto int NOT NULL CONSTRAINT FK_Gasto_Producto FOREIGN KEY REFERENCES Producto(ID_Producto),
     Cantidad_Producto INT NOT NULL CHECK (Cantidad_Producto > 0),
-    ID_Personal VARCHAR(15) NOT NULL CONSTRAINT FK_Gasto_Personal FOREIGN KEY REFERENCES Personal(CUIL_Personal),
+    ID_Personal INT NOT NULL CONSTRAINT FK_Gasto_Personal FOREIGN KEY REFERENCES Personal(ID_Personal),
     ID_Reserva INT NOT NULL CONSTRAINT FK_Gasto_Reserva FOREIGN KEY REFERENCES Reserva(ID_Reserva),
     Origen_Gasto INT NOT NULL CONSTRAINT FK_Gasto_Origen FOREIGN KEY REFERENCES Origen(ID_Origen),
     Estado_Gasto BIT NOT NULL DEFAULT 1
