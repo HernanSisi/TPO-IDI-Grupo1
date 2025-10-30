@@ -1,3 +1,4 @@
+-- Tabla: Categoria — Define categorías de huéspedes con su nombre y descuento aplicable.
 CREATE TABLE Categoria(
     ID_Categoria INT IDENTITY(1,1) PRIMARY KEY,
     Nombre_Categoria VARCHAR(75) NOT NULL,
@@ -6,6 +7,7 @@ CREATE TABLE Categoria(
         DEFAULT 0
 );
 
+-- Tabla: Rol — Define los roles del personal (nombre y descripción).
 CREATE TABLE Rol(
 ID_Rol INT IDENTITY(1,1) PRIMARY KEY,
 Nombre_Rol VARCHAR(50) NOT NULL UNIQUE,
@@ -13,11 +15,13 @@ Descripcion_Rol VARCHAR(200) NOT NULL
 )
 
 
+-- Tabla: Origen — Catálogo de orígenes para gastos/u otras referencias.
 CREATE TABLE Origen(
     ID_Origen INT IDENTITY(1,1) PRIMARY KEY,
     Nombre_Origen VARCHAR(100) NOT NULL UNIQUE
 )
 
+-- Tabla: HUESPED — Registra huéspedes (CUIL, email, nombres, apellidos, fecha de nacimiento y categoría).
 CREATE TABLE HUESPED (
     CUIL_Huesped VARCHAR(15) PRIMARY KEY,
     Estado_Huesped BIT NOT NULL DEFAULT 1,
@@ -38,6 +42,7 @@ CREATE TABLE HUESPED (
         FOREIGN KEY (ID_Categoria) REFERENCES Categoria(ID_Categoria)
 );
 
+-- Tabla: Habitacion — Define habitaciones (número, estado, tipo, precio y capacidad).
 CREATE TABLE Habitacion(
     ID_Nro_Habitacion INT PRIMARY KEY,
     Estado_Habitacion BIT NOT NULL DEFAULT 1,
@@ -48,17 +53,20 @@ CREATE TABLE Habitacion(
 
 
 
+-- Tabla: MetodoPago — Lista de métodos de pago disponibles.
 CREATE TABLE MetodoPago(
     ID_MetodoPago INT IDENTITY(1,1) PRIMARY KEY,
     Nombre_MetodoPago VARCHAR(50) NOT NULL,
 )
 
+-- Tabla: Cobro — Registra cobros realizados (fecha y método de cobro).
 CREATE TABLE Cobro(
     ID_Cobro INT IDENTITY(1,1) PRIMARY KEY,
     Fecha_Cobro DATETIME NOT NULL DEFAULT GETDATE(),
     Metodo_Cobro INT FOREIGN KEY REFERENCES MetodoPago(ID_MetodoPago)
 )
 
+-- Tabla: Personal — Registra al personal (CUIL, email, datos personales, fecha de contratación y rol).
 CREATE TABLE Personal(
     CUIL_Personal VARCHAR(15) PRIMARY KEY,
     Estado_Personal BIT NOT NULL DEFAULT 1,
@@ -80,6 +88,7 @@ CREATE TABLE Personal(
         FOREIGN KEY (ID_Rol) REFERENCES Rol(ID_Rol)
 );
 
+-- Tabla: Reserva — Registra reservas (titular, habitación, fechas de check-in/out y fecha de reserva).
 CREATE TABLE Reserva(
     ID_Reserva INT IDENTITY(1,1) PRIMARY KEY,
     Fecha_Reserva DATETIME NOT NULL DEFAULT GETDATE(),
@@ -90,12 +99,14 @@ CREATE TABLE Reserva(
     CONSTRAINT chk_Fecha_CheckOut CHECK (Fecha_CheckOut > Fecha_CheckIn)
 );
 
+-- Tabla: Reserva_Huesped — Relación N:N entre reservas y huéspedes (participantes en una reserva).
 CREATE TABLE Reserva_Huesped(
     ID_Reserva INT NOT NULL CONSTRAINT FK_ReservaHuesped_Reserva FOREIGN KEY REFERENCES Reserva(ID_Reserva),
     CUIL_Huesped VARCHAR(15) NOT NULL CONSTRAINT FK_ReservaHuesped_Huesped FOREIGN KEY REFERENCES HUESPED(CUIL_Huesped),
     PRIMARY KEY (ID_Reserva, CUIL_Huesped)
 );
 
+-- Tabla: Proovedor — Registra proveedores (CUIL/CUIT, contacto, razón social y email).
 CREATE TABLE Proovedor(
     CUIL_CUIT_Proovedor VARCHAR(15) PRIMARY KEY,
     Nombre_Proovedor VARCHAR(100) NOT NULL,
@@ -109,6 +120,7 @@ CREATE TABLE Proovedor(
             AND LEN(Email_Proovedor) BETWEEN 5 AND 100)
 );   
 
+-- Tabla: Producto — Catálogo de productos con precio, stock y umbral de alerta.
 CREATE TABLE Producto(
     ID_Producto INT IDENTITY(1,1) PRIMARY KEY,
     Nombre_Producto VARCHAR(100) NOT NULL,
@@ -117,12 +129,14 @@ CREATE TABLE Producto(
     Stock_Producto INT NOT NULL CHECK (Stock_Producto >= 0)
 );
 
+-- Tabla: Pedido — Registra pedidos a proveedores (fecha y proveedor asociado).
 CREATE TABLE Pedido(
     ID_Pedido INT IDENTITY(1,1) PRIMARY KEY,
     Fecha_Pedido DATETIME NOT NULL DEFAULT GETDATE(),
     CUIL_CUIT_Proovedor VARCHAR(15) NOT NULL CONSTRAINT FK_Pedido_Proovedor FOREIGN KEY REFERENCES Proovedor(CUIL_CUIT_Proovedor)
 );
 
+-- Tabla: Pedido_Producto — Detalle de productos en cada pedido (cantidad y costo por unidad).
 CREATE TABLE Pedido_Producto(
     ID_Pedido INT NOT NULL CONSTRAINT FK_PedidoProducto_Pedido FOREIGN KEY REFERENCES Pedido(ID_Pedido),
     ID_Producto INT NOT NULL CONSTRAINT FK_PedidoProducto_Producto FOREIGN KEY REFERENCES Producto(ID_Producto),
@@ -131,6 +145,7 @@ CREATE TABLE Pedido_Producto(
     Costo_unidad DECIMAL(10,2) NOT NULL CHECK (Costo_unidad >= 0)
 );
 
+-- Tabla: Gasto — Registra gastos asociados a reservas, personal y productos (importe, cantidad y origen).
 CREATE TABLE Gasto(
     ID_Gasto INT IDENTITY(1,1) PRIMARY KEY,
     Importe DECIMAL(10,2) NOT NULL CHECK (Importe >= 0),
@@ -142,6 +157,7 @@ CREATE TABLE Gasto(
     Origen_Gasto INT NOT NULL CONSTRAINT FK_Gasto_Origen FOREIGN KEY REFERENCES Origen(ID_Origen)
 );
 
+-- Tabla: Cobro_Gasto — Relaciona cobros con gastos (cada gasto puede tener un cobro asociado).
 CREATE TABLE Cobro_Gasto(
     ID_Cobro INT NOT NULL CONSTRAINT FK_CobroGasto_Cobro FOREIGN KEY REFERENCES Cobro(ID_Cobro),
     ID_Gasto INT NOT NULL UNIQUE CONSTRAINT FK_CobroGasto_Gasto FOREIGN KEY REFERENCES Gasto(ID_Gasto),
