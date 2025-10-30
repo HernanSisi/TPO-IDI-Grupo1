@@ -1,4 +1,3 @@
-use hotel
 -- Tabla: Categoria — Define categorías de huéspedes con su nombre y descuento aplicable.
 CREATE TABLE Categoria(
     ID_Categoria INT IDENTITY(1,1) PRIMARY KEY,
