@@ -101,8 +101,10 @@ CREATE TABLE Reserva(
     Fecha_Reserva DATETIME NOT NULL DEFAULT GETDATE(),
     Titular_Reserva INT NOT NULL CONSTRAINT FK_Reserva_Huesped FOREIGN KEY REFERENCES HUESPED(ID_Huesped),
     ID_Habitacion INT NOT NULL CONSTRAINT FK_Reserva_Habitacion FOREIGN KEY REFERENCES Habitacion(ID_Nro_Habitacion),
-    Fecha_CheckIn DATETIME NOT NULL,
-    Fecha_CheckOut DATETIME NOT NULL,
+    Fecha_Reserva_Inicio DATETIME NOT NULL,
+    Fecha_Reserva_Fin DATETIME NOT NULL CONSTRAINT chk_Fecha_Reserva_Fin CHECK (Fecha_Reserva_Fin > Fecha_Reserva_Inicio),
+    Fecha_CheckIn DATETIME,
+    Fecha_CheckOut DATETIME,
     CONSTRAINT chk_Fecha_CheckOut CHECK (Fecha_CheckOut > Fecha_CheckIn)
 );
 
