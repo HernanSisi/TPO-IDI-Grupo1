@@ -158,7 +158,7 @@ CREATE TABLE Gasto(
     ID_Gasto INT IDENTITY(1,1) PRIMARY KEY,
     Importe DECIMAL(10,2) NOT NULL CHECK (Importe >= 0),
     Fecha_Gasto DATETIME NOT NULL DEFAULT GETDATE(),
-    Producto_Gasto int NOT NULL CONSTRAINT FK_Gasto_Producto FOREIGN KEY REFERENCES Producto(ID_Producto),
+    Producto_Gasto int CONSTRAINT FK_Gasto_Producto FOREIGN KEY REFERENCES Producto(ID_Producto),
     Cantidad_Producto INT NOT NULL CHECK (Cantidad_Producto > 0),
     ID_Personal INT NOT NULL CONSTRAINT FK_Gasto_Personal FOREIGN KEY REFERENCES Personal(ID_Personal),
     ID_Reserva INT NOT NULL CONSTRAINT FK_Gasto_Reserva FOREIGN KEY REFERENCES Reserva(ID_Reserva),
