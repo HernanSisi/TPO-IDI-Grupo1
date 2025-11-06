@@ -1,7 +1,7 @@
 -- PROCEDIMIENTOS ALMACENADOS.
 
 -- Para categoría: READ y DELETE
-
+go
 CREATE PROCEDURE SP_ReadCategoria
 AS
 BEGIN
@@ -9,6 +9,9 @@ BEGIN
 END;
 
 EXEC SP_ReadCategoria;
+
+
+go
 
 CREATE PROCEDURE SP_DeleteCategoria
 	@ID_Categoria int
@@ -22,7 +25,7 @@ EXEC SP_DeleteCategoria 1;
 
 
 -- Rol: READ y DELETE
-
+go
 CREATE PROCEDURE SP_ReadRol
 AS
 BEGIN
@@ -31,6 +34,7 @@ END;
 
 EXEC SP_ReadRol;
 
+go
 CREATE PROCEDURE SP_DeleteRol
 	@ID_Rol int
 AS
@@ -41,6 +45,7 @@ END;
 
 EXEC SP_DeleteRol 1;
 
+go
 -- Origen: READ y DELETE
 CREATE PROCEDURE SP_ReadOrigen
 AS
@@ -50,6 +55,7 @@ END;
 
 EXEC SP_ReadOrigen;
 
+go
 CREATE PROCEDURE SP_DeleteOrigen
 	@ID_Origen int
 AS
@@ -60,13 +66,13 @@ END;
 
 EXEC SP_DeleteOrigen 1;
 
-
+go
 -- HUESPED: INSERT y UPDATE
 
 -- COMPROBAR EN AMBOS QUE LOS EMAIL NO COINCIDAN CON UN EMAIL DE PERSONAL.
 CREATE PROCEDURE SP_InsertHuesped
 
-	@CUIL_Huesped int, 
+	@Cedula_Huesped varchar(50), 
 	@Estado_Huesped bit, 
 	@Email_Huesped varchar(100), 
 	@Nombre1_Huesped varchar(50), 
@@ -78,15 +84,16 @@ CREATE PROCEDURE SP_InsertHuesped
 
 AS 
 BEGIN 
-	INSERT INTO HUESPED (CUIL_Huesped, Estado_Huesped, Email_Huesped, Nombre1_Huesped, Nombre2_Huesped, Apellido1_Huesped, Apellido2_Huesped, Fecha_Nacimiento_Huesped, ID_Categoria) 
-	VALUES (@CUIL_Huesped, @Estado_Huesped, @Email_Huesped, @Nombre1_Huesped, @Nombre2_Huesped, @Apellido1_Huesped, @Apellido2_Huesped, @Fecha_Nacimiento_Huesped, @ID_Categoria);
+	INSERT INTO HUESPED (Cedula_Huesped, Estado_Huesped, Email_Huesped, Nombre1_Huesped, Nombre2_Huesped, Apellido1_Huesped, Apellido2_Huesped, Fecha_Nacimiento_Huesped, ID_Categoria) 
+	VALUES (@Cedula_Huesped, @Estado_Huesped, @Email_Huesped, @Nombre1_Huesped, @Nombre2_Huesped, @Apellido1_Huesped, @Apellido2_Huesped, @Fecha_Nacimiento_Huesped, @ID_Categoria);
 END;
 
-EXEC SP_InsertHuesped 047028021, null, 'nadia@gmail.com', 'Nadia', 'Zaira', 'Dowhopolyj', null, '11-10-2005', 1;
+EXEC SP_InsertHuesped 047028021, 1, 'nadia@gmail.com', 'Nadia', 'Zaira', 'Dowhopolyj', null, '11-10-2005', 1;
 
+go
 CREATE PROCEDURE SP_UpdateHuesped 
 
-	@CUIL_Huesped int, 
+	@Cedula_Huesped varchar(50), 
 	@Estado_Huesped bit, 
 	@Email_Huesped varchar(100), 
 	@Nombre1_Huesped varchar(50), 
@@ -99,8 +106,7 @@ AS
 BEGIN
 	UPDATE Huesped
 	SET 
-
-	CUIL_Huesped = @CUIL_Huesped, 
+	Cedula_Huesped = @Cedula_Huesped, 
 	Estado_Huesped = @Estado_Huesped, 
 	Email_Huesped = @Email_Huesped, 
 	Nombre1_Huesped = @Nombre1_Huesped, 
@@ -109,11 +115,9 @@ BEGIN
 	Apellido2_Huesped = @Apellido2_Huesped, 
 	Fecha_Nacimiento_Huesped = @Fecha_Nacimiento_Huesped, 
 	ID_Categoria = @ID_Categoria
-
-	WHERE CUIL_Huesped = @CUIL_Huesped;
+	WHERE Cedula_Huesped = @Cedula_Huesped;
 END;
 
-EXEC SP_UpdateHuesped 047028021, null, 'nadia@gmail.com', 'Nadia', 'Zaira', 'Dowhopolyj', null, '11-10-2005', 1;
-
-
+EXEC SP_UpdateHuesped '47028021', 1, 'nadia@gmail.com', 'Nadia', NULL, 'Dowhopolyj', null, '11-10-2005', 1;
+go
 
