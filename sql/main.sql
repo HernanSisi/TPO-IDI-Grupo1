@@ -101,8 +101,10 @@ CREATE TABLE Reserva(
     Fecha_Reserva DATETIME NOT NULL DEFAULT GETDATE(),
     Titular_Reserva INT NOT NULL CONSTRAINT FK_Reserva_Huesped FOREIGN KEY REFERENCES HUESPED(ID_Huesped),
     ID_Habitacion INT NOT NULL CONSTRAINT FK_Reserva_Habitacion FOREIGN KEY REFERENCES Habitacion(ID_Nro_Habitacion),
-    Fecha_CheckIn DATETIME NOT NULL,
-    Fecha_CheckOut DATETIME NOT NULL,
+    Fecha_Reserva_Inicio DATETIME NOT NULL,
+    Fecha_Reserva_Fin DATETIME NOT NULL CONSTRAINT chk_Fecha_Reserva_Fin CHECK (Fecha_Reserva_Fin > Fecha_Reserva_Inicio),
+    Fecha_CheckIn DATETIME,
+    Fecha_CheckOut DATETIME,
     CONSTRAINT chk_Fecha_CheckOut CHECK (Fecha_CheckOut > Fecha_CheckIn)
 );
 
@@ -156,7 +158,7 @@ CREATE TABLE Gasto(
     ID_Gasto INT IDENTITY(1,1) PRIMARY KEY,
     Importe DECIMAL(10,2) NOT NULL CHECK (Importe >= 0),
     Fecha_Gasto DATETIME NOT NULL DEFAULT GETDATE(),
-    Producto_Gasto int NOT NULL CONSTRAINT FK_Gasto_Producto FOREIGN KEY REFERENCES Producto(ID_Producto),
+    Producto_Gasto int CONSTRAINT FK_Gasto_Producto FOREIGN KEY REFERENCES Producto(ID_Producto),
     Cantidad_Producto INT NOT NULL CHECK (Cantidad_Producto > 0),
     ID_Personal INT NOT NULL CONSTRAINT FK_Gasto_Personal FOREIGN KEY REFERENCES Personal(ID_Personal),
     ID_Reserva INT NOT NULL CONSTRAINT FK_Gasto_Reserva FOREIGN KEY REFERENCES Reserva(ID_Reserva),
