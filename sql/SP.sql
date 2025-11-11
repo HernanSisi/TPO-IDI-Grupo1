@@ -70,7 +70,7 @@ go
 -- HUESPED: INSERT y UPDATE
 
 -- COMPROBAR EN AMBOS QUE LOS EMAIL NO COINCIDAN CON UN EMAIL DE PERSONAL.
-CREATE PROCEDURE SP_InsertHuesped
+CREATE PROCEDURE SP_InsertHuesped 
 
 	@Cedula_Huesped varchar(50), 
 	@Estado_Huesped bit, 

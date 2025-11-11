@@ -46,5 +46,3 @@ INSERT INTO Personal([Cedula_Personal], [Estado_Personal], [Email_Personal], [No
 (23890123459, 1, 'diegosilva@gmail.com', 'Diego', 'Alejandro', 'Silva', 'Ortiz', '1987-10-26', '2014-02-20',9),
 (27901234560, 1, 'camilamendez@gmail.com', 'Camila', 'Rocío', 'Méndez', 'Acosta', '1996-06-12', '2022-07-01',10),
 (27488680715, 1, 'lucia.lopez@yahoo.com', 'Lucía', NULL, 'Lopez', 'Giorello', '2004-06-27', '2024-07-02',8);
-
-SELECT * from Personal;

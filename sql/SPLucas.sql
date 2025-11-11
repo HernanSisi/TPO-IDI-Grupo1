@@ -148,3 +148,36 @@ EXEC SP_Personal_Update
 
 
 
+-- SP insertar metodo de pago
+GO
+CREATE PROCEDURE SP_MetodoPago_Insert
+    @Nombre_MetodoPago VARCHAR(50)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    BEGIN TRY
+        -- Normalizo básico (opcional pero útil)
+        SET @Nombre_MetodoPago = LTRIM(RTRIM(@Nombre_MetodoPago));
+
+        IF @Nombre_MetodoPago = ''
+        BEGIN
+            RAISERROR('El nombre del método de pago no puede ser vacío.', 16, 1);
+            RETURN;
+        END
+
+        INSERT INTO MetodoPago (Nombre_MetodoPago)
+        VALUES (@Nombre_MetodoPago);
+
+        -- Devuelvo el ID generado
+        SELECT CAST(SCOPE_IDENTITY() AS INT) AS ID_MetodoPago;
+    END TRY
+    BEGIN CATCH
+        -- Reenvío el error (incluye violación de UNIQUE si hay duplicado)
+        DECLARE @msg NVARCHAR(4000) = ERROR_MESSAGE();
+        RAISERROR(@msg, 16, 1);
+    END CATCH
+END
+GO
+EXEC SP_MetodoPago_Insert @Nombre_MetodoPago = 'Tarjeta de Crédito';
+EXEC SP_MetodoPago_Insert @Nombre_MetodoPago = '';

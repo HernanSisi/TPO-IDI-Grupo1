@@ -61,7 +61,7 @@ CREATE TABLE Habitacion(
 -- Tabla: MetodoPago — Lista de métodos de pago disponibles.
 CREATE TABLE MetodoPago(
     ID_MetodoPago INT IDENTITY(1,1) PRIMARY KEY,
-    Nombre_MetodoPago VARCHAR(50) NOT NULL,
+    Nombre_MetodoPago VARCHAR(50)  NOT NULL UNIQUE
 )
 
 -- Tabla: Cobro — Registra cobros realizados (fecha y método de cobro).
