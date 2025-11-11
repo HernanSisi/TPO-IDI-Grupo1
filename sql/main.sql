@@ -6,7 +6,6 @@ CREATE TABLE Categoria(
         CONSTRAINT chk_DescuentoValido CHECK (Descuento_Categoria BETWEEN 0 AND 100)
         DEFAULT 0
 );
-
 -- Tabla: Rol — Define los roles del personal (nombre y descripción).
 CREATE TABLE Rol(
 	ID_Rol INT IDENTITY(1,1) PRIMARY KEY,
@@ -102,12 +101,12 @@ CREATE TABLE Reserva(
     Titular_Reserva INT NOT NULL CONSTRAINT FK_Reserva_Huesped FOREIGN KEY REFERENCES HUESPED(ID_Huesped),
     ID_Habitacion INT NOT NULL CONSTRAINT FK_Reserva_Habitacion FOREIGN KEY REFERENCES Habitacion(ID_Nro_Habitacion),
     Fecha_Reserva_Inicio DATETIME NOT NULL,
-    Fecha_Reserva_Fin DATETIME NOT NULL CONSTRAINT chk_Fecha_Reserva_Fin CHECK (Fecha_Reserva_Fin > Fecha_Reserva_Inicio),
+    Fecha_Reserva_Fin DATETIME NOT NULL,
     Fecha_CheckIn DATETIME,
     Fecha_CheckOut DATETIME,
+    CONSTRAINT chk_Fecha_Reserva_Fin CHECK (Fecha_Reserva_Fin > Fecha_Reserva_Inicio),
     CONSTRAINT chk_Fecha_CheckOut CHECK (Fecha_CheckOut > Fecha_CheckIn)
 );
-
 -- Tabla: Reserva_Huesped — Relación N:N entre reservas y huéspedes (participantes en una reserva).
 CREATE TABLE Reserva_Huesped(
     ID_Reserva INT NOT NULL CONSTRAINT FK_ReservaHuesped_Reserva FOREIGN KEY REFERENCES Reserva(ID_Reserva),
