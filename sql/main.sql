@@ -44,7 +44,7 @@ CREATE TABLE HUESPED (
 
 CREATE TABLE TipoHabitacion(
     ID_Tipo_Habitacion INT PRIMARY KEY IDENTITY(1,1),
-    Nombre_Tipo_Habitacion VARCHAR(50) NOT NULL,
+    Nombre_Tipo_Habitacion VARCHAR(50) NOT NULL UNIQUE,
     Precio_Habitacion DECIMAL(10,2) NOT NULL CHECK (Precio_Habitacion >= 0),
     Capacidad_Habitacion INT NOT NULL CHECK (Capacidad_Habitacion > 0)
 )
