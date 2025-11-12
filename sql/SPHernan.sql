@@ -1,4 +1,3 @@
-GO
 CREATE PROCEDURE SP_InsertarGasto
     @Importe DECIMAL(10,2),
     @Fecha_Gasto DATETIME = NULL,

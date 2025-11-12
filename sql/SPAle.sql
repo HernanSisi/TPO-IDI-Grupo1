@@ -17,9 +17,10 @@ BEGIN
     INSERT INTO Habitacion (ID_Nro_Habitacion, Estado_Habitacion, Tipo_Habitacion)
     VALUES (@ID_Nro_Habitacion, @Estado_Habitacion, @Tipo_Habitacion);
 END;
-GO
 
 EXEC SP_Insert_Habitacion 1, 1, 1
+
+GO
 
 CREATE PROCEDURE SP_Update_Habitacion
     @ID_Nro_Habitacion int,
