@@ -387,7 +387,9 @@ EXEC SP_ReservaHuesped_Delete
 GO
 
 GO
+
 -- SP Leer Pedido con detalle
+GO
 CREATE PROCEDURE SP_Pedido_Read
     @ID_Pedido INT
 AS
@@ -401,36 +403,30 @@ BEGIN
         RETURN;
     END
 
-    -- Encabezado + total del pedido
-    SELECT 
+    -- Un solo SELECT: encabezado + detalle (una fila por producto)
+    SELECT
         p.ID_Pedido,
         p.Fecha_Pedido,
         pr.CUIL_CUIT_Proveedor,
         pr.Razon_Social_Proveedor,
         pr.Telefono_Proveedor,
         pr.Email_Proveedor,
-        Total_Pedido = (
-            SELECT SUM(pp.Cantidad_Producto * pp.Costo_unidad)
-            FROM Pedido_Producto pp
-            WHERE pp.ID_Pedido = p.ID_Pedido
-        )
-    FROM Pedido p
-    INNER JOIN Proveedor pr ON pr.CUIL_CUIT_Proveedor = p.CUIL_CUIT_Proveedor
-    WHERE p.ID_Pedido = @ID_Pedido;
-
-    -- Detalle del pedido (líneas)
-    SELECT 
         pp.ID_Producto,
         prod.Nombre_Producto,
         pp.Cantidad_Producto,
         pp.Costo_unidad,
-        Subtotal = pp.Cantidad_Producto * pp.Costo_unidad
-    FROM Pedido_Producto pp
-    INNER JOIN Producto prod ON prod.ID_Producto = pp.ID_Producto
-    WHERE pp.ID_Pedido = @ID_Pedido
+        Subtotal     = pp.Cantidad_Producto * pp.Costo_unidad,
+        Total_Pedido = SUM(pp.Cantidad_Producto * pp.Costo_unidad) 
+                       OVER (PARTITION BY p.ID_Pedido)
+    FROM Pedido p
+    INNER JOIN Proveedor pr      ON pr.CUIL_CUIT_Proveedor = p.CUIL_CUIT_Proveedor
+    LEFT  JOIN Pedido_Producto pp ON pp.ID_Pedido = p.ID_Pedido
+    LEFT  JOIN Producto prod      ON prod.ID_Producto = pp.ID_Producto
+    WHERE p.ID_Pedido = @ID_Pedido
     ORDER BY prod.Nombre_Producto;
 END
 GO
+
 EXEC SP_Pedido_Read @ID_Pedido = 2;
 
 
