@@ -259,6 +259,21 @@ BEGIN
         RETURN;
     END
 
+    DECLARE @LimiteHabitacion INT;
+    SELECT @LimiteHabitacion = th.Capacidad_Habitacion
+    FROM Habitacion hab
+    INNER JOIN TipoHabitacion th ON th.ID_Tipo_Habitacion = hab.Tipo_Habitacion
+    INNER JOIN Reserva r ON r.ID_Habitacion = hab.ID_Nro_Habitacion
+    WHERE r.ID_Reserva = @ID_Reserva;
+
+    DECLARE @CantidadHuespedes INT;
+    SELECT @CantidadHuespedes = (COUNT(*) FROM Reserva_Huesped WHERE ID_Reserva = @ID_Reserva) + 1;
+
+    IF @CantidadHuespedes >= @LimiteHabitacion
+    BEGIN
+        RAISERROR ('Error: Se ha alcanzado el límite de huéspedes para esta habitación.', 16, 1);
+        RETURN;
+    END   
     INSERT INTO Reserva_Huesped 
         (ID_Reserva, ID_Huesped)
     VALUES 
