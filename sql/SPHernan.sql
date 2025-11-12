@@ -180,8 +180,92 @@ BEGIN
         SET @Fecha_Pedido = GETDATE();
     END
 
-    INSERT INTO Pedido (CUIL_CUIT_Proveedor, Fecha_Pedido)
-    VALUES (@CUIL_CUIT_Proveedor, @Fecha_Pedido);
+    INSERT INTO Pedido 
+        (CUIL_CUIT_Proveedor, Fecha_Pedido)
+    VALUES 
+        (@CUIL_CUIT_Proveedor, @Fecha_Pedido);
 
 END
+
 GO
+
+CREATE PROCEDURE sp_InsertarCobro
+    @ID_MetodoPago INT,
+    @Fecha_Cobro DATETIME = NULL
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    IF @ID_MetodoPago IS NULL
+    BEGIN
+        RAISERROR ('Error: El método de pago no puede estar vacío.', 16, 1);
+        RETURN;
+    END
+
+    IF NOT EXISTS (SELECT 1 FROM MetodoPago WHERE ID_MetodoPago = @ID_MetodoPago)
+    BEGIN
+        RAISERROR ('Error: El método de pago indicado no existe.', 16, 1);
+        RETURN;
+    END
+
+    IF @Fecha_Cobro IS NULL
+    BEGIN
+        SET @Fecha_Cobro = GETDATE();
+    END
+
+    INSERT INTO Cobro 
+        (Fecha_Cobro, Metodo_Cobro)
+    VALUES 
+        (@Fecha_Cobro, @ID_MetodoPago);
+
+END
+
+GO
+
+CREATE PROCEDURE sp_InsertarReservaHuesped
+    @ID_Reserva INT,
+    @ID_Huesped INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    IF @ID_Reserva IS NULL
+    BEGIN
+        RAISERROR ('Error: El ID de Reserva no puede estar vacío.', 16, 1);
+        RETURN;
+    END
+
+    IF @ID_Huesped IS NULL
+    BEGIN
+        RAISERROR ('Error: El ID de Huésped no puede estar vacío.', 16, 1);
+        RETURN;
+    END
+
+    IF NOT EXISTS (SELECT 1 FROM Reserva WHERE ID_Reserva = @ID_Reserva)
+    BEGIN
+        RAISERROR ('Error: La Reserva indicada no existe.', 16, 1);
+        RETURN;
+    END
+
+    IF NOT EXISTS (SELECT 1 FROM HUESPED WHERE ID_Huesped = @ID_Huesped)
+    BEGIN
+        RAISERROR ('Error: El Huésped indicado no existe.', 16, 1);
+        RETURN;
+    END
+
+    IF EXISTS (SELECT 1 FROM Reserva_Huesped WHERE ID_Reserva = @ID_Reserva AND ID_Huesped = @ID_Huesped)
+    BEGIN
+        RAISERROR ('Error: Este Huésped ya está asignado a esta Reserva.', 16, 1);
+        RETURN;
+    END
+
+    INSERT INTO Reserva_Huesped 
+        (ID_Reserva, ID_Huesped)
+    VALUES 
+        (@ID_Reserva, @ID_Huesped);
+
+END
+
+
+GO
+
