@@ -181,3 +181,88 @@ END
 GO
 EXEC SP_MetodoPago_Insert @Nombre_MetodoPago = 'Tarjeta de Crédito';
 EXEC SP_MetodoPago_Insert @Nombre_MetodoPago = '';
+
+
+-- SP actualizar metodo de pago
+CREATE PROCEDURE SP_MetodoPago_Update
+    @ID_MetodoPago INT,
+    @Nombre_MetodoPago VARCHAR(50) = NULL
+AS
+BEGIN
+    SET NOCOUNT ON;
+    
+    UPDATE MetodoPago
+    SET 
+        Nombre_MetodoPago = COALESCE(@Nombre_MetodoPago, Nombre_MetodoPago)
+    WHERE ID_MetodoPago = @ID_MetodoPago;
+    
+    IF @@ROWCOUNT = 0
+    BEGIN
+        RAISERROR('No existe método de pago con ese ID.', 16, 1);
+    END
+END;
+GO
+
+-- Cambiar el nombre del método de pago con ID 1
+EXEC SP_MetodoPago_Update 
+    @ID_MetodoPago = 1,
+    @Nombre_MetodoPago = 'Tarjeta de Crédito';
+
+-- Otro ejemplo
+EXEC SP_MetodoPago_Update 
+    @ID_MetodoPago = 2,
+    @Nombre_MetodoPago = 'Efectivo';
+
+
+
+-- SP Actualizar producto 
+CREATE PROCEDURE SP_Producto_Update
+    @ID_Producto INT,
+    @Nombre_Producto VARCHAR(100) = NULL,
+    @Precio_Unidad_Producto DECIMAL(10,2) = NULL,
+    @Stock_Alerta INT = NULL,
+    @Stock_Producto INT = NULL
+AS
+BEGIN
+    SET NOCOUNT ON;
+    
+    -- UPDATE manteniendo valores actuales si el parámetro es NULL
+    UPDATE Producto
+    SET 
+        Nombre_Producto = COALESCE(@Nombre_Producto, Nombre_Producto),
+        Precio_Unidad_Producto = COALESCE(@Precio_Unidad_Producto, Precio_Unidad_Producto),
+        Stock_Alerta = COALESCE(@Stock_Alerta, Stock_Alerta),
+        Stock_Producto = COALESCE(@Stock_Producto, Stock_Producto)
+    WHERE ID_Producto = @ID_Producto;
+    
+    IF @@ROWCOUNT = 0
+    BEGIN
+        RAISERROR('No existe producto con ese ID.', 16, 1);
+    END
+END;
+GO
+-- Cambiar solo el precio
+EXEC SP_Producto_Update 
+    @ID_Producto = 1,
+    @Precio_Unidad_Producto = 150.50;
+
+-- Cambiar nombre y stock
+EXEC SP_Producto_Update 
+    @ID_Producto = 1,
+    @Nombre_Producto = 'Shampoo Premium',
+    @Stock_Producto = 100;
+
+-- Cambiar stock de alerta
+EXEC SP_Producto_Update 
+    @ID_Producto = 1,
+    @Stock_Alerta = 10;
+
+-- Cambiar varios campos
+EXEC SP_Producto_Update 
+    @ID_Producto = 1,
+    @Nombre_Producto = 'Jabón Líquido',
+    @Precio_Unidad_Producto = 85.00,
+    @Stock_Producto = 50;
+
+
+    

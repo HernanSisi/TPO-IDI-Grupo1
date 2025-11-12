@@ -56,8 +56,6 @@ CREATE TABLE Habitacion(
     
 )
 
-
-
 -- Tabla: MetodoPago — Lista de métodos de pago disponibles.
 CREATE TABLE MetodoPago(
     ID_MetodoPago INT IDENTITY(1,1) PRIMARY KEY,
