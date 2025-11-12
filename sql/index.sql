@@ -1,8 +1,11 @@
--- Reserva
-CREATE INDEX IX_Reserva_IDHabitacion ON Reserva (ID_Habitacion);
+-- HUESPED
+CREATE INDEX IX_Huesped_Cedula ON Huesped (Cedula_Huesped);
 
--- Gasto
+-- GASTO
 CREATE INDEX IX_Gasto_IDReserva ON Gasto (ID_Reserva);
 
--- Cobro
-CREATE INDEX IX_Cobro_MetodoCobro ON Cobro (Metodo_Cobro);
+-- PEDIDO
+CREATE INDEX IX_Pedido_Proveedor ON Pedido (CUIL_CUIT_Proveedor);
+
+-- RESERVA
+CREATE INDEX IX_Reserva_IDHabitacion ON Reserva (ID_Habitacion);

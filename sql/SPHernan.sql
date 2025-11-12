@@ -522,6 +522,7 @@ BEGIN
 END;
 GO
 
+GO
 CREATE PROCEDURE SP_LeerDetalleReserva
     @ID_Reserva INT
 AS
@@ -540,74 +541,52 @@ BEGIN
         RETURN;
     END
 
-    -- 1) Devuelve la tupla de Reserva
     SELECT
+        -- Reserva
         r.ID_Reserva,
         r.Fecha_Reserva,
-        r.Titular_Reserva,
-        r.ID_Habitacion,
         r.Fecha_Reserva_Inicio,
         r.Fecha_Reserva_Fin,
         r.Fecha_CheckIn,
-        r.Fecha_CheckOut
-    FROM Reserva r
-    WHERE r.ID_Reserva = @ID_Reserva;
+        r.Fecha_CheckOut,
 
-    -- 2) Devuelve las filas referenciadas por las FK de la reserva (Titular y Habitación + TipoHabitacion)
-    SELECT
-        h.ID_Huesped,
-        h.Cedula_Huesped,
-        h.Nombre1_Huesped,
-        h.Nombre2_Huesped,
-        h.Apellido1_Huesped,
-        h.Apellido2_Huesped,
-        h.Email_Huesped,
-        h.Fecha_Nacimiento_Huesped,
-        h.ID_Categoria
-    FROM HUESPED h
-    INNER JOIN Reserva r ON r.Titular_Reserva = h.ID_Huesped
-    WHERE r.ID_Reserva = @ID_Reserva;
+        -- Titular
+        tit.ID_Huesped              AS ID_Titular,
+        tit.Cedula_Huesped          AS Cedula_Titular,
+        tit.Nombre1_Huesped         AS Nombre1_Titular,
+        tit.Apellido1_Huesped       AS Apellido1_Titular,
+        tit.Email_Huesped           AS Email_Titular,
 
-    SELECT
+        -- Habitación + Tipo
         hab.ID_Nro_Habitacion,
         hab.Estado_Habitacion,
-        hab.Tipo_Habitacion,
+        th.ID_Tipo_Habitacion,
         th.Nombre_Tipo_Habitacion,
         th.Precio_Habitacion,
-        th.Capacidad_Habitacion
-    FROM Habitacion hab
-    LEFT JOIN TipoHabitacion th ON th.ID_Tipo_Habitacion = hab.Tipo_Habitacion
-    INNER JOIN Reserva r2 ON r2.ID_Habitacion = hab.ID_Nro_Habitacion
-    WHERE r2.ID_Reserva = @ID_Reserva;
+        th.Capacidad_Habitacion,
 
-    -- 3) Devuelve los gastos que referencian a esta reserva (si existen)
-    SELECT
-        g.ID_Gasto,
-        g.Importe,
-        g.Fecha_Gasto,
-        g.Producto_Gasto,
-        g.Cantidad_Producto,
-        g.ID_Personal,
-        g.Origen_Gasto,
-        g.Estado_Gasto
-    FROM Gasto g
-    WHERE g.ID_Reserva = @ID_Reserva;
+        -- Huéspedes asociados vía Reserva_Huesped
+        rh.ID_Huesped               AS ID_Huesped_Reserva,
+        h2.Cedula_Huesped           AS Cedula_Huesped_Reserva,
+        h2.Nombre1_Huesped          AS Nombre1_Huesped_Reserva,
+        h2.Apellido1_Huesped        AS Apellido1_Huesped_Reserva,
+        h2.Email_Huesped            AS Email_Huesped_Reserva
+    FROM Reserva r
+    INNER JOIN HUESPED tit
+        ON tit.ID_Huesped = r.Titular_Reserva
+    INNER JOIN Habitacion hab
+        ON hab.ID_Nro_Habitacion = r.ID_Habitacion
+    LEFT JOIN TipoHabitacion th
+        ON th.ID_Tipo_Habitacion = hab.Tipo_Habitacion
+    LEFT JOIN Reserva_Huesped rh
+        ON rh.ID_Reserva = r.ID_Reserva
+    LEFT JOIN HUESPED h2
+        ON h2.ID_Huesped = rh.ID_Huesped
+    WHERE r.ID_Reserva = @ID_Reserva
+    ORDER BY rh.ID_Huesped;
+END
+GO
 
-    -- 4) Devuelve en un result set separado todos los huéspedes asociados a la reserva vía Reserva_Huesped
-    SELECT
-        rh.ID_Huesped,
-        h.Cedula_Huesped,
-        h.Nombre1_Huesped,
-        h.Nombre2_Huesped,
-        h.Apellido1_Huesped,
-        h.Apellido2_Huesped,
-        h.Email_Huesped,
-        h.Fecha_Nacimiento_Huesped,
-        h.ID_Categoria
-    FROM Reserva_Huesped rh
-    INNER JOIN HUESPED h ON h.ID_Huesped = rh.ID_Huesped
-    WHERE rh.ID_Reserva = @ID_Reserva;
 
-END;
 
-EXEC SP_LeerDetalleReserva @ID_Reserva = 2;
+EXEC SP_LeerDetalleReserva @ID_Reserva = 4;
