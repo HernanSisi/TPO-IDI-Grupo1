@@ -1,3 +1,4 @@
+GO
 CREATE PROCEDURE SP_InsertarGasto
     @Importe DECIMAL(10,2),
     @Fecha_Gasto DATETIME = NULL,
@@ -155,7 +156,7 @@ END
 
 GO
 
-ALTER PROCEDURE sp_InsertarPedido
+CREATE PROCEDURE sp_InsertarPedido
     @CUIL_CUIT_Proveedor VARCHAR(15),
     @Fecha_Pedido DATETIME = NULL
 AS
