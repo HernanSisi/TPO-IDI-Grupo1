@@ -492,101 +492,182 @@ BEGIN
 
 END
 GO
+CREATE PROCEDURE SP_Insert_Habitacion
 
-CREATE PROCEDURE SP_ActualizarProveedor
-    @CUIL_CUIT_Proveedor VARCHAR(15),
-	@Razon_Social_Proveedor VARCHAR(150) = NULL,
-    @Telefono_Proveedor VARCHAR(20) = NULL,
-    @Email_Proveedor VARCHAR(100) = NULL
-AS 
+    @ID_Nro_Habitacion int,
+    @Estado_Habitacion bit,
+    @Tipo_Habitacion int
+
+AS
+BEGIN 
+-- Verificar que la habitacion exista
+        IF NOT EXISTS (SELECT 1 FROM Habitacion WHERE Tipo_Habitacion = @Tipo_Habitacion)
+        BEGIN
+            RAISERROR('El tipo de habitacion especificado no existe.', 16, 1);
+            RETURN;
+        END
+
+    INSERT INTO Habitacion (ID_Nro_Habitacion, Estado_Habitacion, Tipo_Habitacion)
+    VALUES (@ID_Nro_Habitacion, @Estado_Habitacion, @Tipo_Habitacion);
+END;
+
+GO
+
+CREATE PROCEDURE SP_Personal_Insert
+    @Cedula_Personal VARCHAR(50),
+    @Email_Personal VARCHAR(100),
+    @Nombre1_Personal VARCHAR(50),
+    @Nombre2_Personal VARCHAR(50) = NULL,
+    @Apellido1_Personal VARCHAR(50),
+    @Apellido2_Personal VARCHAR(50) = NULL,
+    @Fecha_Nacimiento_Personal DATE,
+    @ID_Rol INT
+AS
 BEGIN
     SET NOCOUNT ON;
     
-    IF @Email_Proveedor is NOT NULL AND EXISTS (SELECT 1 FROM Proveedor WHERE Email_Proveedor = @Email_Proveedor)
+    DECLARE @EmailCount INT;
+    
+    -- Verificar si el email existe en HUESPED
+    SELECT @EmailCount = COUNT(*) 
+    FROM HUESPED 
+    WHERE Email_Huesped = @Email_Personal;
+    
+    IF @EmailCount = 0
     BEGIN
-        RAISERROR ('Error: el email esta asignado a otro proveedor', 16, 1);
-        RETURN;
+        -- Verificar que el rol exista
+        IF NOT EXISTS (SELECT 1 FROM Rol WHERE ID_Rol = @ID_Rol)
+        BEGIN
+            RAISERROR('El rol especificado no existe.', 16, 1);
+            RETURN;
+        END
+        
+        INSERT INTO Personal (
+            Cedula_Personal,
+            Email_Personal,
+            Nombre1_Personal,
+            Nombre2_Personal,
+            Apellido1_Personal,
+            Apellido2_Personal,
+            Fecha_Nacimiento_Personal,
+            ID_Rol
+        )
+        VALUES (
+            @Cedula_Personal,
+            @Email_Personal,
+            @Nombre1_Personal,
+            @Nombre2_Personal,
+            @Apellido1_Personal,
+            @Apellido2_Personal,
+            @Fecha_Nacimiento_Personal,
+            @ID_Rol
+        );
     END
-
-    UPDATE Proveedor
-    SET
-        Razon_Social_Proveedor = COALESCE(@Razon_Social_Proveedor, Razon_Social_Proveedor),
-        Telefono_Proveedor = COALESCE(@Telefono_Proveedor, Telefono_Proveedor),
-        Email_Proveedor = COALESCE(@Email_Proveedor, Email_Proveedor)
-    WHERE CUIL_CUIT_Proveedor = @CUIL_CUIT_Proveedor;
-
-    IF @@ROWCOUNT = 0
+    ELSE
     BEGIN
-        RAISERROR('No existe tipo de habitación con ese ID.', 16, 1);
-    END
+        RAISERROR('El email ya existe en la tabla HUESPED.', 16, 1);
+    END;
 END;
 GO
 
-GO
-CREATE PROCEDURE SP_LeerDetalleReserva
-    @ID_Reserva INT
+CREATE PROCEDURE SP_MetodoPago_Insert
+    @Nombre_MetodoPago VARCHAR(50)
 AS
 BEGIN
     SET NOCOUNT ON;
 
-    IF @ID_Reserva IS NULL
-    BEGIN
-        RAISERROR('Error: El ID de Reserva no puede ser NULL.',16,1);
-        RETURN;
-    END
+    BEGIN TRY
+        -- Normalizo básico (opcional pero útil)
+        SET @Nombre_MetodoPago = LTRIM(RTRIM(@Nombre_MetodoPago));
 
-    IF NOT EXISTS (SELECT 1 FROM Reserva WHERE ID_Reserva = @ID_Reserva)
-    BEGIN
-        RAISERROR('Error: No existe reserva con ese ID.',16,1);
-        RETURN;
-    END
+        IF @Nombre_MetodoPago = ''
+        BEGIN
+            RAISERROR('El nombre del método de pago no puede ser vacío.', 16, 1);
+            RETURN;
+        END
 
-    SELECT
-        -- Reserva
-        r.ID_Reserva,
-        r.Fecha_Reserva,
-        r.Fecha_Reserva_Inicio,
-        r.Fecha_Reserva_Fin,
-        r.Fecha_CheckIn,
-        r.Fecha_CheckOut,
+        INSERT INTO MetodoPago (Nombre_MetodoPago)
+        VALUES (@Nombre_MetodoPago);
 
-        -- Titular
-        tit.ID_Huesped              AS ID_Titular,
-        tit.Cedula_Huesped          AS Cedula_Titular,
-        tit.Nombre1_Huesped         AS Nombre1_Titular,
-        tit.Apellido1_Huesped       AS Apellido1_Titular,
-        tit.Email_Huesped           AS Email_Titular,
-
-        -- Habitación + Tipo
-        hab.ID_Nro_Habitacion,
-        hab.Estado_Habitacion,
-        th.ID_Tipo_Habitacion,
-        th.Nombre_Tipo_Habitacion,
-        th.Precio_Habitacion,
-        th.Capacidad_Habitacion,
-
-        -- Huéspedes asociados vía Reserva_Huesped
-        rh.ID_Huesped               AS ID_Huesped_Reserva,
-        h2.Cedula_Huesped           AS Cedula_Huesped_Reserva,
-        h2.Nombre1_Huesped          AS Nombre1_Huesped_Reserva,
-        h2.Apellido1_Huesped        AS Apellido1_Huesped_Reserva,
-        h2.Email_Huesped            AS Email_Huesped_Reserva
-    FROM Reserva r
-    INNER JOIN HUESPED tit
-        ON tit.ID_Huesped = r.Titular_Reserva
-    INNER JOIN Habitacion hab
-        ON hab.ID_Nro_Habitacion = r.ID_Habitacion
-    LEFT JOIN TipoHabitacion th
-        ON th.ID_Tipo_Habitacion = hab.Tipo_Habitacion
-    LEFT JOIN Reserva_Huesped rh
-        ON rh.ID_Reserva = r.ID_Reserva
-    LEFT JOIN HUESPED h2
-        ON h2.ID_Huesped = rh.ID_Huesped
-    WHERE r.ID_Reserva = @ID_Reserva
-    ORDER BY rh.ID_Huesped;
+        -- Devuelvo el ID generado
+        SELECT CAST(SCOPE_IDENTITY() AS INT) AS ID_MetodoPago;
+    END TRY
+    BEGIN CATCH
+        -- Reenvío el error (incluye violación de UNIQUE si hay duplicado)
+        DECLARE @msg NVARCHAR(4000) = ERROR_MESSAGE();
+        RAISERROR(@msg, 16, 1);
+    END CATCH
 END
 GO
 
+CREATE PROCEDURE SP_TipoHabitacion_Insert
+    @Nombre_Tipo_Habitacion VARCHAR(50),
+    @Precio_Habitacion DECIMAL(10,2),
+    @Capacidad_Habitacion INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    
+    -- Insertar el tipo de habitación
+    INSERT INTO TipoHabitacion (
+        Nombre_Tipo_Habitacion,
+        Precio_Habitacion,
+        Capacidad_Habitacion
+    )
+    VALUES (
+        @Nombre_Tipo_Habitacion,
+        @Precio_Habitacion,
+        @Capacidad_Habitacion
+    );
+END;
+GO
 
+CREATE PROCEDURE SP_InsertHuesped
+    @Cedula_Huesped VARCHAR(50),
+    @Estado_Huesped BIT = 1,
+    @Email_Huesped VARCHAR(100),
+    @Nombre1_Huesped VARCHAR(50),
+    @Nombre2_Huesped VARCHAR(50) = NULL,
+    @Apellido1_Huesped VARCHAR(50),
+    @Apellido2_Huesped VARCHAR(50) = NULL,
+    @Fecha_Nacimiento_Huesped DATE,
+    @ID_Categoria INT = NULL
+AS
+BEGIN
+    SET NOCOUNT ON;
+    DECLARE @EmailCount INT;
 
-EXEC SP_LeerDetalleReserva @ID_Reserva = 4;
+    BEGIN TRY
+        -- Verificar email no exista en Personal
+        SELECT @EmailCount = COUNT(*) FROM Personal WHERE Email_Personal = @Email_Huesped;
+        IF @EmailCount > 0
+        BEGIN
+            RAISERROR('El email ya existe en la tabla PERSONAL.', 16, 1);
+            RETURN;
+        END
+
+        -- Verificar categoría válida
+        IF @ID_Categoria IS NOT NULL AND NOT EXISTS (SELECT 1 FROM Categoria WHERE ID_Categoria = @ID_Categoria)
+        BEGIN
+            RAISERROR('La categoría especificada no existe.', 16, 1);
+            RETURN;
+        END
+
+        INSERT INTO HUESPED (
+            Cedula_Huesped, Estado_Huesped, Email_Huesped,
+            Nombre1_Huesped, Nombre2_Huesped, Apellido1_Huesped, Apellido2_Huesped,
+            Fecha_Nacimiento_Huesped, ID_Categoria
+        )
+        VALUES (
+            @Cedula_Huesped, @Estado_Huesped, @Email_Huesped,
+            @Nombre1_Huesped, @Nombre2_Huesped, @Apellido1_Huesped, @Apellido2_Huesped,
+            @Fecha_Nacimiento_Huesped, @ID_Categoria
+        );
+    END TRY
+    BEGIN CATCH
+        DECLARE @msg NVARCHAR(4000) = ERROR_MESSAGE();
+        RAISERROR(@msg, 16, 1);
+    END CATCH
+END;
+GO
+
