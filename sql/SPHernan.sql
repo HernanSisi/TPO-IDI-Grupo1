@@ -269,3 +269,73 @@ END
 
 GO
 
+CREATE PROCEDURE sp_InsertarReserva
+    @Titular_Reserva INT,
+    @ID_Habitacion INT,
+    @Fecha_Reserva_Inicio DATETIME,
+    @Fecha_Reserva_Fin DATETIME,
+    @Fecha_Reserva DATETIME = NULL,
+    @Fecha_CheckIn DATETIME = NULL,
+    @Fecha_CheckOut DATETIME = NULL
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    IF @Titular_Reserva IS NULL or @ID_Habitacion IS NULL OR @Fecha_Reserva_Inicio IS NULL OR @Fecha_Reserva_Fin IS NULL
+    BEGIN
+        RAISERROR ('Error: Los campos Habitacion, Fecha de inicio de la reserva, fecha de fin de la reserva o titular no pueden estar vacíos.', 16, 1);
+        RETURN;
+    END
+
+    IF NOT EXISTS (SELECT 1 FROM HUESPED WHERE ID_Huesped = @Titular_Reserva)
+    BEGIN
+        RAISERROR ('Error: El Huésped titular indicado no existe.', 16, 1);
+        RETURN;
+    END
+
+    IF NOT EXISTS (SELECT 1 FROM Habitacion WHERE ID_Nro_Habitacion = @ID_Habitacion)
+    BEGIN
+        RAISERROR ('Error: La Habitación indicada no existe.', 16, 1);
+        RETURN;
+    END
+
+    IF @Fecha_Reserva_Fin <= @Fecha_Reserva_Inicio
+    BEGIN
+        RAISERROR ('Error: La fecha de fin de reserva debe ser posterior a la fecha de inicio.', 16, 1);
+        RETURN;
+    END
+
+    IF @Fecha_CheckIn IS NOT NULL AND @Fecha_CheckOut IS NOT NULL AND @Fecha_CheckOut <= @Fecha_CheckIn
+    BEGIN
+        RAISERROR ('Error: La fecha de Check-Out debe ser posterior a la fecha de Check-In.', 16, 1);
+        RETURN;
+    END
+
+    IF @Fecha_Reserva IS NULL
+    BEGIN
+        SET @Fecha_Reserva = GETDATE();
+    END
+
+    INSERT INTO Reserva 
+    (
+        Fecha_Reserva,
+        Titular_Reserva,
+        ID_Habitacion,
+        Fecha_Reserva_Inicio,
+        Fecha_Reserva_Fin,
+        Fecha_CheckIn,
+        Fecha_CheckOut
+    )
+    VALUES 
+    (
+        @Fecha_Reserva,
+        @Titular_Reserva,
+        @ID_Habitacion,
+        @Fecha_Reserva_Inicio,
+        @Fecha_Reserva_Fin,
+        @Fecha_CheckIn,
+        @Fecha_CheckOut
+    );
+
+END
+GO
