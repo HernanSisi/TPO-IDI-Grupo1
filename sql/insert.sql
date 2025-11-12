@@ -46,7 +46,7 @@ INSERT INTO HUESPED (Cedula_Huesped, Estado_Huesped, Email_Huesped, Nombre1_Hues
 ('24-41789654-2', 1, 'ana.garcia@outlook.com', 'Ana', 'Sofía', 'García', 'Ramírez', '1995-02-14', 1),
 ('20-36541289-7', 1, 'roberto.sanchez@gmail.com', 'Roberto', 'Andrés', 'Sánchez', 'Torres', '1982-09-30', 4),
 ('27-43892156-1', 1, 'laura.martinez@hotmail.com', 'Laura', 'Patricia', 'Martínez', 'Díaz', '1988-05-18', 2),
-('23-39784512-4', 1, 'holasoytopa@gmail.com', 'Diego', 'César', 'Topa', NULL, '1992-12-05', 5),
+('23-39784512-4', 1, 'dice@gmail.com', 'Diego', 'César', 'Topa', NULL, '1992-12-05', 5),
 ('24-40156987-8', 1, 'sofia.gomez@yahoo.com', 'Sofía', 'Isabel', 'Gómez', 'Moreno', '1987-08-25', 1),
 ('20-37894561-6', 1, 'mariposasilvestre@outlook.com', 'Celso', 'Javier', 'Díaz', 'Castro', '1980-04-12', 3),
 ('27-44123789-3', 1, 'valentina.romero@gmail.com', 'Valentina', 'Lucía', 'Romero', 'Herrera', '1998-01-20', 6);
