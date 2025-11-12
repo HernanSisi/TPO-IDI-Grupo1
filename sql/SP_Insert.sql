@@ -1,5 +1,4 @@
-GO
-CREATE PROCEDURE SP_InsertarGasto
+CREATE PROCEDURE SP_Insert_Gasto
     @Importe DECIMAL(10,2),
     @Fecha_Gasto DATETIME = NULL,
     @Producto_Gasto INT,
@@ -67,9 +66,8 @@ CREATE PROCEDURE SP_InsertarGasto
         RETURN 0;
     END;
 
-GO
 
-CREATE PROCEDURE sp_InsertarCobroGasto
+CREATE PROCEDURE SP_Insert_Cobro_Gasto
     @ID_Cobro INT,
     @ID_Gasto INT
 AS
@@ -100,9 +98,8 @@ BEGIN
 
 END
 
-GO
 
-CREATE PROCEDURE SP_InsertarPedidoProducto
+CREATE PROCEDURE SP_Insert_Pedido_Producto
     @ID_Pedido INT,
     @ID_Producto INT,
     @Cantidad_Producto INT,
@@ -154,9 +151,8 @@ BEGIN
 
 END
 
-GO
 
-CREATE PROCEDURE sp_InsertarPedido
+CREATE PROCEDURE SP_Insert_Pedido
     @CUIL_CUIT_Proveedor VARCHAR(15),
     @Fecha_Pedido DATETIME = NULL
 AS
@@ -165,7 +161,7 @@ BEGIN
 
     IF @CUIL_CUIT_Proveedor IS NULL OR @CUIL_CUIT_Proveedor = ''
     BEGIN
-        RAISERROR ('Error: El CUIL/CUIT del proveedor no puede estar vacío.', 16, 1);
+        RAISERROR ('Error: El CUIL/CUIT del proveedor no puede estar vacÃ­o.', 16, 1);
         RETURN;
     END
 
@@ -187,9 +183,8 @@ BEGIN
 
 END
 
-GO
 
-CREATE PROCEDURE sp_InsertarCobro
+CREATE PROCEDURE SP_Insert_Cobro
     @ID_MetodoPago INT,
     @Fecha_Cobro DATETIME = NULL
 AS
@@ -198,13 +193,13 @@ BEGIN
 
     IF @ID_MetodoPago IS NULL
     BEGIN
-        RAISERROR ('Error: El método de pago no puede estar vacío.', 16, 1);
+        RAISERROR ('Error: El mÃ©todo de pago no puede estar vacÃ­o.', 16, 1);
         RETURN;
     END
 
     IF NOT EXISTS (SELECT 1 FROM MetodoPago WHERE ID_MetodoPago = @ID_MetodoPago)
     BEGIN
-        RAISERROR ('Error: El método de pago indicado no existe.', 16, 1);
+        RAISERROR ('Error: El mÃ©todo de pago indicado no existe.', 16, 1);
         RETURN;
     END
 
@@ -220,9 +215,8 @@ BEGIN
 
 END
 
-GO
 
-CREATE PROCEDURE sp_InsertarReservaHuesped
+CREATE PROCEDURE SP_Insert_Reserva_Huesped
     @ID_Reserva INT,
     @ID_Huesped INT
 AS
@@ -231,13 +225,13 @@ BEGIN
 
     IF @ID_Reserva IS NULL
     BEGIN
-        RAISERROR ('Error: El ID de Reserva no puede estar vacío.', 16, 1);
+        RAISERROR ('Error: El ID de Reserva no puede estar vacÃ­o.', 16, 1);
         RETURN;
     END
 
     IF @ID_Huesped IS NULL
     BEGIN
-        RAISERROR ('Error: El ID de Huésped no puede estar vacío.', 16, 1);
+        RAISERROR ('Error: El ID de HuÃ©sped no puede estar vacÃ­o.', 16, 1);
         RETURN;
     END
 
@@ -249,13 +243,13 @@ BEGIN
 
     IF NOT EXISTS (SELECT 1 FROM HUESPED WHERE ID_Huesped = @ID_Huesped)
     BEGIN
-        RAISERROR ('Error: El Huésped indicado no existe.', 16, 1);
+        RAISERROR ('Error: El HuÃ©sped indicado no existe.', 16, 1);
         RETURN;
     END
 
     IF EXISTS (SELECT 1 FROM Reserva_Huesped WHERE ID_Reserva = @ID_Reserva AND ID_Huesped = @ID_Huesped)
     BEGIN
-        RAISERROR ('Error: Este Huésped ya está asignado a esta Reserva.', 16, 1);
+        RAISERROR ('Error: Este HuÃ©sped ya estÃ¡ asignado a esta Reserva.', 16, 1);
         RETURN;
     END
 
@@ -271,7 +265,7 @@ BEGIN
 
     IF @CantidadHuespedes >= @LimiteHabitacion
     BEGIN
-        RAISERROR ('Error: Se ha alcanzado el límite de huéspedes para esta habitación.', 16, 1);
+        RAISERROR ('Error: Se ha alcanzado el lÃ­mite de huÃ©spedes para esta habitaciÃ³n.', 16, 1);
         RETURN;
     END   
     INSERT INTO Reserva_Huesped 
@@ -282,9 +276,8 @@ BEGIN
 END
 
 
-GO
 
-CREATE PROCEDURE sp_InsertarReserva
+CREATE PROCEDURE SP_Insert_Reserva
     @Titular_Reserva INT,
     @ID_Habitacion INT,
     @Fecha_Reserva_Inicio DATETIME,
@@ -298,22 +291,34 @@ BEGIN
 
     IF @Titular_Reserva IS NULL or @ID_Habitacion IS NULL OR @Fecha_Reserva_Inicio IS NULL OR @Fecha_Reserva_Fin IS NULL
     BEGIN
-        RAISERROR ('Error: Los campos Habitacion, Fecha de inicio de la reserva, fecha de fin de la reserva o titular no pueden estar vacíos.', 16, 1);
+        RAISERROR ('Error: Los campos Habitacion, Fecha de inicio de la reserva, fecha de fin de la reserva o titular no pueden estar vacÃ­os.', 16, 1);
         RETURN;
     END
 
     IF NOT EXISTS (SELECT 1 FROM HUESPED WHERE ID_Huesped = @Titular_Reserva)
     BEGIN
-        RAISERROR ('Error: El Huésped titular indicado no existe.', 16, 1);
+        RAISERROR ('Error: El HuÃ©sped titular indicado no existe.', 16, 1);
         RETURN;
     END
 
     IF NOT EXISTS (SELECT 1 FROM Habitacion WHERE ID_Nro_Habitacion = @ID_Habitacion)
     BEGIN
-        RAISERROR ('Error: La Habitación indicada no existe.', 16, 1);
+        RAISERROR ('Error: La HabitaciÃ³n indicada no existe.', 16, 1);
         RETURN;
     END
 
+-- EstÃ¡ activa la habitaciÃ³n
+    IF NOT EXISTS (
+        SELECT 1 
+        FROM Habitacion 
+        WHERE ID_Nro_Habitacion = @ID_Habitacion
+          AND Estado_Habitacion = 1
+    )
+    BEGIN
+        RAISERROR ('Error: La HabitaciÃ³n indicada no estÃ¡ activa.', 16, 1);
+        RETURN;
+    END
+    
     IF @Fecha_Reserva_Fin <= @Fecha_Reserva_Inicio
     BEGIN
         RAISERROR ('Error: La fecha de fin de reserva debe ser posterior a la fecha de inicio.', 16, 1);
@@ -353,9 +358,8 @@ BEGIN
     );
 
 END
-GO
 
-CREATE PROCEDURE sp_InsertarProducto
+CREATE PROCEDURE SP_Insert_Producto
     @Nombre_Producto VARCHAR(100),
     @Precio_Unidad_Producto DECIMAL(10,2),
     @Stock_Producto INT,
@@ -366,19 +370,19 @@ BEGIN
 
     IF @Nombre_Producto IS NULL OR @Nombre_Producto = ''
     BEGIN
-        RAISERROR ('Error: El nombre del producto no puede estar vacío.', 16, 1);
+        RAISERROR ('Error: El nombre del producto no puede estar vacÃ­o.', 16, 1);
         RETURN;
     END
 
     IF @Precio_Unidad_Producto IS NULL
     BEGIN
-        RAISERROR ('Error: El precio del producto no puede estar vacío.', 16, 1);
+        RAISERROR ('Error: El precio del producto no puede estar vacÃ­o.', 16, 1);
         RETURN;
     END
 
     IF @Stock_Producto IS NULL
     BEGIN
-        RAISERROR ('Error: El stock del producto no puede estar vacío.', 16, 1);
+        RAISERROR ('Error: El stock del producto no puede estar vacÃ­o.', 16, 1);
         RETURN;
     END
 
@@ -420,9 +424,8 @@ BEGIN
 
 END
 
-GO
 
-CREATE PROCEDURE sp_InsertarProveedor
+CREATE PROCEDURE SP_Insert_Proveedor
     @CUIL_CUIT_Proveedor VARCHAR(15),
     @Razon_Social_Proveedor VARCHAR(150),
     @Telefono_Proveedor VARCHAR(20),
@@ -433,25 +436,25 @@ BEGIN
 
     IF @CUIL_CUIT_Proveedor IS NULL OR @CUIL_CUIT_Proveedor = ''
     BEGIN
-        RAISERROR ('Error: El CUIL/CUIT del proveedor no puede estar vacío.', 16, 1);
+        RAISERROR ('Error: El CUIL/CUIT del proveedor no puede estar vacÃ­o.', 16, 1);
         RETURN;
     END
 
     IF @Razon_Social_Proveedor IS NULL OR @Razon_Social_Proveedor = ''
     BEGIN
-        RAISERROR ('Error: La razón social no puede estar vacía.', 16, 1);
+        RAISERROR ('Error: La razÃ³n social no puede estar vacÃ­a.', 16, 1);
         RETURN;
     END
 
     IF @Telefono_Proveedor IS NULL OR @Telefono_Proveedor = ''
     BEGIN
-        RAISERROR ('Error: El teléfono no puede estar vacío.', 16, 1);
+        RAISERROR ('Error: El telÃ©fono no puede estar vacÃ­o.', 16, 1);
         RETURN;
     END
 
     IF @Email_Proveedor IS NULL OR @Email_Proveedor = ''
     BEGIN
-        RAISERROR ('Error: El email no puede estar vacío.', 16, 1);
+        RAISERROR ('Error: El email no puede estar vacÃ­o.', 16, 1);
         RETURN;
     END
 
@@ -463,7 +466,7 @@ BEGIN
 
     IF EXISTS (SELECT 1 FROM Proveedor WHERE Email_Proveedor = @Email_Proveedor)
     BEGIN
-        RAISERROR ('Error: El email ingresado ya está registrado.', 16, 1);
+        RAISERROR ('Error: El email ingresado ya estÃ¡ registrado.', 16, 1);
         RETURN;
     END
 
@@ -473,7 +476,7 @@ BEGIN
         AND LEN(@Email_Proveedor) BETWEEN 5 AND 100
     )
     BEGIN
-        RAISERROR ('Error: El formato del email no es válido.', 16, 1);
+        RAISERROR ('Error: El formato del email no es vÃ¡lido.', 16, 1);
         RETURN;
     END
 
@@ -491,7 +494,6 @@ BEGIN
     );
 
 END
-GO
 CREATE PROCEDURE SP_Insert_Habitacion
 
     @ID_Nro_Habitacion int,
@@ -511,9 +513,8 @@ BEGIN
     VALUES (@ID_Nro_Habitacion, @Estado_Habitacion, @Tipo_Habitacion);
 END;
 
-GO
 
-CREATE PROCEDURE SP_Personal_Insert
+CREATE PROCEDURE SP_Insert_Personal
     @Cedula_Personal VARCHAR(50),
     @Email_Personal VARCHAR(100),
     @Nombre1_Personal VARCHAR(50),
@@ -568,21 +569,20 @@ BEGIN
         RAISERROR('El email ya existe en la tabla HUESPED.', 16, 1);
     END;
 END;
-GO
 
-CREATE PROCEDURE SP_MetodoPago_Insert
+CREATE PROCEDURE SP_Insert_MetodoPago
     @Nombre_MetodoPago VARCHAR(50)
 AS
 BEGIN
     SET NOCOUNT ON;
 
     BEGIN TRY
-        -- Normalizo básico (opcional pero útil)
+        -- Normalizo bÃ¡sico (opcional pero Ãºtil)
         SET @Nombre_MetodoPago = LTRIM(RTRIM(@Nombre_MetodoPago));
 
         IF @Nombre_MetodoPago = ''
         BEGIN
-            RAISERROR('El nombre del método de pago no puede ser vacío.', 16, 1);
+            RAISERROR('El nombre del mÃ©todo de pago no puede ser vacÃ­o.', 16, 1);
             RETURN;
         END
 
@@ -593,14 +593,13 @@ BEGIN
         SELECT CAST(SCOPE_IDENTITY() AS INT) AS ID_MetodoPago;
     END TRY
     BEGIN CATCH
-        -- Reenvío el error (incluye violación de UNIQUE si hay duplicado)
+        -- ReenvÃ­o el error (incluye violaciÃ³n de UNIQUE si hay duplicado)
         DECLARE @msg NVARCHAR(4000) = ERROR_MESSAGE();
         RAISERROR(@msg, 16, 1);
     END CATCH
 END
-GO
 
-CREATE PROCEDURE SP_TipoHabitacion_Insert
+CREATE PROCEDURE SP_Insert_TipoHabitacion
     @Nombre_Tipo_Habitacion VARCHAR(50),
     @Precio_Habitacion DECIMAL(10,2),
     @Capacidad_Habitacion INT
@@ -608,7 +607,7 @@ AS
 BEGIN
     SET NOCOUNT ON;
     
-    -- Insertar el tipo de habitación
+    -- Insertar el tipo de habitaciÃ³n
     INSERT INTO TipoHabitacion (
         Nombre_Tipo_Habitacion,
         Precio_Habitacion,
@@ -620,9 +619,8 @@ BEGIN
         @Capacidad_Habitacion
     );
 END;
-GO
 
-CREATE PROCEDURE SP_InsertHuesped
+CREATE PROCEDURE SP_Insert_Huesped
     @Cedula_Huesped VARCHAR(50),
     @Estado_Huesped BIT = 1,
     @Email_Huesped VARCHAR(100),
@@ -646,10 +644,10 @@ BEGIN
             RETURN;
         END
 
-        -- Verificar categoría válida
+        -- Verificar categorÃ­a vÃ¡lida
         IF @ID_Categoria IS NOT NULL AND NOT EXISTS (SELECT 1 FROM Categoria WHERE ID_Categoria = @ID_Categoria)
         BEGIN
-            RAISERROR('La categoría especificada no existe.', 16, 1);
+            RAISERROR('La categorÃ­a especificada no existe.', 16, 1);
             RETURN;
         END
 
@@ -669,5 +667,6 @@ BEGIN
         RAISERROR(@msg, 16, 1);
     END CATCH
 END;
-GO
+
+
 

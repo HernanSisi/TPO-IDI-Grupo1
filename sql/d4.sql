@@ -50,7 +50,7 @@ GO
 
 
 -- PROCEDIMIENTO: Devuelve el dinero neto (cobrado - gastado)
-CREATE PROCEDURE SP_DineroNeto
+CREATE PROCEDURE SP_Read_DineroNeto
     @FechaInicio DATETIME,
     @FechaFin    DATETIME
 AS

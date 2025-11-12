@@ -1,30 +1,29 @@
-CREATE PROCEDURE SP_ReservaHuesped_Delete
+CREATE PROCEDURE SP_Delete_Reserva_Huesped
     @ID_Reserva INT,
     @ID_Huesped INT
 AS
 BEGIN
     SET NOCOUNT ON;
     
-    -- Eliminar la relación entre reserva y huésped
+    -- Eliminar la relaciÃ³n entre reserva y huÃ©sped
     DELETE FROM Reserva_Huesped
     WHERE ID_Reserva = @ID_Reserva 
       AND ID_Huesped = @ID_Huesped;
     
     IF @@ROWCOUNT = 0
     BEGIN
-        RAISERROR('No existe esa relación entre reserva y huésped.', 16, 1);
+        RAISERROR('No existe esa relaciÃ³n entre reserva y huÃ©sped.', 16, 1);
     END
 END;
-GO
 
-CREATE PROCEDURE SP_CobroGasto_Delete
+CREATE PROCEDURE SP_Delete_Cobro_Gasto
     @ID_Cobro INT,
     @ID_Gasto INT
 AS
 BEGIN
     SET NOCOUNT ON;
 
-    -- Validar que exista la relación
+    -- Validar que exista la relaciÃ³n
     IF NOT EXISTS (
         SELECT 1 
         FROM Cobro_Gasto
@@ -32,20 +31,19 @@ BEGIN
           AND ID_Gasto = @ID_Gasto
     )
     BEGIN
-        RAISERROR('No existe esa relación entre cobro y gasto.', 16, 1);
+        RAISERROR('No existe esa relaciÃ³n entre cobro y gasto.', 16, 1);
         RETURN;
     END
 
-    -- Eliminar la relación
+    -- Eliminar la relaciÃ³n
     DELETE FROM Cobro_Gasto
     WHERE ID_Cobro = @ID_Cobro
       AND ID_Gasto = @ID_Gasto;
 
-    PRINT 'Relación cobro-gasto eliminada correctamente.';
+    PRINT 'RelaciÃ³n cobro-gasto eliminada correctamente.';
 END
-GO
 
-CREATE PROCEDURE SP_DeleteRol
+CREATE PROCEDURE SP_Delete_Rol
     @ID_Rol INT
 AS
 BEGIN
@@ -65,9 +63,8 @@ BEGIN
         RAISERROR(@msg, 16, 1);
     END CATCH
 END;
-GO
 
-CREATE PROCEDURE SP_DeleteOrigen
+CREATE PROCEDURE SP_Delete_Origen
     @ID_Origen INT
 AS
 BEGIN
@@ -87,9 +84,8 @@ BEGIN
         RAISERROR(@msg, 16, 1);
     END CATCH
 END;
-GO
 
-CREATE PROCEDURE SP_DeleteCategoria
+CREATE PROCEDURE SP_Delete_Categoria
     @ID_Categoria INT
 AS
 BEGIN
@@ -98,7 +94,7 @@ BEGIN
     BEGIN TRY
         IF NOT EXISTS (SELECT 1 FROM Categoria WHERE ID_Categoria = @ID_Categoria)
         BEGIN
-            RAISERROR('No existe una categoría con ese ID.', 16, 1);
+            RAISERROR('No existe una categorÃ­a con ese ID.', 16, 1);
             RETURN;
         END
 
@@ -109,4 +105,3 @@ BEGIN
         RAISERROR(@msg, 16, 1);
     END CATCH
 END;
-GO

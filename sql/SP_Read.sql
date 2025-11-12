@@ -1,4 +1,4 @@
-CREATE PROCEDURE SP_Pedido_Read
+CREATE PROCEDURE SP_Read_PedidoDetalle
     @ID_Pedido INT
 AS
 BEGIN
@@ -35,7 +35,7 @@ BEGIN
 END
 GO
 
-CREATE PROCEDURE SP_Gasto_ReadPorReserva
+CREATE PROCEDURE SP_Read_GastoReserva
     @ID_Reserva INT
 AS
 BEGIN
@@ -64,7 +64,7 @@ BEGIN
 END
 GO
 
-CREATE PROCEDURE SP_Cobro_ReadPorReserva
+CREATE PROCEDURE SP_Read_CobroReserva
     @ID_Reserva INT
 AS
 BEGIN
@@ -103,7 +103,7 @@ BEGIN
 END
 GO
 
-CREATE PROCEDURE SP_PedidoSDetalle_Read
+CREATE PROCEDURE SP_Read_PedidoResumen
     @ID_Pedido INT
 AS
 BEGIN
@@ -123,7 +123,8 @@ BEGIN
 END
 GO
 
-CREATE PROCEDURE SP_ReadOrigen
+-- Devuelve ID y nombre de cada origen registrado.
+CREATE PROCEDURE SP_Read_OrigenLista
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -131,7 +132,8 @@ BEGIN
 END;
 GO
 
-CREATE PROCEDURE SP_ReadRol
+-- Lista los roles y su descripcion.
+CREATE PROCEDURE SP_Read_RolDetalle
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -139,7 +141,8 @@ BEGIN
 END;
 GO
 
-CREATE PROCEDURE SP_ReadCategoria
+-- Muestra las categorias con su descuento asociado.
+CREATE PROCEDURE SP_Read_CategoriaDescuento
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -147,7 +150,7 @@ BEGIN
 END;
 GO
 
-CREATE PROCEDURE SP_LeerDetalleReserva
+CREATE PROCEDURE SP_Read_ReservaDetalleCompleto
     @ID_Reserva INT
 AS
 BEGIN

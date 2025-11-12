@@ -1,4 +1,4 @@
-CREATE PROCEDURE SP_ActualizarProveedor
+CREATE PROCEDURE SP_Update_Proveedor
     @CUIL_CUIT_Proveedor VARCHAR(15),
 	@Razon_Social_Proveedor VARCHAR(150) = NULL,
     @Telefono_Proveedor VARCHAR(20) = NULL,
@@ -22,12 +22,11 @@ BEGIN
 
     IF @@ROWCOUNT = 0
     BEGIN
-        RAISERROR('No existe tipo de habitación con ese ID.', 16, 1);
+        RAISERROR('No existe tipo de habitaciÃ³n con ese ID.', 16, 1);
     END
 END;
-GO
 
-CREATE PROCEDURE SP_UpdateHuesped
+CREATE PROCEDURE SP_Update_Huesped
     @ID_Huesped INT,
     @Email_Huesped VARCHAR(100) = NULL,
     @Estado_Huesped BIT = NULL,
@@ -45,7 +44,7 @@ BEGIN
     BEGIN TRY
         IF NOT EXISTS (SELECT 1 FROM HUESPED WHERE ID_Huesped = @ID_Huesped)
         BEGIN
-            RAISERROR('No existe huésped con ese ID.', 16, 1);
+            RAISERROR('No existe huÃ©sped con ese ID.', 16, 1);
             RETURN;
         END
 
@@ -61,7 +60,7 @@ BEGIN
 
         IF @ID_Categoria IS NOT NULL AND NOT EXISTS (SELECT 1 FROM Categoria WHERE ID_Categoria = @ID_Categoria)
         BEGIN
-            RAISERROR('La categoría especificada no existe.', 16, 1);
+            RAISERROR('La categorÃ­a especificada no existe.', 16, 1);
             RETURN;
         END
 
@@ -83,9 +82,8 @@ BEGIN
         RAISERROR(@msg, 16, 1);
     END CATCH
 END;
-GO
 
-CREATE PROCEDURE SP_Personal_Update
+CREATE PROCEDURE SP_Update_Personal
     @ID_Personal INT,
     @Email_Personal VARCHAR(100) = NULL,
     @Nombre1_Personal VARCHAR(50) = NULL,
@@ -100,7 +98,7 @@ BEGIN
     
     DECLARE @EmailCount INT;
     
-    -- Solo verificar email en HUESPED si se está intentando cambiar
+    -- Solo verificar email en HUESPED si se estÃ¡ intentando cambiar
     IF @Email_Personal IS NOT NULL
     BEGIN
         SELECT @EmailCount = COUNT(*) 
@@ -114,7 +112,7 @@ BEGIN
         END
     END
     
-    -- Verificar que el rol exista si se está intentando cambiar
+    -- Verificar que el rol exista si se estÃ¡ intentando cambiar
     IF @ID_Rol IS NOT NULL
     BEGIN
         IF NOT EXISTS (SELECT 1 FROM Rol WHERE ID_Rol = @ID_Rol)
@@ -124,7 +122,7 @@ BEGIN
         END
     END
     
-    -- UPDATE manteniendo valores actuales si el parámetro es NULL
+    -- UPDATE manteniendo valores actuales si el parÃ¡metro es NULL
     UPDATE Personal
     SET 
         Email_Personal = COALESCE(@Email_Personal, Email_Personal),
@@ -141,9 +139,8 @@ BEGIN
         RAISERROR('No existe personal con ese ID.', 16, 1);
     END
 END;
-GO
 
-CREATE PROCEDURE SP_MetodoPago_Update
+CREATE PROCEDURE SP_Update_MetodoPago
     @ID_MetodoPago INT,
     @Nombre_MetodoPago VARCHAR(50) = NULL
 AS
@@ -157,14 +154,12 @@ BEGIN
     
     IF @@ROWCOUNT = 0
     BEGIN
-        RAISERROR('No existe método de pago con ese ID.', 16, 1);
+        RAISERROR('No existe mÃ©todo de pago con ese ID.', 16, 1);
     END
 END;
-GO
 
-go
 
-CREATE PROCEDURE SP_Producto_Update
+CREATE PROCEDURE SP_Update_Producto
     @ID_Producto INT,
     @Nombre_Producto VARCHAR(100) = NULL,
     @Precio_Unidad_Producto DECIMAL(10,2) = NULL,
@@ -174,7 +169,7 @@ AS
 BEGIN
     SET NOCOUNT ON;
     
-    -- UPDATE manteniendo valores actuales si el parámetro es NULL
+    -- UPDATE manteniendo valores actuales si el parÃ¡metro es NULL
     UPDATE Producto
     SET 
         Nombre_Producto = COALESCE(@Nombre_Producto, Nombre_Producto),
@@ -188,9 +183,8 @@ BEGIN
         RAISERROR('No existe producto con ese ID.', 16, 1);
     END
 END;
-GO
 
-CREATE PROCEDURE SP_TipoHabitacion_Update
+CREATE PROCEDURE SP_Update_TipoHabitacion
     @ID_Tipo_Habitacion INT,
     @Nombre_Tipo_Habitacion VARCHAR(50) = NULL,
     @Precio_Habitacion DECIMAL(10,2) = NULL,
@@ -199,7 +193,7 @@ AS
 BEGIN
     SET NOCOUNT ON;
     
-    -- UPDATE manteniendo valores actuales si el parámetro es NULL
+    -- UPDATE manteniendo valores actuales si el parÃ¡metro es NULL
     UPDATE TipoHabitacion
     SET 
         Nombre_Tipo_Habitacion = COALESCE(@Nombre_Tipo_Habitacion, Nombre_Tipo_Habitacion),
@@ -209,10 +203,9 @@ BEGIN
     
     IF @@ROWCOUNT = 0
     BEGIN
-        RAISERROR('No existe tipo de habitación con ese ID.', 16, 1);
+        RAISERROR('No existe tipo de habitaciÃ³n con ese ID.', 16, 1);
     END
 END;
-GO
 
 CREATE PROCEDURE SP_Update_Habitacion
     @ID_Nro_Habitacion int,
@@ -231,4 +224,5 @@ BEGIN
         Tipo_Habitacion = COALESCE(@Tipo_Habitacion, Tipo_Habitacion)
     WHERE ID_Nro_Habitacion = @ID_Nro_Habitacion;
 END;
+
 

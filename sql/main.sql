@@ -21,7 +21,7 @@ CREATE TABLE Origen(
 )
 
 -- Tabla: HUESPED — Registra huéspedes (CUIL, email, nombres, apellidos, fecha de nacimiento y categoría).
-CREATE TABLE HUESPED (
+CREATE TABLE Huesped (
     ID_Huesped INT PRIMARY KEY IDENTITY(1,1),
     Cedula_Huesped VARCHAR(50) NOT NULL UNIQUE,
     Estado_Huesped BIT NOT NULL DEFAULT 1,
@@ -128,7 +128,7 @@ CREATE TABLE Proveedor(
 -- Tabla: Producto — Catálogo de productos con precio, stock y umbral de alerta.
 CREATE TABLE Producto(
     ID_Producto INT IDENTITY(1,1) PRIMARY KEY,
-    Nombre_Producto VARCHAR(100) NOT NULL,
+    Nombre_Producto VARCHAR(100) NOT NULL UNIQUE,
     Precio_Unidad_Producto DECIMAL(10,2) NOT NULL CHECK (Precio_Unidad_Producto >= 0),
     Stock_Alerta INT NOT NULL DEFAULT 5 CHECK (Stock_Alerta >= 0),
     Stock_Producto INT NOT NULL CHECK (Stock_Producto >= 0)
