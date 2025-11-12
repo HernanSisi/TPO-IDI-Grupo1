@@ -118,7 +118,7 @@ BEGIN
         WHERE p.Stock_Producto < c.ConsumoTotal;
 
         RAISERROR('¡Stock insuficiente para producto ID=%d (stock=%d, requerido=%d)! Operación cancelada.',
-                  16, 1, @EjID, @StockActual, @Requerido);
+                16, 1, @EjID, @StockActual, @Requerido);
         ROLLBACK TRANSACTION;
         RETURN;
     END

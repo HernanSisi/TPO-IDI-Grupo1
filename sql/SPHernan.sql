@@ -476,3 +476,34 @@ BEGIN
 
 END
 GO
+
+CREATE PROCEDURE SP_ActualizarProveedor
+    @CUIL_CUIT_Proveedor VARCHAR(15),
+	@Razon_Social_Proveedor VARCHAR(150) = NULL,
+    @Telefono_Proveedor VARCHAR(20) = NULL,
+    @Email_Proveedor VARCHAR(100) = NULL
+AS 
+BEGIN
+    SET NOCOUNT ON;
+    
+    IF @Email_Proveedor is NOT NULL AND EXISTS (SELECT 1 FROM Proveedor WHERE Email_Proveedor = @Email_Proveedor)
+    BEGIN
+        RAISERROR ('Error: el email esta asignado a otro proveedor', 16, 1);
+        RETURN;
+    END
+
+    UPDATE Proveedor
+    SET
+        Razon_Social_Proveedor = COALESCE(@Razon_Social_Proveedor, Razon_Social_Proveedor),
+        Telefono_Proveedor = COALESCE(@Telefono_Proveedor, Telefono_Proveedor),
+        Email_Proveedor = COALESCE(@Email_Proveedor, Email_Proveedor)
+    WHERE CUIL_CUIT_Proveedor = @CUIL_CUIT_Proveedor;
+
+    IF @@ROWCOUNT = 0
+    BEGIN
+        RAISERROR('No existe tipo de habitación con ese ID.', 16, 1);
+    END
+END;
+
+GO
+
