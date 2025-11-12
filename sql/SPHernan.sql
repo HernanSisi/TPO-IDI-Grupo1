@@ -339,3 +339,141 @@ BEGIN
 
 END
 GO
+
+CREATE PROCEDURE sp_InsertarProducto
+    @Nombre_Producto VARCHAR(100),
+    @Precio_Unidad_Producto DECIMAL(10,2),
+    @Stock_Producto INT,
+    @Stock_Alerta INT = NULL
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    IF @Nombre_Producto IS NULL OR @Nombre_Producto = ''
+    BEGIN
+        RAISERROR ('Error: El nombre del producto no puede estar vacío.', 16, 1);
+        RETURN;
+    END
+
+    IF @Precio_Unidad_Producto IS NULL
+    BEGIN
+        RAISERROR ('Error: El precio del producto no puede estar vacío.', 16, 1);
+        RETURN;
+    END
+
+    IF @Stock_Producto IS NULL
+    BEGIN
+        RAISERROR ('Error: El stock del producto no puede estar vacío.', 16, 1);
+        RETURN;
+    END
+
+    IF @Precio_Unidad_Producto < 0
+    BEGIN
+        RAISERROR ('Error: El precio del producto no puede ser negativo.', 16, 1);
+        RETURN;
+    END
+
+    IF @Stock_Producto < 0
+    BEGIN
+        RAISERROR ('Error: El stock del producto no puede ser negativo.', 16, 1);
+        RETURN;
+    END
+
+    IF @Stock_Alerta IS NULL
+    BEGIN
+        SET @Stock_Alerta = 5;
+    END
+
+    IF @Stock_Alerta < 0
+    BEGIN
+        RAISERROR ('Error: El stock de alerta no puede ser negativo.', 16, 1);
+        RETURN;
+    END
+
+    INSERT INTO Producto (
+        Nombre_Producto,
+        Precio_Unidad_Producto,
+        Stock_Alerta,
+        Stock_Producto
+    )
+    VALUES (
+        @Nombre_Producto,
+        @Precio_Unidad_Producto,
+        @Stock_Alerta,
+        @Stock_Producto
+    );
+
+END
+
+GO
+
+CREATE PROCEDURE sp_InsertarProveedor
+    @CUIL_CUIT_Proveedor VARCHAR(15),
+    @Razon_Social_Proveedor VARCHAR(150),
+    @Telefono_Proveedor VARCHAR(20),
+    @Email_Proveedor VARCHAR(100)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    IF @CUIL_CUIT_Proveedor IS NULL OR @CUIL_CUIT_Proveedor = ''
+    BEGIN
+        RAISERROR ('Error: El CUIL/CUIT del proveedor no puede estar vacío.', 16, 1);
+        RETURN;
+    END
+
+    IF @Razon_Social_Proveedor IS NULL OR @Razon_Social_Proveedor = ''
+    BEGIN
+        RAISERROR ('Error: La razón social no puede estar vacía.', 16, 1);
+        RETURN;
+    END
+
+    IF @Telefono_Proveedor IS NULL OR @Telefono_Proveedor = ''
+    BEGIN
+        RAISERROR ('Error: El teléfono no puede estar vacío.', 16, 1);
+        RETURN;
+    END
+
+    IF @Email_Proveedor IS NULL OR @Email_Proveedor = ''
+    BEGIN
+        RAISERROR ('Error: El email no puede estar vacío.', 16, 1);
+        RETURN;
+    END
+
+    IF EXISTS (SELECT 1 FROM Proveedor WHERE CUIL_CUIT_Proveedor = @CUIL_CUIT_Proveedor)
+    BEGIN
+        RAISERROR ('Error: El CUIL/CUIT ingresado ya existe.', 16, 1);
+        RETURN;
+    END
+
+    IF EXISTS (SELECT 1 FROM Proveedor WHERE Email_Proveedor = @Email_Proveedor)
+    BEGIN
+        RAISERROR ('Error: El email ingresado ya está registrado.', 16, 1);
+        RETURN;
+    END
+
+    IF NOT (
+        @Email_Proveedor LIKE '%@%._%'
+        AND CHARINDEX(' ', @Email_Proveedor) = 0
+        AND LEN(@Email_Proveedor) BETWEEN 5 AND 100
+    )
+    BEGIN
+        RAISERROR ('Error: El formato del email no es válido.', 16, 1);
+        RETURN;
+    END
+
+    INSERT INTO Proveedor (
+        CUIL_CUIT_Proveedor,
+        Razon_Social_Proveedor,
+        Telefono_Proveedor,
+        Email_Proveedor
+    )
+    VALUES (
+        @CUIL_CUIT_Proveedor,
+        @Razon_Social_Proveedor,
+        @Telefono_Proveedor,
+        @Email_Proveedor
+    );
+
+END
+GO

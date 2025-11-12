@@ -182,7 +182,7 @@ GO
 EXEC SP_MetodoPago_Insert @Nombre_MetodoPago = 'Tarjeta de Crédito';
 EXEC SP_MetodoPago_Insert @Nombre_MetodoPago = '';
 
-
+go
 -- SP actualizar metodo de pago
 CREATE PROCEDURE SP_MetodoPago_Update
     @ID_MetodoPago INT,
@@ -213,7 +213,7 @@ EXEC SP_MetodoPago_Update
     @ID_MetodoPago = 2,
     @Nombre_MetodoPago = 'Efectivo';
 
-
+go
 
 -- SP Actualizar producto 
 CREATE PROCEDURE SP_Producto_Update
