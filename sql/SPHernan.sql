@@ -1,3 +1,4 @@
+GO
 CREATE PROCEDURE SP_InsertarGasto
     @Importe DECIMAL(10,2),
     @Fecha_Gasto DATETIME = NULL,
@@ -504,6 +505,94 @@ BEGIN
         RAISERROR('No existe tipo de habitación con ese ID.', 16, 1);
     END
 END;
-
 GO
 
+CREATE PROCEDURE SP_LeerDetalleReserva
+    @ID_Reserva INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    IF @ID_Reserva IS NULL
+    BEGIN
+        RAISERROR('Error: El ID de Reserva no puede ser NULL.',16,1);
+        RETURN;
+    END
+
+    IF NOT EXISTS (SELECT 1 FROM Reserva WHERE ID_Reserva = @ID_Reserva)
+    BEGIN
+        RAISERROR('Error: No existe reserva con ese ID.',16,1);
+        RETURN;
+    END
+
+    -- 1) Devuelve la tupla de Reserva
+    SELECT
+        r.ID_Reserva,
+        r.Fecha_Reserva,
+        r.Titular_Reserva,
+        r.ID_Habitacion,
+        r.Fecha_Reserva_Inicio,
+        r.Fecha_Reserva_Fin,
+        r.Fecha_CheckIn,
+        r.Fecha_CheckOut
+    FROM Reserva r
+    WHERE r.ID_Reserva = @ID_Reserva;
+
+    -- 2) Devuelve las filas referenciadas por las FK de la reserva (Titular y Habitación + TipoHabitacion)
+    SELECT
+        h.ID_Huesped,
+        h.Cedula_Huesped,
+        h.Nombre1_Huesped,
+        h.Nombre2_Huesped,
+        h.Apellido1_Huesped,
+        h.Apellido2_Huesped,
+        h.Email_Huesped,
+        h.Fecha_Nacimiento_Huesped,
+        h.ID_Categoria
+    FROM HUESPED h
+    INNER JOIN Reserva r ON r.Titular_Reserva = h.ID_Huesped
+    WHERE r.ID_Reserva = @ID_Reserva;
+
+    SELECT
+        hab.ID_Nro_Habitacion,
+        hab.Estado_Habitacion,
+        hab.Tipo_Habitacion,
+        th.Nombre_Tipo_Habitacion,
+        th.Precio_Habitacion,
+        th.Capacidad_Habitacion
+    FROM Habitacion hab
+    LEFT JOIN TipoHabitacion th ON th.ID_Tipo_Habitacion = hab.Tipo_Habitacion
+    INNER JOIN Reserva r2 ON r2.ID_Habitacion = hab.ID_Nro_Habitacion
+    WHERE r2.ID_Reserva = @ID_Reserva;
+
+    -- 3) Devuelve los gastos que referencian a esta reserva (si existen)
+    SELECT
+        g.ID_Gasto,
+        g.Importe,
+        g.Fecha_Gasto,
+        g.Producto_Gasto,
+        g.Cantidad_Producto,
+        g.ID_Personal,
+        g.Origen_Gasto,
+        g.Estado_Gasto
+    FROM Gasto g
+    WHERE g.ID_Reserva = @ID_Reserva;
+
+    -- 4) Devuelve en un result set separado todos los huéspedes asociados a la reserva vía Reserva_Huesped
+    SELECT
+        rh.ID_Huesped,
+        h.Cedula_Huesped,
+        h.Nombre1_Huesped,
+        h.Nombre2_Huesped,
+        h.Apellido1_Huesped,
+        h.Apellido2_Huesped,
+        h.Email_Huesped,
+        h.Fecha_Nacimiento_Huesped,
+        h.ID_Categoria
+    FROM Reserva_Huesped rh
+    INNER JOIN HUESPED h ON h.ID_Huesped = rh.ID_Huesped
+    WHERE rh.ID_Reserva = @ID_Reserva;
+
+END;
+
+EXEC SP_LeerDetalleReserva @ID_Reserva = 2;
