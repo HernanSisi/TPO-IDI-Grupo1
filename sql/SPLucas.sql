@@ -78,7 +78,7 @@ EXEC SP_Personal_Insert
     @Fecha_Nacimiento_Personal = '1995-08-21',
     @ID_Rol = 1;
 
-
+go
 -- Procedimiento almacenado para actualizar un registro en la tabla PERSONAL
 -- Verifica que el email no exista en la tabla HUESPED antes de actualizar
 CREATE PROCEDURE SP_Personal_Update

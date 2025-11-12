@@ -98,4 +98,89 @@ BEGIN
         (@ID_Cobro, @ID_Gasto);
 
 END
+
+GO
+
+CREATE PROCEDURE SP_InsertarPedidoProducto
+    @ID_Pedido INT,
+    @ID_Producto INT,
+    @Cantidad_Producto INT,
+    @Costo_unidad DECIMAL(10,2)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    IF @ID_Pedido IS NULL OR @ID_Producto IS NULL OR @Cantidad_Producto IS NULL OR @Costo_unidad IS NULL
+    BEGIN
+        RAISERROR ('Error: Ninguno de los campos puede ser nulo.', 16, 1);
+        RETURN;
+    END
+
+    IF NOT EXISTS (SELECT 1 FROM Pedido WHERE ID_Pedido = @ID_Pedido)
+    BEGIN
+        RAISERROR ('Error: El Pedido indicado no existe.', 16, 1);
+        RETURN;
+    END
+
+    IF NOT EXISTS (SELECT 1 FROM Producto WHERE ID_Producto = @ID_Producto)
+    BEGIN
+        RAISERROR ('Error: El Producto indicado no existe.', 16, 1);
+        RETURN;
+    END
+
+    IF @Cantidad_Producto <= 0
+    BEGIN
+        RAISERROR ('Error: La cantidad del producto debe ser mayor que cero.', 16, 1);
+        RETURN;
+    END
+
+    IF @Costo_unidad < 0
+    BEGIN
+        RAISERROR ('Error: El costo por unidad no puede ser un valor negativo.', 16, 1);
+        RETURN;
+    END
+
+    IF EXISTS (SELECT 1 FROM Pedido_Producto WHERE ID_Pedido = @ID_Pedido AND ID_Producto = @ID_Producto)
+    BEGIN
+        RAISERROR ('Error: El producto ya ha sido agregado a este pedido.', 16, 1);
+        RETURN;
+    END
+
+    INSERT INTO Pedido_Producto 
+        (ID_Pedido, ID_Producto, Cantidad_Producto, Costo_unidad)
+    VALUES 
+        (@ID_Pedido, @ID_Producto, @Cantidad_Producto, @Costo_unidad);
+
+END
+
+GO
+
+ALTER PROCEDURE sp_InsertarPedido
+    @CUIL_CUIT_Proveedor VARCHAR(15),
+    @Fecha_Pedido DATETIME = NULL
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    IF @CUIL_CUIT_Proveedor IS NULL OR @CUIL_CUIT_Proveedor = ''
+    BEGIN
+        RAISERROR ('Error: El CUIL/CUIT del proveedor no puede estar vacío.', 16, 1);
+        RETURN;
+    END
+
+    IF NOT EXISTS (SELECT 1 FROM Proveedor WHERE CUIL_CUIT_Proveedor = @CUIL_CUIT_Proveedor)
+    BEGIN
+        RAISERROR ('Error: El proveedor indicado no existe.', 16, 1);
+        RETURN;
+    END
+
+    IF @Fecha_Pedido IS NULL
+    BEGIN
+        SET @Fecha_Pedido = GETDATE();
+    END
+
+    INSERT INTO Pedido (CUIL_CUIT_Proveedor, Fecha_Pedido)
+    VALUES (@CUIL_CUIT_Proveedor, @Fecha_Pedido);
+
+END
 GO
