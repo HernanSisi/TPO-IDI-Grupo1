@@ -1,43 +1,137 @@
-CREATE TRIGGER generarGastoAlReservarChad
+-------------------------- TRIGGER GENERAR GASTO AL RESERVAR ----------------------------------------
+CREATE TRIGGER generarGastoAlReservar
 ON Reserva
 AFTER INSERT
 AS
 BEGIN
     SET NOCOUNT ON;
 
-    -- Fallbacks para claves foráneas: buscar valores 'Sistema' o tomar cualquier registro existente
-    DECLARE @Producto_Gasto_Default INT = (SELECT TOP 1 ID_Producto FROM Producto WHERE Nombre_Producto LIKE '%Habitacion%');
-    IF @Producto_Gasto_Default IS NULL
-        SELECT TOP 1 @Producto_Gasto_Default = ID_Producto FROM Producto;
+    -- Asegurar existencia de valores por defecto (creamos mínimos si falta)
+    IF NOT EXISTS (SELECT 1 FROM Origen WHERE Nombre_Origen = 'Sistema')
+        INSERT INTO Origen (Nombre_Origen) VALUES ('Sistema');
 
-    DECLARE @ID_Personal_Default INT = (
-        SELECT TOP 1 P.ID_Personal
-        FROM Personal P
-        JOIN Rol R ON P.ID_Rol = R.ID_Rol
-        WHERE R.Nombre_Rol = 'Sistema'
-    );
-    IF @ID_Personal_Default IS NULL
-        SELECT TOP 1 @ID_Personal_Default = ID_Personal FROM Personal;
+    IF NOT EXISTS (SELECT 1 FROM Rol WHERE Nombre_Rol = 'Sistema')
+        INSERT INTO Rol (Nombre_Rol, Descripcion_Rol) VALUES ('Sistema', 'Usuario sistema');
 
-    DECLARE @Origen_Gasto_Default INT = (SELECT TOP 1 ID_Origen FROM Origen WHERE Nombre_Origen = 'Sistema');
-    IF @Origen_Gasto_Default IS NULL
-        SELECT TOP 1 @Origen_Gasto_Default = ID_Origen FROM Origen;
+    IF NOT EXISTS (
+        SELECT 1 FROM Personal p JOIN Rol r ON p.ID_Rol = r.ID_Rol WHERE r.Nombre_Rol = 'Sistema'
+    )
+    BEGIN
+        DECLARE @idRol INT = (SELECT TOP 1 ID_Rol FROM Rol WHERE Nombre_Rol = 'Sistema');
+        INSERT INTO Personal (Cedula_Personal, Email_Personal, Nombre1_Personal, Apellido1_Personal, Fecha_Nacimiento_Personal, Fecha_Contratacion, ID_Rol)
+        VALUES ('00000000','sistema@example.com','Sistema','Sistema','1970-01-01',GETDATE(),@idRol);
+    END
 
-    -- Insertar en Gasto usando INSERT ... SELECT para manejar múltiples filas en 'inserted'
+    -- Obtener defaults (siempre con TOP 1 para evitar fallos en multi-row)
+    DECLARE @Producto_Default INT;
+    SELECT TOP 1 @Producto_Default = ID_Producto FROM Producto WHERE Nombre_Producto LIKE '%Habitacion%';
+    IF @Producto_Default IS NULL
+        SELECT TOP 1 @Producto_Default = ID_Producto FROM Producto;
+
+    DECLARE @Personal_Default INT;
+    SELECT TOP 1 @Personal_Default = p.ID_Personal
+    FROM Personal p
+    JOIN Rol r ON p.ID_Rol = r.ID_Rol
+    WHERE r.Nombre_Rol = 'Sistema';
+    IF @Personal_Default IS NULL
+        SELECT TOP 1 @Personal_Default = ID_Personal FROM Personal;
+
+    DECLARE @Origen_Default INT;
+    SELECT TOP 1 @Origen_Default = ID_Origen FROM Origen WHERE Nombre_Origen = 'Sistema';
+    IF @Origen_Default IS NULL
+        SELECT TOP 1 @Origen_Default = ID_Origen FROM Origen;
+
+    -- Si no encontramos defaults críticos, abortamos con mensaje claro
+    IF @Personal_Default IS NULL OR @Origen_Default IS NULL
+    BEGIN
+        -- Mensaje sencillo y rollback explícito (más fácil de explicar en la presentación)
+        RAISERROR('Faltan datos por defecto (Personal/Origen).', 16, 1);
+        ROLLBACK TRANSACTION;
+        RETURN;
+    END
+
+    -- Insertar gastos para las filas de 'inserted' de forma set-based
+    --hacemos un select dentro de el siguiente insert 
     INSERT INTO Gasto (Importe, Producto_Gasto, Cantidad_Producto, ID_Personal, ID_Reserva, Origen_Gasto)
     SELECT
-        -- Importe = precio por noche * noches (mínimo 1)
-        ISNULL(th.Precio_Habitacion, 0) *
-            CASE WHEN DATEDIFF(day, i.Fecha_CheckIn, i.Fecha_CheckOut) > 0
-                 THEN DATEDIFF(day, i.Fecha_CheckIn, i.Fecha_CheckOut)
-                 ELSE 1 END AS Importe,
-        ISNULL(@Producto_Gasto_Default, 1) AS Producto_Gasto,
+        -- Calculamos importe = precio_habitacion * noches, sin usar DATEDIFF(day,...)
+        COALESCE(th.Precio_Habitacion, 0) *
+            CASE
+                -- Si faltan fechas de reserva, cobrar 1 unidad por defecto
+                WHEN i.Fecha_Reserva_Inicio IS NULL OR i.Fecha_Reserva_Fin IS NULL THEN 1
+                -- Calculamos días como diferencia entre las fechas convertidas a DATE y casteadas a FLOAT
+                WHEN CAST(CONVERT(date, i.Fecha_Reserva_Fin) AS float) - CAST(CONVERT(date, i.Fecha_Reserva_Inicio) AS float) > 0
+                    -- entonces redondeamos convirtiendo la resta a INT
+                    THEN CONVERT(INT, CAST(CONVERT(date, i.Fecha_Reserva_Fin) AS float) - CAST(CONVERT(date, i.Fecha_Reserva_Inicio) AS float))
+                ELSE 1
+            END AS Importe,
+            -- luego de hallar la cant noches, se multiplica todo eso por el precio de la habitacion
+            -- o sea coalesce precio_habitacion * cant_noches (hallado)
+        @Producto_Default AS Producto_Gasto,
         1 AS Cantidad_Producto,
-        ISNULL(@ID_Personal_Default, 1) AS ID_Personal,
+        @Personal_Default AS ID_Personal,
         i.ID_Reserva,
-        ISNULL(@Origen_Gasto_Default, 1) AS Origen_Gasto
+        @Origen_Default AS Origen_Gasto
     FROM inserted i
     LEFT JOIN Habitacion h ON h.ID_Nro_Habitacion = i.ID_Habitacion
     LEFT JOIN TipoHabitacion th ON th.ID_Tipo_Habitacion = h.Tipo_Habitacion;
-
 END;
+GO
+
+
+------------ TRIGGER CONTROL DE STOCK --------
+
+CREATE TRIGGER ControlStock
+ON Gasto
+AFTER INSERT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    -- Proposito: Controlar que no se pueda insertar un gasto que reduzca el stock de un producto por debajo de cero.
+
+    -- (1) Verificar si algún producto no tiene stock suficiente
+    IF EXISTS (
+        SELECT 1
+        FROM (
+            SELECT Producto_Gasto AS ID_Producto, SUM(Cantidad_Producto) AS ConsumoTotal
+            FROM inserted
+            WHERE Producto_Gasto IS NOT NULL
+            GROUP BY Producto_Gasto
+        ) AS c
+        JOIN Producto p ON p.ID_Producto = c.ID_Producto
+        WHERE p.Stock_Producto < c.ConsumoTotal
+    )
+    BEGIN
+        DECLARE @EjID INT, @StockActual INT, @Requerido INT;
+        SELECT TOP (1)
+            @EjID = c.ID_Producto,
+            @Requerido = c.ConsumoTotal,
+            @StockActual = p.Stock_Producto
+        FROM (
+            SELECT Producto_Gasto AS ID_Producto, SUM(Cantidad_Producto) AS ConsumoTotal
+            FROM inserted
+            WHERE Producto_Gasto IS NOT NULL
+            GROUP BY Producto_Gasto
+        ) AS c
+        JOIN Producto p ON p.ID_Producto = c.ID_Producto
+        WHERE p.Stock_Producto < c.ConsumoTotal;
+
+        RAISERROR('¡Stock insuficiente para producto ID=%d (stock=%d, requerido=%d)! Operación cancelada.',
+                  16, 1, @EjID, @StockActual, @Requerido);
+        ROLLBACK TRANSACTION;
+        RETURN;
+    END
+
+    -- (2) Si todo OK, aplicar la resta de stock
+    UPDATE p
+    SET p.Stock_Producto = p.Stock_Producto - c.ConsumoTotal
+    FROM Producto p
+    JOIN (
+        SELECT Producto_Gasto AS ID_Producto, SUM(Cantidad_Producto) AS ConsumoTotal
+        FROM inserted
+        WHERE Producto_Gasto IS NOT NULL
+        GROUP BY Producto_Gasto
+    ) AS c ON p.ID_Producto = c.ID_Producto;
+END;
+GO

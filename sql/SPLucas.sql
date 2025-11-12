@@ -265,4 +265,310 @@ EXEC SP_Producto_Update
     @Stock_Producto = 50;
 
 
+-- SP Insertar TipoHabitacion
+CREATE PROCEDURE SP_TipoHabitacion_Insert
+    @Nombre_Tipo_Habitacion VARCHAR(50),
+    @Precio_Habitacion DECIMAL(10,2),
+    @Capacidad_Habitacion INT
+AS
+BEGIN
+    SET NOCOUNT ON;
     
+    -- Insertar el tipo de habitación
+    INSERT INTO TipoHabitacion (
+        Nombre_Tipo_Habitacion,
+        Precio_Habitacion,
+        Capacidad_Habitacion
+    )
+    VALUES (
+        @Nombre_Tipo_Habitacion,
+        @Precio_Habitacion,
+        @Capacidad_Habitacion
+    );
+END;
+GO
+
+
+-- Insertar habitación simple
+EXEC SP_TipoHabitacion_Insert
+    @Nombre_Tipo_Habitacion = 'Simple',
+    @Precio_Habitacion = 5000.00,
+    @Capacidad_Habitacion = 1;
+
+-- Insertar habitación doble
+EXEC SP_TipoHabitacion_Insert
+    @Nombre_Tipo_Habitacion = 'Doble',
+    @Precio_Habitacion = 8000.00,
+    @Capacidad_Habitacion = 2;
+
+EXEC SP_TipoHabitacion_Insert
+    @Nombre_Tipo_Habitacion = 'Triple',
+    @Precio_Habitacion = 12000.00,
+    @Capacidad_Habitacion = 3;
+-- Insertar suite
+EXEC SP_TipoHabitacion_Insert
+    @Nombre_Tipo_Habitacion = 'Suite Presidencial',
+    @Precio_Habitacion = 25000.00,
+    @Capacidad_Habitacion = 4;
+
+
+--- SP Actualizar TipoHabitacion
+CREATE PROCEDURE SP_TipoHabitacion_Update
+    @ID_Tipo_Habitacion INT,
+    @Nombre_Tipo_Habitacion VARCHAR(50) = NULL,
+    @Precio_Habitacion DECIMAL(10,2) = NULL,
+    @Capacidad_Habitacion INT = NULL
+AS
+BEGIN
+    SET NOCOUNT ON;
+    
+    -- UPDATE manteniendo valores actuales si el parámetro es NULL
+    UPDATE TipoHabitacion
+    SET 
+        Nombre_Tipo_Habitacion = COALESCE(@Nombre_Tipo_Habitacion, Nombre_Tipo_Habitacion),
+        Precio_Habitacion = COALESCE(@Precio_Habitacion, Precio_Habitacion),
+        Capacidad_Habitacion = COALESCE(@Capacidad_Habitacion, Capacidad_Habitacion)
+    WHERE ID_Tipo_Habitacion = @ID_Tipo_Habitacion;
+    
+    IF @@ROWCOUNT = 0
+    BEGIN
+        RAISERROR('No existe tipo de habitación con ese ID.', 16, 1);
+    END
+END;
+GO
+
+-- Cambiar solo el precio
+EXEC SP_TipoHabitacion_Update
+    @ID_Tipo_Habitacion = 1,
+    @Precio_Habitacion = 5500.00;
+
+-- Cambiar nombre y capacidad
+EXEC SP_TipoHabitacion_Update
+    @ID_Tipo_Habitacion = 1,
+    @Nombre_Tipo_Habitacion = 'Simple Premium',
+    @Capacidad_Habitacion = 2;
+
+-- Cambiar todos los campos
+EXEC SP_TipoHabitacion_Update
+    @ID_Tipo_Habitacion = 2,
+    @Nombre_Tipo_Habitacion = 'Doble Deluxe',
+    @Precio_Habitacion = 9500.00,
+    @Capacidad_Habitacion = 3;
+
+
+--SP Eliminar Reserva_Huesped
+CREATE PROCEDURE SP_ReservaHuesped_Delete
+    @ID_Reserva INT,
+    @ID_Huesped INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    
+    -- Eliminar la relación entre reserva y huésped
+    DELETE FROM Reserva_Huesped
+    WHERE ID_Reserva = @ID_Reserva 
+      AND ID_Huesped = @ID_Huesped;
+    
+    IF @@ROWCOUNT = 0
+    BEGIN
+        RAISERROR('No existe esa relación entre reserva y huésped.', 16, 1);
+    END
+END;
+GO
+-- Eliminar la relación entre la reserva 1 y el huésped 2
+EXEC SP_ReservaHuesped_Delete
+    @ID_Reserva = 1,
+    @ID_Huesped = 2; 
+
+-- Intentar eliminar una relación inexistente
+EXEC SP_ReservaHuesped_Delete
+    @ID_Reserva = 999,
+    @ID_Huesped = 888;
+GO
+
+GO
+-- SP Leer Pedido con detalle
+CREATE PROCEDURE SP_Pedido_Read
+    @ID_Pedido INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    -- Validación de existencia
+    IF NOT EXISTS (SELECT 1 FROM Pedido WHERE ID_Pedido = @ID_Pedido)
+    BEGIN
+        RAISERROR('No existe pedido con ese ID.', 16, 1);
+        RETURN;
+    END
+
+    -- Encabezado + total del pedido
+    SELECT 
+        p.ID_Pedido,
+        p.Fecha_Pedido,
+        pr.CUIL_CUIT_Proveedor,
+        pr.Razon_Social_Proveedor,
+        pr.Telefono_Proveedor,
+        pr.Email_Proveedor,
+        Total_Pedido = (
+            SELECT SUM(pp.Cantidad_Producto * pp.Costo_unidad)
+            FROM Pedido_Producto pp
+            WHERE pp.ID_Pedido = p.ID_Pedido
+        )
+    FROM Pedido p
+    INNER JOIN Proveedor pr ON pr.CUIL_CUIT_Proveedor = p.CUIL_CUIT_Proveedor
+    WHERE p.ID_Pedido = @ID_Pedido;
+
+    -- Detalle del pedido (líneas)
+    SELECT 
+        pp.ID_Producto,
+        prod.Nombre_Producto,
+        pp.Cantidad_Producto,
+        pp.Costo_unidad,
+        Subtotal = pp.Cantidad_Producto * pp.Costo_unidad
+    FROM Pedido_Producto pp
+    INNER JOIN Producto prod ON prod.ID_Producto = pp.ID_Producto
+    WHERE pp.ID_Pedido = @ID_Pedido
+    ORDER BY prod.Nombre_Producto;
+END
+GO
+EXEC SP_Pedido_Read @ID_Pedido = 2;
+
+
+
+-- SP Leer Gasto por Reserva
+GO
+CREATE PROCEDURE SP_Gasto_ReadPorReserva
+    @ID_Reserva INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    IF NOT EXISTS (SELECT 1 FROM Reserva WHERE ID_Reserva = @ID_Reserva)
+    BEGIN
+        RAISERROR('No existe reserva con ese ID.', 16, 1);
+        RETURN;
+    END
+
+    SELECT
+        r.ID_Reserva,
+        r.Fecha_Reserva,
+        Total_Gastos         = COUNT(g.ID_Gasto),
+        Total_Activos        = SUM(CASE WHEN g.Estado_Gasto = 1 THEN 1 ELSE 0 END),
+        Total_Anulados       = SUM(CASE WHEN g.Estado_Gasto = 0 THEN 1 ELSE 0 END),
+        Monto_Total_Activos  = SUM(CASE WHEN g.Estado_Gasto = 1 THEN g.Importe ELSE 0 END),
+        Monto_Total_Anulados = SUM(CASE WHEN g.Estado_Gasto = 0 THEN g.Importe ELSE 0 END)
+    FROM Reserva r
+    LEFT JOIN Gasto g
+        ON g.ID_Reserva = r.ID_Reserva
+    WHERE r.ID_Reserva = @ID_Reserva
+    GROUP BY r.ID_Reserva, r.Fecha_Reserva;
+
+END
+GO
+
+
+EXEC SP_Gasto_ReadPorReserva @ID_Reserva = 4;
+
+GO
+
+
+
+-- SP Leer Cobro por Reserva
+CREATE PROCEDURE SP_Cobro_ReadPorReserva
+    @ID_Reserva INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    -- Validar que la reserva exista
+    IF NOT EXISTS (SELECT 1 FROM Reserva WHERE ID_Reserva = @ID_Reserva)
+    BEGIN
+        RAISERROR('No existe reserva con ese ID.', 16, 1);
+        RETURN;
+    END
+
+    -- Un solo SELECT con todo el detalle de cobros
+    SELECT
+        r.ID_Reserva,
+        c.ID_Cobro,
+        c.Fecha_Cobro,
+        mp.Nombre_MetodoPago,
+        g.ID_Gasto,
+        g.Fecha_Gasto,
+        g.Importe,
+        g.Cantidad_Producto,
+        p.Nombre_Producto,
+        o.Nombre_Origen,
+        per.Nombre1_Personal + ' ' + per.Apellido1_Personal AS Personal_Responsable
+    FROM Reserva r
+    INNER JOIN Gasto g          ON g.ID_Reserva = r.ID_Reserva
+    INNER JOIN Cobro_Gasto cg   ON cg.ID_Gasto = g.ID_Gasto
+    INNER JOIN Cobro c          ON c.ID_Cobro = cg.ID_Cobro
+    INNER JOIN MetodoPago mp    ON mp.ID_MetodoPago = c.Metodo_Cobro
+    INNER JOIN Producto p       ON p.ID_Producto = g.Producto_Gasto
+    INNER JOIN Origen o         ON o.ID_Origen = g.Origen_Gasto
+    INNER JOIN Personal per     ON per.ID_Personal = g.ID_Personal
+    WHERE r.ID_Reserva = @ID_Reserva
+    ORDER BY c.Fecha_Cobro DESC, g.Fecha_Gasto DESC;
+END
+GO
+EXEC SP_Cobro_ReadPorReserva @ID_Reserva = 4;
+
+GO
+-- SP Leer Pedido sin detalle
+CREATE PROCEDURE SP_PedidoSDetalle_Read
+    @ID_Pedido INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT 
+        p.ID_Pedido,
+        p.Fecha_Pedido,
+        p.CUIL_CUIT_Proveedor
+    FROM Pedido p
+    WHERE p.ID_Pedido = @ID_Pedido;
+
+    IF @@ROWCOUNT = 0
+    BEGIN
+        RAISERROR('No existe pedido con ese ID.', 16, 1);
+    END
+END
+GO
+
+
+EXEC SP_PedidoSDetalle_Read @ID_Pedido = 2;
+
+
+GO
+CREATE PROCEDURE SP_CobroGasto_Delete
+    @ID_Cobro INT,
+    @ID_Gasto INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    -- Validar que exista la relación
+    IF NOT EXISTS (
+        SELECT 1 
+        FROM Cobro_Gasto
+        WHERE ID_Cobro = @ID_Cobro
+          AND ID_Gasto = @ID_Gasto
+    )
+    BEGIN
+        RAISERROR('No existe esa relación entre cobro y gasto.', 16, 1);
+        RETURN;
+    END
+
+    -- Eliminar la relación
+    DELETE FROM Cobro_Gasto
+    WHERE ID_Cobro = @ID_Cobro
+      AND ID_Gasto = @ID_Gasto;
+
+    PRINT 'Relación cobro-gasto eliminada correctamente.';
+END
+GO
+
+EXEC SP_CobroGasto_Delete 
+    @ID_Cobro = 1, 
+    @ID_Gasto = 5;

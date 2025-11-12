@@ -1,11 +1,6 @@
 {
-    "[sql]": {
-        "editor.quickSuggestions": {
-            "other": false,
-            "comments": false,
-            "strings": false
-        },
-        "editor.suggestOnTriggerCharacters": false,
-        "editor.parameterHints.enabled": false
-    }
+    "mssql.enableSqlLint": false,
+    "mssql.lintOnSave": false,
+    "sql.linter.enable": false,
+    "mssql.intelliSense.enableErrorChecking": false
 }
