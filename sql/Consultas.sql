@@ -46,7 +46,7 @@ SELECT
     T.Precio_Habitacion,
     H.Estado_Habitacion
 FROM Habitacion AS H
-JOIN TipoHabitacion AS T
+INNER JOIN TipoHabitacion AS T
     ON H.Tipo_Habitacion = T.ID_Tipo_Habitacion
 WHERE 
     H.Estado_Habitacion = 1
