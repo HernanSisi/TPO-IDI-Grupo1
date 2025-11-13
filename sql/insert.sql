@@ -23,7 +23,8 @@ INSERT INTO Rol (Nombre_Rol, Descripcion_Rol) VALUES
 ('Botones', 'Recepcion'),
 ('Supervisor', 'Mantenimiento'),
 ('Guardia', 'Seguridad'),
-('Recursos Humanos', 'Administracion');
+('Recursos Humanos', 'Administracion'),
+('Administrador de Sistemas', 'TI');
 
 -- Tabla: Origen
 INSERT INTO Origen (Nombre_Origen) VALUES
@@ -36,6 +37,7 @@ INSERT INTO Origen (Nombre_Origen) VALUES
 ('Telefono'),
 ('Internet Premium'),
 ('Excursiones'),
-('Transporte');
+('Transporte')
+('Sistema');
 
 -- El resto de los datos se insertan mediante procedimientos almacenados en sql/exec.sql.

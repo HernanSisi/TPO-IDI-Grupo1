@@ -1,5 +1,4 @@
 CREATE PROCEDURE SP_Insert_Gasto
-    @Importe DECIMAL(10,2),
     @Fecha_Gasto DATETIME = NULL,
     @Producto_Gasto INT,
     @Cantidad_Producto INT,
@@ -10,18 +9,13 @@ CREATE PROCEDURE SP_Insert_Gasto
     BEGIN
         SET NOCOUNT ON;
 
-        IF @Importe IS NULL OR @Producto_Gasto IS NULL OR @Cantidad_Producto IS NULL
+        IF @Producto_Gasto IS NULL OR @Cantidad_Producto IS NULL
             OR @ID_Personal IS NULL OR @ID_Reserva IS NULL OR @Origen_Gasto IS NULL
         BEGIN
             RAISERROR('Error: Faltan parametros obligatorios (no pueden ser NULL).',16,1);
             RETURN;
         END
 
-        IF @Importe < 0
-        BEGIN
-            RAISERROR('Error: Importe debe ser >= 0.',16,1);
-            RETURN;
-        END
 
         IF @Cantidad_Producto <= 0
         BEGIN
@@ -56,16 +50,19 @@ CREATE PROCEDURE SP_Insert_Gasto
             RETURN;
         END
 
+        Declare @PrecioUnidad DECIMAL(10,2);
+        SET @PrecioUnidad = (select precio_unidad_producto from producto where id_producto = @Producto_Gasto);
+
         BEGIN TRANSACTION;
             INSERT INTO Gasto
                 (Importe, Fecha_Gasto, Producto_Gasto, Cantidad_Producto, ID_Personal, ID_Reserva, Origen_Gasto)
             VALUES
-                (@Importe, @Fecha_Gasto, @Producto_Gasto, @Cantidad_Producto, @ID_Personal, @ID_Reserva, @Origen_Gasto);
+                (@PrecioUnidad * @Cantidad_Producto, @Fecha_Gasto, @Producto_Gasto, @Cantidad_Producto, @ID_Personal, @ID_Reserva, @Origen_Gasto);
         COMMIT TRANSACTION;
 
         RETURN 0;
     END;
-
+GO
 
 CREATE PROCEDURE SP_Insert_Cobro_Gasto
     @ID_Cobro INT,
@@ -97,7 +94,7 @@ BEGIN
         (@ID_Cobro, @ID_Gasto);
 
 END
-
+GO
 
 CREATE PROCEDURE SP_Insert_Pedido_Producto
     @ID_Pedido INT,
@@ -150,7 +147,7 @@ BEGIN
         (@ID_Pedido, @ID_Producto, @Cantidad_Producto, @Costo_unidad);
 
 END
-
+GO
 
 CREATE PROCEDURE SP_Insert_Pedido
     @CUIL_CUIT_Proveedor VARCHAR(15),
@@ -182,7 +179,7 @@ BEGIN
         (@CUIL_CUIT_Proveedor, @Fecha_Pedido);
 
 END
-
+GO
 
 CREATE PROCEDURE SP_Insert_Cobro
     @ID_MetodoPago INT,
@@ -214,7 +211,7 @@ BEGIN
         (@Fecha_Cobro, @ID_MetodoPago);
 
 END
-
+GO
 
 CREATE PROCEDURE SP_Insert_Reserva_Huesped
     @ID_Reserva INT,
@@ -261,7 +258,9 @@ BEGIN
     WHERE r.ID_Reserva = @ID_Reserva;
 
     DECLARE @CantidadHuespedes INT;
-    SELECT @CantidadHuespedes = (COUNT(*) FROM Reserva_Huesped WHERE ID_Reserva = @ID_Reserva) + 1;
+    SELECT @CantidadHuespedes = COUNT(*) + 1
+    FROM Reserva_Huesped
+    WHERE ID_Reserva = @ID_Reserva;
 
     IF @CantidadHuespedes >= @LimiteHabitacion
     BEGIN
@@ -274,8 +273,7 @@ BEGIN
         (@ID_Reserva, @ID_Huesped);
 
 END
-
-
+GO
 
 CREATE PROCEDURE SP_Insert_Reserva
     @Titular_Reserva INT,
@@ -358,6 +356,7 @@ BEGIN
     );
 
 END
+GO
 
 CREATE PROCEDURE SP_Insert_Producto
     @Nombre_Producto VARCHAR(100),
@@ -423,7 +422,7 @@ BEGIN
     );
 
 END
-
+GO
 
 CREATE PROCEDURE SP_Insert_Proveedor
     @CUIL_CUIT_Proveedor VARCHAR(15),
@@ -494,6 +493,8 @@ BEGIN
     );
 
 END
+GO
+
 CREATE PROCEDURE SP_Insert_Habitacion
 
     @ID_Nro_Habitacion int,
@@ -503,7 +504,7 @@ CREATE PROCEDURE SP_Insert_Habitacion
 AS
 BEGIN 
 -- Verificar que la habitacion exista
-        IF NOT EXISTS (SELECT 1 FROM Habitacion WHERE Tipo_Habitacion = @Tipo_Habitacion)
+        IF NOT EXISTS (SELECT 1 FROM TipoHabitacion WHERE ID_Tipo_Habitacion = @Tipo_Habitacion)
         BEGIN
             RAISERROR('El tipo de habitacion especificado no existe.', 16, 1);
             RETURN;
@@ -512,7 +513,7 @@ BEGIN
     INSERT INTO Habitacion (ID_Nro_Habitacion, Estado_Habitacion, Tipo_Habitacion)
     VALUES (@ID_Nro_Habitacion, @Estado_Habitacion, @Tipo_Habitacion);
 END;
-
+GO
 
 CREATE PROCEDURE SP_Insert_Personal
     @Cedula_Personal VARCHAR(50),
@@ -569,6 +570,7 @@ BEGIN
         RAISERROR('El email ya existe en la tabla Huesped.', 16, 1);
     END;
 END;
+GO
 
 CREATE PROCEDURE SP_Insert_MetodoPago
     @Nombre_MetodoPago VARCHAR(50)
@@ -577,7 +579,7 @@ BEGIN
     SET NOCOUNT ON;
 
     BEGIN TRY
-        -- Normalizo bÃ¡sico (opcional pero Ãºtil)
+        -- Normalizo basico (opcional pero util)
         SET @Nombre_MetodoPago = LTRIM(RTRIM(@Nombre_MetodoPago));
 
         IF @Nombre_MetodoPago = ''
@@ -589,15 +591,14 @@ BEGIN
         INSERT INTO MetodoPago (Nombre_MetodoPago)
         VALUES (@Nombre_MetodoPago);
 
-        -- Devuelvo el ID generado
-        SELECT CAST(SCOPE_IDENTITY() AS INT) AS ID_MetodoPago;
     END TRY
     BEGIN CATCH
-        -- ReenvÃ­o el error (incluye violaciÃ³n de UNIQUE si hay duplicado)
+        -- Reenvío el error (incluye violacion de UNIQUE si hay duplicado)
         DECLARE @msg NVARCHAR(4000) = ERROR_MESSAGE();
         RAISERROR(@msg, 16, 1);
     END CATCH
 END
+GO
 
 CREATE PROCEDURE SP_Insert_TipoHabitacion
     @Nombre_Tipo_Habitacion VARCHAR(50),
@@ -607,7 +608,7 @@ AS
 BEGIN
     SET NOCOUNT ON;
     
-    -- Insertar el tipo de habitaciÃ³n
+    -- Insertar el tipo de habitacion
     INSERT INTO TipoHabitacion (
         Nombre_Tipo_Habitacion,
         Precio_Habitacion,
@@ -619,6 +620,7 @@ BEGIN
         @Capacidad_Habitacion
     );
 END;
+GO
 
 CREATE PROCEDURE SP_Insert_Huesped
     @Cedula_Huesped VARCHAR(50),
@@ -670,3 +672,6 @@ END;
 
 
 
+
+
+GO

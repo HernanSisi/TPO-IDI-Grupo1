@@ -15,6 +15,7 @@ BEGIN
         RAISERROR('No existe esa relacion entre reserva y Huesped.', 16, 1);
     END
 END;
+GO
 
 CREATE PROCEDURE SP_Delete_Cobro_Gasto
     @ID_Cobro INT,
@@ -42,6 +43,7 @@ BEGIN
 
     PRINT 'Relacion cobro-gasto eliminada correctamente.';
 END
+GO
 
 CREATE PROCEDURE SP_Delete_Rol
     @ID_Rol INT
@@ -63,6 +65,7 @@ BEGIN
         RAISERROR(@msg, 16, 1);
     END CATCH
 END;
+GO
 
 CREATE PROCEDURE SP_Delete_Origen
     @ID_Origen INT
@@ -84,6 +87,7 @@ BEGIN
         RAISERROR(@msg, 16, 1);
     END CATCH
 END;
+GO
 
 CREATE PROCEDURE SP_Delete_Categoria
     @ID_Categoria INT
@@ -105,3 +109,5 @@ BEGIN
         RAISERROR(@msg, 16, 1);
     END CATCH
 END;
+GO
+

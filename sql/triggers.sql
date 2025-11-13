@@ -5,24 +5,6 @@ AFTER INSERT
 AS
 BEGIN
     SET NOCOUNT ON;
-
-    -- Asegurar existencia de valores por defecto (creamos minimos si falta)
-    IF NOT EXISTS (SELECT 1 FROM Origen WHERE Nombre_Origen = 'Sistema')
-        INSERT INTO Origen (Nombre_Origen) VALUES ('Sistema');
-
-    IF NOT EXISTS (SELECT 1 FROM Rol WHERE Nombre_Rol = 'Sistema')
-        INSERT INTO Rol (Nombre_Rol, Descripcion_Rol) VALUES ('Sistema', 'Usuario sistema');
-
-    IF NOT EXISTS (
-        SELECT 1 FROM Personal p JOIN Rol r ON p.ID_Rol = r.ID_Rol WHERE r.Nombre_Rol = 'Sistema'
-    )
-    BEGIN
-        DECLARE @idRol INT = (SELECT TOP 1 ID_Rol FROM Rol WHERE Nombre_Rol = 'Sistema');
-        INSERT INTO Personal (Cedula_Personal, Email_Personal, Nombre1_Personal, Apellido1_Personal, Fecha_Nacimiento_Personal, Fecha_Contratacion, ID_Rol)
-        VALUES ('00000000','sistema@example.com','Sistema','Sistema','1970-01-01',GETDATE(),@idRol);
-    END
-
-    -- Obtener defaults (siempre con TOP 1 para evitar fallos en multi-row)
     DECLARE @Producto_Default INT;
     SELECT TOP 1 @Producto_Default = ID_Producto FROM Producto WHERE Nombre_Producto LIKE '%Habitacion%';
     IF @Producto_Default IS NULL
@@ -32,7 +14,7 @@ BEGIN
     SELECT TOP 1 @Personal_Default = p.ID_Personal
     FROM Personal p
     JOIN Rol r ON p.ID_Rol = r.ID_Rol
-    WHERE r.Nombre_Rol = 'Sistema';
+    WHERE r.Nombre_Rol = 'Administrador de Sistemas';
     IF @Personal_Default IS NULL
         SELECT TOP 1 @Personal_Default = ID_Personal FROM Personal;
 
@@ -60,9 +42,9 @@ BEGIN
                 -- Si faltan fechas de reserva, cobrar 1 unidad por defecto
                 WHEN i.Fecha_Reserva_Inicio IS NULL OR i.Fecha_Reserva_Fin IS NULL THEN 1
                 -- Calculamos dias como diferencia entre las fechas convertidas a DATE y casteadas a FLOAT
-                WHEN CAST(CONVERT(date, i.Fecha_Reserva_Fin) AS float) - CAST(CONVERT(date, i.Fecha_Reserva_Inicio) AS float) > 0
+                WHEN DATEDIFF(day, CONVERT(date, i.Fecha_Reserva_Inicio), CONVERT(date, i.Fecha_Reserva_Fin)) > 0
                     -- entonces redondeamos convirtiendo la resta a INT
-                    THEN CONVERT(INT, CAST(CONVERT(date, i.Fecha_Reserva_Fin) AS float) - CAST(CONVERT(date, i.Fecha_Reserva_Inicio) AS float))
+                THEN  DATEDIFF(day, CONVERT(date, i.Fecha_Reserva_Inicio), CONVERT(date, i.Fecha_Reserva_Fin))
                 ELSE 1
             END AS Importe,
             -- luego de hallar la cant noches, se multiplica todo eso por el precio de la habitacion
@@ -135,3 +117,8 @@ BEGIN
     ) AS c ON p.ID_Producto = c.ID_Producto;
 END;
 GO
+
+EXEC SP_Insert_Gasto @Importe = 450.0, @Fecha_Gasto = '2024-11-01 18:30:00', @Producto_Gasto = 3, @Cantidad_Producto = 30, @ID_Personal = 1, @ID_Reserva = 1, @Origen_Gasto = 1;
+
+select * from Producto
+select * from pedido

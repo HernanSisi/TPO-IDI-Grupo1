@@ -14,4 +14,4 @@ EXEC SP_Read_RolDetalle;
 
 EXEC SP_Read_CategoriaDescuento;
 
-EXEC SP_Read_ReservaDetalleCompleto @ID_Reserva = 3;
+EXEC SP_Read_ReservaDetalleCompleto @ID_Reserva = 2;

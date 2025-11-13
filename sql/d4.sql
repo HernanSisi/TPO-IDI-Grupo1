@@ -70,4 +70,4 @@ BEGIN
 END;
 GO
 
-EXEC SP_DineroNeto '2024-10-01', '2024-12-31';
+EXEC SP_Read_DineroNeto '2024-11-01', '2024-11-30';

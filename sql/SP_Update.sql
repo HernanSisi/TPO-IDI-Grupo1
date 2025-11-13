@@ -25,6 +25,7 @@ BEGIN
         RAISERROR('No existe tipo de habitacion con ese ID.', 16, 1);
     END
 END;
+GO
 
 CREATE PROCEDURE SP_Update_Huesped
     @ID_Huesped INT,
@@ -82,6 +83,7 @@ BEGIN
         RAISERROR(@msg, 16, 1);
     END CATCH
 END;
+GO
 
 CREATE PROCEDURE SP_Update_Personal
     @ID_Personal INT,
@@ -139,6 +141,7 @@ BEGIN
         RAISERROR('No existe personal con ese ID.', 16, 1);
     END
 END;
+GO
 
 CREATE PROCEDURE SP_Update_MetodoPago
     @ID_MetodoPago INT,
@@ -157,7 +160,7 @@ BEGIN
         RAISERROR('No existe metodo de pago con ese ID.', 16, 1);
     END
 END;
-
+GO
 
 CREATE PROCEDURE SP_Update_Producto
     @ID_Producto INT,
@@ -183,6 +186,7 @@ BEGIN
         RAISERROR('No existe producto con ese ID.', 16, 1);
     END
 END;
+GO
 
 CREATE PROCEDURE SP_Update_TipoHabitacion
     @ID_Tipo_Habitacion INT,
@@ -206,6 +210,7 @@ BEGIN
         RAISERROR('No existe tipo de habitaciA3n con ese ID.', 16, 1);
     END
 END;
+GO
 
 CREATE PROCEDURE SP_Update_Habitacion
     @ID_Nro_Habitacion int,
@@ -224,5 +229,5 @@ BEGIN
         Tipo_Habitacion = COALESCE(@Tipo_Habitacion, Tipo_Habitacion)
     WHERE ID_Nro_Habitacion = @ID_Nro_Habitacion;
 END;
-
+GO
 

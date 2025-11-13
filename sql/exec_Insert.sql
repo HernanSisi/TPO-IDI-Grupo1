@@ -47,6 +47,8 @@ EXEC SP_Insert_MetodoPago @Nombre_MetodoPago = 'QR';
 EXEC SP_Insert_MetodoPago @Nombre_MetodoPago = 'Astro';
 
 -- Personal
+EXEC SP_Insert_Personal @Cedula_Personal = '20-00000000-0', @Email_Personal = 'sistema@macacookie.com', @Nombre1_Personal = 'Sistema', @Nombre2_Personal = '', @Apellido1_Personal = 'TI', @Apellido2_Personal = '', @Fecha_Nacimiento_Personal = '1900-1-1', @ID_Rol = 11;
+
 EXEC SP_Insert_Personal @Cedula_Personal = '20-28456789-1', @Email_Personal = 'pedro.alvarez@hotelstaff.com', @Nombre1_Personal = 'Pedro', @Nombre2_Personal = 'Luis', @Apellido1_Personal = 'Alvarez', @Apellido2_Personal = 'Gomez', @Fecha_Nacimiento_Personal = '1985-06-15', @ID_Rol = 1;
 EXEC SP_Insert_Personal @Cedula_Personal = '27-32789456-4', @Email_Personal = 'lucia.silva@hotelstaff.com', @Nombre1_Personal = 'Lucia', @Nombre2_Personal = 'Andrea', @Apellido1_Personal = 'Silva', @Apellido2_Personal = 'Morales', @Fecha_Nacimiento_Personal = '1988-09-22', @ID_Rol = 2;
 EXEC SP_Insert_Personal @Cedula_Personal = '23-30156789-7', @Email_Personal = 'miguel.torres@hotelstaff.com', @Nombre1_Personal = 'Miguel', @Nombre2_Personal = NULL, @Apellido1_Personal = 'Torres', @Apellido2_Personal = 'Vega', @Fecha_Nacimiento_Personal = '1990-12-03', @ID_Rol = 3;
@@ -57,6 +59,7 @@ EXEC SP_Insert_Personal @Cedula_Personal = '23-31478963-3', @Email_Personal = 'f
 EXEC SP_Insert_Personal @Cedula_Personal = '24-35789123-6', @Email_Personal = 'gabriela.vargas@hotelstaff.com', @Nombre1_Personal = 'Gabriela', @Nombre2_Personal = 'Maria', @Apellido1_Personal = 'Vargas', @Apellido2_Personal = 'Cruz', @Fecha_Nacimiento_Personal = '1989-05-07', @ID_Rol = 8;
 EXEC SP_Insert_Personal @Cedula_Personal = '20-30258741-9', @Email_Personal = 'ricardo.molina@hotelstaff.com', @Nombre1_Personal = 'Ricardo', @Nombre2_Personal = 'David', @Apellido1_Personal = 'Molina', @Apellido2_Personal = 'Rojas', @Fecha_Nacimiento_Personal = '1984-03-12', @ID_Rol = 9;
 EXEC SP_Insert_Personal @Cedula_Personal = '27-36123789-4', @Email_Personal = 'silvia.cortes@hotelstaff.com', @Nombre1_Personal = 'Silvia', @Nombre2_Personal = 'Carolina', @Apellido1_Personal = 'Cortes', @Apellido2_Personal = 'Navarro', @Fecha_Nacimiento_Personal = '1992-10-20', @ID_Rol = 10;
+
 
 -- Proveedor
 EXEC SP_Insert_Proveedor @CUIL_CUIT_Proveedor = '30-71234567-8', @Razon_Social_Proveedor = 'Labubu SA', @Telefono_Proveedor = '11-4567-8901', @Email_Proveedor = 'ventas@alimentoslabubu.com';
@@ -108,7 +111,10 @@ EXEC SP_Insert_Pedido_Producto @ID_Pedido = 8, @ID_Producto = 9, @Cantidad_Produ
 
 -- Reserva
 EXEC SP_Insert_Reserva @Titular_Reserva = 1, @ID_Habitacion = 101, @Fecha_Reserva_Inicio = '2024-11-01 15:00:00', @Fecha_Reserva_Fin = '2024-11-05 11:00:00', @Fecha_Reserva = '2024-10-25 10:30:00', @Fecha_CheckIn = '2024-11-01 15:30:00', @Fecha_CheckOut = '2024-11-05 10:45:00';
-EXEC SP_Insert_Reserva @Titular_Reserva = 2, @ID_Habitacion = 102, @Fecha_Reserva_Inicio = '2024-11-03 14:00:00', @Fecha_Reserva_Fin = '2024-11-08 12:00:00', @Fecha_Reserva = '2024-10-26 14:20:00', @Fecha_CheckIn = '2024-11-03 14:20:00', @Fecha_CheckOut = '2024-11-08 11:30:00';
+
+
+
+EXEC SP_Insert_Reserva @Titular_Reserva = 2, @ID_Habitacion = 303, @Fecha_Reserva_Inicio = '2024-11-03 14:00:00', @Fecha_Reserva_Fin = '2024-11-08 12:00:00', @Fecha_Reserva = '2024-10-26 14:20:00', @Fecha_CheckIn = '2024-11-03 14:20:00', @Fecha_CheckOut = '2024-11-08 11:30:00';
 EXEC SP_Insert_Reserva @Titular_Reserva = 3, @ID_Habitacion = 103, @Fecha_Reserva_Inicio = '2024-11-05 16:00:00', @Fecha_Reserva_Fin = '2024-11-10 10:00:00', @Fecha_Reserva = '2024-10-27 09:15:00', @Fecha_CheckIn = '2024-11-05 16:15:00', @Fecha_CheckOut = '2024-11-10 09:50:00';
 EXEC SP_Insert_Reserva @Titular_Reserva = 4, @ID_Habitacion = 201, @Fecha_Reserva_Inicio = '2024-11-07 13:00:00', @Fecha_Reserva_Fin = '2024-11-12 11:00:00', @Fecha_Reserva = '2024-10-28 16:45:00', @Fecha_CheckIn = '2024-11-07 13:30:00', @Fecha_CheckOut = '2024-11-12 05:00:00';
 EXEC SP_Insert_Reserva @Titular_Reserva = 5, @ID_Habitacion = 202, @Fecha_Reserva_Inicio = '2024-11-10 15:00:00', @Fecha_Reserva_Fin = '2024-11-15 12:00:00', @Fecha_Reserva = '2024-10-29 11:30:00', @Fecha_CheckIn = '2024-11-10 15:00:00', @Fecha_CheckOut = '2024-11-15 12:00:00';
@@ -119,16 +125,16 @@ EXEC SP_Insert_Reserva @Titular_Reserva = 9, @ID_Habitacion = 401, @Fecha_Reserv
 EXEC SP_Insert_Reserva @Titular_Reserva = 10, @ID_Habitacion = 102, @Fecha_Reserva_Inicio = '2024-11-20 16:00:00', @Fecha_Reserva_Fin = '2024-11-25 10:00:00', @Fecha_Reserva = '2024-11-03 14:45:00', @Fecha_CheckIn = '2024-11-20 16:00:00', @Fecha_CheckOut = '2024-11-25 10:00:00';
 
 -- Reserva_Huesped
-EXEC SP_Insert_Reserva_Huesped @ID_Reserva = 1, @ID_Huesped = 1;
-EXEC SP_Insert_Reserva_Huesped @ID_Reserva = 1, @ID_Huesped = 2;
 EXEC SP_Insert_Reserva_Huesped @ID_Reserva = 2, @ID_Huesped = 2;
-EXEC SP_Insert_Reserva_Huesped @ID_Reserva = 2, @ID_Huesped = 3;
 EXEC SP_Insert_Reserva_Huesped @ID_Reserva = 3, @ID_Huesped = 3;
 EXEC SP_Insert_Reserva_Huesped @ID_Reserva = 4, @ID_Huesped = 4;
 EXEC SP_Insert_Reserva_Huesped @ID_Reserva = 4, @ID_Huesped = 5;
 EXEC SP_Insert_Reserva_Huesped @ID_Reserva = 5, @ID_Huesped = 5;
 EXEC SP_Insert_Reserva_Huesped @ID_Reserva = 6, @ID_Huesped = 6;
+EXEC SP_Insert_Reserva_Huesped @ID_Reserva = 6, @ID_Huesped = 8;
 EXEC SP_Insert_Reserva_Huesped @ID_Reserva = 7, @ID_Huesped = 7;
+EXEC SP_Insert_Reserva_Huesped @ID_Reserva = 7, @ID_Huesped = 2;
+EXEC SP_Insert_Reserva_Huesped @ID_Reserva = 8, @ID_Huesped = 9;
 
 -- Cobro
 EXEC SP_Insert_Cobro @ID_MetodoPago = 1, @Fecha_Cobro = '2024-11-01 14:30:00';
@@ -143,25 +149,66 @@ EXEC SP_Insert_Cobro @ID_MetodoPago = 2, @Fecha_Cobro = '2024-11-09 14:10:00';
 EXEC SP_Insert_Cobro @ID_MetodoPago = 4, @Fecha_Cobro = '2024-11-10 09:30:00';
 
 -- Gasto
-EXEC SP_Insert_Gasto @Importe = 450.0, @Fecha_Gasto = '2024-11-01 18:30:00', @Producto_Gasto = 1, @Cantidad_Producto = 3, @ID_Personal = 1, @ID_Reserva = 1, @Origen_Gasto = 1;
-EXEC SP_Insert_Gasto @Importe = 2500.0, @Fecha_Gasto = '2024-11-02 20:15:00', @Producto_Gasto = 3, @Cantidad_Producto = 1, @ID_Personal = 1, @ID_Reserva = 1, @Origen_Gasto = 4;
-EXEC SP_Insert_Gasto @Importe = 700.0, @Fecha_Gasto = '2024-11-03 19:45:00', @Producto_Gasto = 2, @Cantidad_Producto = 2, @ID_Personal = 1, @ID_Reserva = 2, @Origen_Gasto = 1;
-EXEC SP_Insert_Gasto @Importe = 1200.0, @Fecha_Gasto = '2024-11-04 21:30:00', @Producto_Gasto = 1, @Cantidad_Producto = 1, @ID_Personal = 1, @ID_Reserva = 2, @Origen_Gasto = 2;
-EXEC SP_Insert_Gasto @Importe = 350.0, @Fecha_Gasto = '2024-11-05 17:20:00', @Producto_Gasto = 4, @Cantidad_Producto = 2, @ID_Personal = 1, @ID_Reserva = 3, @Origen_Gasto = 3;
-EXEC SP_Insert_Gasto @Importe = 1500.0, @Fecha_Gasto = '2024-11-07 20:00:00', @Producto_Gasto = 7, @Cantidad_Producto = 1, @ID_Personal = 1, @ID_Reserva = 4, @Origen_Gasto = 4;
-EXEC SP_Insert_Gasto @Importe = 800.0, @Fecha_Gasto = '2024-11-08 18:15:00', @Producto_Gasto = 9, @Cantidad_Producto = 3, @ID_Personal = 1, @ID_Reserva = 7, @Origen_Gasto = 1;
-EXEC SP_Insert_Gasto @Importe = 2200.0, @Fecha_Gasto = '2024-11-09 19:30:00', @Producto_Gasto = 1, @Cantidad_Producto = 1, @ID_Personal = 1, @ID_Reserva = 8, @Origen_Gasto = 5;
-EXEC SP_Insert_Gasto @Importe = 600.0, @Fecha_Gasto = '2024-11-10 17:45:00', @Producto_Gasto = 10, @Cantidad_Producto = 5, @ID_Personal = 1, @ID_Reserva = 3, @Origen_Gasto = 1;
-EXEC SP_Insert_Gasto @Importe = 1800.0, @Fecha_Gasto = '2024-11-02 21:00:00', @Producto_Gasto = 2, @Cantidad_Producto = 1, @ID_Personal = 1, @ID_Reserva = 2, @Origen_Gasto = 6;
+EXEC SP_Insert_Gasto  @Fecha_Gasto = '2024-11-01 18:30:00', @Producto_Gasto = 1, @Cantidad_Producto = 3, @ID_Personal = 1, @ID_Reserva = 1, @Origen_Gasto = 1;
+EXEC SP_Insert_Gasto @Fecha_Gasto = '2024-11-02 20:15:00', @Producto_Gasto = 3, @Cantidad_Producto = 1, @ID_Personal = 1, @ID_Reserva = 1, @Origen_Gasto = 4;
+EXEC SP_Insert_Gasto @Fecha_Gasto = '2024-11-03 19:45:00', @Producto_Gasto = 2, @Cantidad_Producto = 2, @ID_Personal = 1, @ID_Reserva = 2, @Origen_Gasto = 1;
+EXEC SP_Insert_Gasto @Fecha_Gasto = '2024-11-04 21:30:00', @Producto_Gasto = 1, @Cantidad_Producto = 1, @ID_Personal = 1, @ID_Reserva = 2, @Origen_Gasto = 2;
+EXEC SP_Insert_Gasto @Fecha_Gasto = '2024-11-05 17:20:00', @Producto_Gasto = 4, @Cantidad_Producto = 2, @ID_Personal = 1, @ID_Reserva = 3, @Origen_Gasto = 3;
+EXEC SP_Insert_Gasto @Fecha_Gasto = '2024-11-07 20:00:00', @Producto_Gasto = 7, @Cantidad_Producto = 1, @ID_Personal = 1, @ID_Reserva = 4, @Origen_Gasto = 4;
+EXEC SP_Insert_Gasto @Fecha_Gasto = '2024-11-08 18:15:00', @Producto_Gasto = 9, @Cantidad_Producto = 3, @ID_Personal = 1, @ID_Reserva = 7, @Origen_Gasto = 1;
+EXEC SP_Insert_Gasto @Fecha_Gasto = '2024-11-09 19:30:00', @Producto_Gasto = 1, @Cantidad_Producto = 1, @ID_Personal = 1, @ID_Reserva = 8, @Origen_Gasto = 5;
+EXEC SP_Insert_Gasto @Fecha_Gasto = '2024-11-10 17:45:00', @Producto_Gasto = 10, @Cantidad_Producto = 5, @ID_Personal = 1, @ID_Reserva = 3, @Origen_Gasto = 1;
+EXEC SP_Insert_Gasto @Fecha_Gasto = '2024-11-03 21:00:00', @Producto_Gasto = 2, @Cantidad_Producto = 1, @ID_Personal = 1, @ID_Reserva = 2, @Origen_Gasto = 6;
 
 -- Cobro_Gasto
-EXEC SP_Insert_Cobro_Gasto @ID_Cobro = 1, @ID_Gasto = 1;
-EXEC SP_Insert_Cobro_Gasto @ID_Cobro = 2, @ID_Gasto = 2;
-EXEC SP_Insert_Cobro_Gasto @ID_Cobro = 3, @ID_Gasto = 3;
-EXEC SP_Insert_Cobro_Gasto @ID_Cobro = 4, @ID_Gasto = 4;
-EXEC SP_Insert_Cobro_Gasto @ID_Cobro = 5, @ID_Gasto = 5;
-EXEC SP_Insert_Cobro_Gasto @ID_Cobro = 6, @ID_Gasto = 6;
-EXEC SP_Insert_Cobro_Gasto @ID_Cobro = 7, @ID_Gasto = 7;
-EXEC SP_Insert_Cobro_Gasto @ID_Cobro = 8, @ID_Gasto = 8;
-EXEC SP_Insert_Cobro_Gasto @ID_Cobro = 9, @ID_Gasto = 9;
-EXEC SP_Insert_Cobro_Gasto @ID_Cobro = 10, @ID_Gasto = 10;
+DECLARE @ID_Gasto_1 INT = (
+    SELECT ID_Gasto FROM Gasto
+    WHERE Fecha_Gasto = '2024-11-01 18:30:00' AND ID_Reserva = 1 AND Producto_Gasto = 1 AND Importe = 450.0
+);
+DECLARE @ID_Gasto_2 INT = (
+    SELECT ID_Gasto FROM Gasto
+    WHERE Fecha_Gasto = '2024-11-02 20:15:00' AND ID_Reserva = 1 AND Producto_Gasto = 3 AND Importe = 2500.0
+);
+DECLARE @ID_Gasto_3 INT = (
+    SELECT ID_Gasto FROM Gasto
+    WHERE Fecha_Gasto = '2024-11-03 19:45:00' AND ID_Reserva = 2 AND Producto_Gasto = 2 AND Importe = 700.0
+);
+DECLARE @ID_Gasto_4 INT = (
+    SELECT ID_Gasto FROM Gasto
+    WHERE Fecha_Gasto = '2024-11-04 21:30:00' AND ID_Reserva = 2 AND Producto_Gasto = 1 AND Importe = 1200.0
+);
+DECLARE @ID_Gasto_5 INT = (
+    SELECT ID_Gasto FROM Gasto
+    WHERE Fecha_Gasto = '2024-11-05 17:20:00' AND ID_Reserva = 3 AND Producto_Gasto = 4 AND Importe = 350.0
+);
+DECLARE @ID_Gasto_6 INT = (
+    SELECT ID_Gasto FROM Gasto
+    WHERE Fecha_Gasto = '2024-11-07 20:00:00' AND ID_Reserva = 4 AND Producto_Gasto = 7 AND Importe = 1500.0
+);
+DECLARE @ID_Gasto_7 INT = (
+    SELECT ID_Gasto FROM Gasto
+    WHERE Fecha_Gasto = '2024-11-08 18:15:00' AND ID_Reserva = 7 AND Producto_Gasto = 9 AND Importe = 800.0
+);
+DECLARE @ID_Gasto_8 INT = (
+    SELECT ID_Gasto FROM Gasto
+    WHERE Fecha_Gasto = '2024-11-09 19:30:00' AND ID_Reserva = 8 AND Producto_Gasto = 1 AND Importe = 2200.0
+);
+DECLARE @ID_Gasto_9 INT = (
+    SELECT ID_Gasto FROM Gasto
+    WHERE Fecha_Gasto = '2024-11-10 17:45:00' AND ID_Reserva = 3 AND Producto_Gasto = 10 AND Importe = 600.0
+);
+DECLARE @ID_Gasto_10 INT = (
+    SELECT ID_Gasto FROM Gasto
+    WHERE Fecha_Gasto = '2024-11-02 21:00:00' AND ID_Reserva = 2 AND Producto_Gasto = 2 AND Importe = 1800.0
+);
+
+EXEC SP_Insert_Cobro_Gasto @ID_Cobro = 1, @ID_Gasto = @ID_Gasto_1;
+EXEC SP_Insert_Cobro_Gasto @ID_Cobro = 2, @ID_Gasto = @ID_Gasto_2;
+EXEC SP_Insert_Cobro_Gasto @ID_Cobro = 3, @ID_Gasto = @ID_Gasto_3;
+EXEC SP_Insert_Cobro_Gasto @ID_Cobro = 4, @ID_Gasto = @ID_Gasto_4;
+EXEC SP_Insert_Cobro_Gasto @ID_Cobro = 5, @ID_Gasto = @ID_Gasto_5;
+EXEC SP_Insert_Cobro_Gasto @ID_Cobro = 6, @ID_Gasto = @ID_Gasto_6;
+EXEC SP_Insert_Cobro_Gasto @ID_Cobro = 7, @ID_Gasto = @ID_Gasto_7;
+EXEC SP_Insert_Cobro_Gasto @ID_Cobro = 8, @ID_Gasto = @ID_Gasto_8;
+EXEC SP_Insert_Cobro_Gasto @ID_Cobro = 9, @ID_Gasto = @ID_Gasto_9;
+EXEC SP_Insert_Cobro_Gasto @ID_Cobro = 10, @ID_Gasto = @ID_Gasto_10;

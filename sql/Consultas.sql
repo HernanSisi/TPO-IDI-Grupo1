@@ -3,7 +3,8 @@ SELECT
     ID_Categoria,
     Nombre_Categoria,
     Descuento_Categoria
-FROM Categoria;
+FROM Categoria
+ORDER BY Descuento_Categoria DESC;
 
 GO
 
@@ -88,7 +89,7 @@ GROUP BY
 
 GO
 
--- CONSULTA 7: Huespedes que tienen mas de una reserva
+-- CONSULTA 7: Huespedes que tienen al menos una reserva
 SELECT
     H.Nombre1_Huesped,
     H.Apellido1_Huesped,
@@ -99,7 +100,7 @@ INNER JOIN Reserva AS R
 GROUP BY
     H.Nombre1_Huesped,
     H.Apellido1_Huesped
-HAVING COUNT(R.ID_Reserva) > 1;
+HAVING COUNT(R.ID_Reserva) >= 1;
 
 GO
 
@@ -149,8 +150,8 @@ GO
 -- CONSULTA 11: Total cobrado y pendiente por reserva
 SELECT
     R.ID_Reserva,
-    H.Nombre1_Huesped,
-    H.Apellido1_Huesped,
+    H.Nombre1_Huesped AS Nombre_Titular,
+    H.Apellido1_Huesped AS Apellido_Titular,
 
     SUM(G.Importe) AS Total_Gastos,
 
@@ -169,12 +170,12 @@ SELECT
         END
     ) AS Total_Pendiente
 FROM Reserva AS R
-JOIN Huesped AS H
+INNER JOIN Huesped AS H
     ON R.Titular_Reserva = H.ID_Huesped
-JOIN Gasto AS G
+INNER JOIN Gasto AS G
     ON G.ID_Reserva = R.ID_Reserva
 LEFT JOIN Cobro_Gasto AS CG
-    ON CG.ID_Gasto = G.ID_Gasto   -- si no hay cobro, queda NULL
+    ON CG.ID_Gasto = G.ID_Gasto  
 GROUP BY
     R.ID_Reserva,
     H.Nombre1_Huesped,
