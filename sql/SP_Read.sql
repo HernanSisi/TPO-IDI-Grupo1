@@ -5,7 +5,9 @@ BEGIN
     SET NOCOUNT ON;
 
     -- Validacion de existencia
-    IF NOT EXISTS (SELECT 1 FROM Pedido WHERE ID_Pedido = @ID_Pedido)
+    IF NOT EXISTS (SELECT 1
+    FROM Pedido
+    WHERE ID_Pedido = @ID_Pedido)
     BEGIN
         RAISERROR('No existe pedido con ese ID.', 16, 1);
         RETURN;
@@ -27,9 +29,9 @@ BEGIN
         Total_Pedido = SUM(pp.Cantidad_Producto * pp.Costo_unidad) 
                        OVER (PARTITION BY p.ID_Pedido)
     FROM Pedido p
-    INNER JOIN Proveedor pr      ON pr.CUIL_CUIT_Proveedor = p.CUIL_CUIT_Proveedor
-    LEFT  JOIN Pedido_Producto pp ON pp.ID_Pedido = p.ID_Pedido
-    LEFT  JOIN Producto prod      ON prod.ID_Producto = pp.ID_Producto
+        INNER JOIN Proveedor pr ON pr.CUIL_CUIT_Proveedor = p.CUIL_CUIT_Proveedor
+        LEFT JOIN Pedido_Producto pp ON pp.ID_Pedido = p.ID_Pedido
+        LEFT JOIN Producto prod ON prod.ID_Producto = pp.ID_Producto
     WHERE p.ID_Pedido = @ID_Pedido
     ORDER BY prod.Nombre_Producto;
 END
@@ -41,7 +43,9 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
-    IF NOT EXISTS (SELECT 1 FROM Reserva WHERE ID_Reserva = @ID_Reserva)
+    IF NOT EXISTS (SELECT 1
+    FROM Reserva
+    WHERE ID_Reserva = @ID_Reserva)
     BEGIN
         RAISERROR('No existe reserva con ese ID.', 16, 1);
         RETURN;
@@ -56,7 +60,7 @@ BEGIN
         Monto_Total_Activos  = SUM(CASE WHEN g.Estado_Gasto = 1 THEN g.Importe ELSE 0 END),
         Monto_Total_Anulados = SUM(CASE WHEN g.Estado_Gasto = 0 THEN g.Importe ELSE 0 END)
     FROM Reserva r
-    LEFT JOIN Gasto g
+        LEFT JOIN Gasto g
         ON g.ID_Reserva = r.ID_Reserva
     WHERE r.ID_Reserva = @ID_Reserva
     GROUP BY r.ID_Reserva, r.Fecha_Reserva;
@@ -71,7 +75,9 @@ BEGIN
     SET NOCOUNT ON;
 
     -- Validar que la reserva exista
-    IF NOT EXISTS (SELECT 1 FROM Reserva WHERE ID_Reserva = @ID_Reserva)
+    IF NOT EXISTS (SELECT 1
+    FROM Reserva
+    WHERE ID_Reserva = @ID_Reserva)
     BEGIN
         RAISERROR('No existe reserva con ese ID.', 16, 1);
         RETURN;
@@ -91,13 +97,13 @@ BEGIN
         o.Nombre_Origen,
         per.Nombre1_Personal + ' ' + per.Apellido1_Personal AS Personal_Responsable
     FROM Reserva r
-    INNER JOIN Gasto g          ON g.ID_Reserva = r.ID_Reserva
-    INNER JOIN Cobro_Gasto cg   ON cg.ID_Gasto = g.ID_Gasto
-    INNER JOIN Cobro c          ON c.ID_Cobro = cg.ID_Cobro
-    INNER JOIN MetodoPago mp    ON mp.ID_MetodoPago = c.Metodo_Cobro
-    INNER JOIN Producto p       ON p.ID_Producto = g.Producto_Gasto
-    INNER JOIN Origen o         ON o.ID_Origen = g.Origen_Gasto
-    INNER JOIN Personal per     ON per.ID_Personal = g.ID_Personal
+        INNER JOIN Gasto g ON g.ID_Reserva = r.ID_Reserva
+        INNER JOIN Cobro_Gasto cg ON cg.ID_Gasto = g.ID_Gasto
+        INNER JOIN Cobro c ON c.ID_Cobro = cg.ID_Cobro
+        INNER JOIN MetodoPago mp ON mp.ID_MetodoPago = c.Metodo_Cobro
+        INNER JOIN Producto p ON p.ID_Producto = g.Producto_Gasto
+        INNER JOIN Origen o ON o.ID_Origen = g.Origen_Gasto
+        INNER JOIN Personal per ON per.ID_Personal = g.ID_Personal
     WHERE r.ID_Reserva = @ID_Reserva
     ORDER BY c.Fecha_Cobro DESC, g.Fecha_Gasto DESC;
 END
@@ -109,7 +115,7 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
-    SELECT 
+    SELECT
         p.ID_Pedido,
         p.Fecha_Pedido,
         p.CUIL_CUIT_Proveedor
@@ -128,7 +134,8 @@ CREATE PROCEDURE SP_Read_OrigenLista
 AS
 BEGIN
     SET NOCOUNT ON;
-    SELECT ID_Origen, Nombre_Origen FROM Origen;
+    SELECT ID_Origen, Nombre_Origen
+    FROM Origen;
 END;
 GO
 
@@ -137,7 +144,8 @@ CREATE PROCEDURE SP_Read_RolDetalle
 AS
 BEGIN
     SET NOCOUNT ON;
-    SELECT ID_Rol, Nombre_Rol, Descripcion_Rol FROM Rol;
+    SELECT ID_Rol, Nombre_Rol, Descripcion_Rol
+    FROM Rol;
 END;
 GO
 
@@ -146,7 +154,8 @@ CREATE PROCEDURE SP_Read_CategoriaDescuento
 AS
 BEGIN
     SET NOCOUNT ON;
-    SELECT ID_Categoria, Nombre_Categoria, Descuento_Categoria FROM Categoria;
+    SELECT ID_Categoria, Nombre_Categoria, Descuento_Categoria
+    FROM Categoria;
 END;
 GO
 
@@ -162,7 +171,9 @@ BEGIN
         RETURN;
     END
 
-    IF NOT EXISTS (SELECT 1 FROM Reserva WHERE ID_Reserva = @ID_Reserva)
+    IF NOT EXISTS (SELECT 1
+    FROM Reserva
+    WHERE ID_Reserva = @ID_Reserva)
     BEGIN
         RAISERROR('Error: No existe reserva con ese ID.',16,1);
         RETURN;
@@ -199,18 +210,17 @@ BEGIN
         h2.Apellido1_Huesped        AS Apellido1_Huesped_Reserva,
         h2.Email_Huesped            AS Email_Huesped_Reserva
     FROM Reserva r
-    INNER JOIN Huesped tit
+        INNER JOIN Huesped tit
         ON tit.ID_Huesped = r.Titular_Reserva
-    INNER JOIN Habitacion hab
+        INNER JOIN Habitacion hab
         ON hab.ID_Nro_Habitacion = r.ID_Habitacion
-    LEFT JOIN TipoHabitacion th
+        LEFT JOIN TipoHabitacion th
         ON th.ID_Tipo_Habitacion = hab.Tipo_Habitacion
-    LEFT JOIN Reserva_Huesped rh
+        LEFT JOIN Reserva_Huesped rh
         ON rh.ID_Reserva = r.ID_Reserva
-    LEFT JOIN Huesped h2
+        LEFT JOIN Huesped h2
         ON h2.ID_Huesped = rh.ID_Huesped
     WHERE r.ID_Reserva = @ID_Reserva
     ORDER BY rh.ID_Huesped;
 END
 GO
-

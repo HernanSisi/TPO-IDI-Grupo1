@@ -4,64 +4,74 @@ CREATE PROCEDURE SP_Insert_Gasto
     @Cantidad_Producto INT,
     @ID_Personal INT,
     @ID_Reserva INT,
-        @Origen_Gasto INT
-    AS
-    BEGIN
-        SET NOCOUNT ON;
+    @Origen_Gasto INT
+AS
+BEGIN
+    SET NOCOUNT ON;
 
-        IF @Producto_Gasto IS NULL OR @Cantidad_Producto IS NULL
-            OR @ID_Personal IS NULL OR @ID_Reserva IS NULL OR @Origen_Gasto IS NULL
+    IF @Producto_Gasto IS NULL OR @Cantidad_Producto IS NULL
+        OR @ID_Personal IS NULL OR @ID_Reserva IS NULL OR @Origen_Gasto IS NULL
         BEGIN
-            RAISERROR('Error: Faltan parametros obligatorios (no pueden ser NULL).',16,1);
-            RETURN;
-        END
+        RAISERROR('Error: Faltan parametros obligatorios (no pueden ser NULL).',16,1);
+        RETURN;
+    END
 
 
-        IF @Cantidad_Producto <= 0
+    IF @Cantidad_Producto <= 0
         BEGIN
-            RAISERROR('Error: Cantidad_Producto debe ser > 0.',16,1);
-            RETURN;
-        END
+        RAISERROR('Error: Cantidad_Producto debe ser > 0.',16,1);
+        RETURN;
+    END
 
-        IF @Fecha_Gasto IS NULL
+    IF @Fecha_Gasto IS NULL
             SET @Fecha_Gasto = GETDATE();
 
-        IF NOT EXISTS(SELECT 1 FROM Producto WHERE ID_Producto = @Producto_Gasto)
+    IF NOT EXISTS(SELECT 1
+    FROM Producto
+    WHERE ID_Producto = @Producto_Gasto)
         BEGIN
-            RAISERROR('Error: Producto indicado no existe.',16,1);
-            RETURN;
-        END
+        RAISERROR('Error: Producto indicado no existe.',16,1);
+        RETURN;
+    END
 
-        IF NOT EXISTS(SELECT 1 FROM Personal WHERE ID_Personal = @ID_Personal)
+    IF NOT EXISTS(SELECT 1
+    FROM Personal
+    WHERE ID_Personal = @ID_Personal)
         BEGIN
-            RAISERROR('Error: Personal indicado no existe.',16,1);
-            RETURN;
-        END
+        RAISERROR('Error: Personal indicado no existe.',16,1);
+        RETURN;
+    END
 
-        IF NOT EXISTS(SELECT 1 FROM Reserva WHERE ID_Reserva = @ID_Reserva)
+    IF NOT EXISTS(SELECT 1
+    FROM Reserva
+    WHERE ID_Reserva = @ID_Reserva)
         BEGIN
-            RAISERROR('Error: Reserva indicada no existe.',16,1);
-            RETURN;
-        END
+        RAISERROR('Error: Reserva indicada no existe.',16,1);
+        RETURN;
+    END
 
-        IF NOT EXISTS(SELECT 1 FROM Origen WHERE ID_Origen = @Origen_Gasto)
+    IF NOT EXISTS(SELECT 1
+    FROM Origen
+    WHERE ID_Origen = @Origen_Gasto)
         BEGIN
-            RAISERROR('Error: Origen indicado no existe.',16,1);
-            RETURN;
-        END
+        RAISERROR('Error: Origen indicado no existe.',16,1);
+        RETURN;
+    END
 
-        Declare @PrecioUnidad DECIMAL(10,2);
-        SET @PrecioUnidad = (select precio_unidad_producto from producto where id_producto = @Producto_Gasto);
+    Declare @PrecioUnidad DECIMAL(10,2);
+    SET @PrecioUnidad = (select precio_unidad_producto
+    from producto
+    where id_producto = @Producto_Gasto);
 
-        BEGIN TRANSACTION;
-            INSERT INTO Gasto
-                (Importe, Fecha_Gasto, Producto_Gasto, Cantidad_Producto, ID_Personal, ID_Reserva, Origen_Gasto)
-            VALUES
-                (@PrecioUnidad * @Cantidad_Producto, @Fecha_Gasto, @Producto_Gasto, @Cantidad_Producto, @ID_Personal, @ID_Reserva, @Origen_Gasto);
-        COMMIT TRANSACTION;
+    BEGIN TRANSACTION;
+    INSERT INTO Gasto
+        (Importe, Fecha_Gasto, Producto_Gasto, Cantidad_Producto, ID_Personal, ID_Reserva, Origen_Gasto)
+    VALUES
+        (@PrecioUnidad * @Cantidad_Producto, @Fecha_Gasto, @Producto_Gasto, @Cantidad_Producto, @ID_Personal, @ID_Reserva, @Origen_Gasto);
+    COMMIT TRANSACTION;
 
-        RETURN 0;
-    END;
+    RETURN 0;
+END;
 GO
 
 CREATE PROCEDURE SP_Insert_Cobro_Gasto
@@ -73,24 +83,28 @@ BEGIN
 
     IF @ID_Cobro IS NULL OR @ID_Gasto IS NULL
         BEGIN
-            RAISERROR('Error: Faltan parametros obligatorios (no pueden ser NULL).',16,1);
-            RETURN;
+        RAISERROR('Error: Faltan parametros obligatorios (no pueden ser NULL).',16,1);
+        RETURN;
     END
-    IF NOT EXISTS (SELECT 1 FROM Cobro WHERE ID_Cobro = @ID_Cobro)
+    IF NOT EXISTS (SELECT 1
+    FROM Cobro
+    WHERE ID_Cobro = @ID_Cobro)
     BEGIN
         RAISERROR ('Error: El cobro indicado no existe', 16, 1);
         RETURN;
     END
 
-    IF NOT EXISTS (SELECT 1 FROM Gasto WHERE ID_Gasto = @ID_Gasto)
+    IF NOT EXISTS (SELECT 1
+    FROM Gasto
+    WHERE ID_Gasto = @ID_Gasto)
     BEGIN
         RAISERROR ('Error: El gasto indicano no existe.', 16, 1);
         RETURN;
     END
 
-    INSERT INTO Cobro_Gasto 
+    INSERT INTO Cobro_Gasto
         (ID_Cobro, ID_Gasto)
-    VALUES 
+    VALUES
         (@ID_Cobro, @ID_Gasto);
 
 END
@@ -111,13 +125,17 @@ BEGIN
         RETURN;
     END
 
-    IF NOT EXISTS (SELECT 1 FROM Pedido WHERE ID_Pedido = @ID_Pedido)
+    IF NOT EXISTS (SELECT 1
+    FROM Pedido
+    WHERE ID_Pedido = @ID_Pedido)
     BEGIN
         RAISERROR ('Error: El Pedido indicado no existe.', 16, 1);
         RETURN;
     END
 
-    IF NOT EXISTS (SELECT 1 FROM Producto WHERE ID_Producto = @ID_Producto)
+    IF NOT EXISTS (SELECT 1
+    FROM Producto
+    WHERE ID_Producto = @ID_Producto)
     BEGIN
         RAISERROR ('Error: El Producto indicado no existe.', 16, 1);
         RETURN;
@@ -135,15 +153,17 @@ BEGIN
         RETURN;
     END
 
-    IF EXISTS (SELECT 1 FROM Pedido_Producto WHERE ID_Pedido = @ID_Pedido AND ID_Producto = @ID_Producto)
+    IF EXISTS (SELECT 1
+    FROM Pedido_Producto
+    WHERE ID_Pedido = @ID_Pedido AND ID_Producto = @ID_Producto)
     BEGIN
         RAISERROR ('Error: El producto ya ha sido agregado a este pedido.', 16, 1);
         RETURN;
     END
 
-    INSERT INTO Pedido_Producto 
+    INSERT INTO Pedido_Producto
         (ID_Pedido, ID_Producto, Cantidad_Producto, Costo_unidad)
-    VALUES 
+    VALUES
         (@ID_Pedido, @ID_Producto, @Cantidad_Producto, @Costo_unidad);
 
 END
@@ -162,7 +182,9 @@ BEGIN
         RETURN;
     END
 
-    IF NOT EXISTS (SELECT 1 FROM Proveedor WHERE CUIL_CUIT_Proveedor = @CUIL_CUIT_Proveedor)
+    IF NOT EXISTS (SELECT 1
+    FROM Proveedor
+    WHERE CUIL_CUIT_Proveedor = @CUIL_CUIT_Proveedor)
     BEGIN
         RAISERROR ('Error: El proveedor indicado no existe.', 16, 1);
         RETURN;
@@ -173,9 +195,9 @@ BEGIN
         SET @Fecha_Pedido = GETDATE();
     END
 
-    INSERT INTO Pedido 
+    INSERT INTO Pedido
         (CUIL_CUIT_Proveedor, Fecha_Pedido)
-    VALUES 
+    VALUES
         (@CUIL_CUIT_Proveedor, @Fecha_Pedido);
 
 END
@@ -194,7 +216,9 @@ BEGIN
         RETURN;
     END
 
-    IF NOT EXISTS (SELECT 1 FROM MetodoPago WHERE ID_MetodoPago = @ID_MetodoPago)
+    IF NOT EXISTS (SELECT 1
+    FROM MetodoPago
+    WHERE ID_MetodoPago = @ID_MetodoPago)
     BEGIN
         RAISERROR ('Error: El metodo de pago indicado no existe.', 16, 1);
         RETURN;
@@ -205,9 +229,9 @@ BEGIN
         SET @Fecha_Cobro = GETDATE();
     END
 
-    INSERT INTO Cobro 
+    INSERT INTO Cobro
         (Fecha_Cobro, Metodo_Cobro)
-    VALUES 
+    VALUES
         (@Fecha_Cobro, @ID_MetodoPago);
 
 END
@@ -232,19 +256,25 @@ BEGIN
         RETURN;
     END
 
-    IF NOT EXISTS (SELECT 1 FROM Reserva WHERE ID_Reserva = @ID_Reserva)
+    IF NOT EXISTS (SELECT 1
+    FROM Reserva
+    WHERE ID_Reserva = @ID_Reserva)
     BEGIN
         RAISERROR ('Error: La Reserva indicada no existe.', 16, 1);
         RETURN;
     END
 
-    IF NOT EXISTS (SELECT 1 FROM Huesped WHERE ID_Huesped = @ID_Huesped)
+    IF NOT EXISTS (SELECT 1
+    FROM Huesped
+    WHERE ID_Huesped = @ID_Huesped)
     BEGIN
         RAISERROR ('Error: El Huesped indicado no existe.', 16, 1);
         RETURN;
     END
 
-    IF EXISTS (SELECT 1 FROM Reserva_Huesped WHERE ID_Reserva = @ID_Reserva AND ID_Huesped = @ID_Huesped)
+    IF EXISTS (SELECT 1
+    FROM Reserva_Huesped
+    WHERE ID_Reserva = @ID_Reserva AND ID_Huesped = @ID_Huesped)
     BEGIN
         RAISERROR ('Error: Este Huesped ya esta asignado a esta Reserva.', 16, 1);
         RETURN;
@@ -253,8 +283,8 @@ BEGIN
     DECLARE @LimiteHabitacion INT;
     SELECT @LimiteHabitacion = th.Capacidad_Habitacion
     FROM Habitacion hab
-    INNER JOIN TipoHabitacion th ON th.ID_Tipo_Habitacion = hab.Tipo_Habitacion
-    INNER JOIN Reserva r ON r.ID_Habitacion = hab.ID_Nro_Habitacion
+        INNER JOIN TipoHabitacion th ON th.ID_Tipo_Habitacion = hab.Tipo_Habitacion
+        INNER JOIN Reserva r ON r.ID_Habitacion = hab.ID_Nro_Habitacion
     WHERE r.ID_Reserva = @ID_Reserva;
 
     DECLARE @CantidadHuespedes INT;
@@ -266,10 +296,10 @@ BEGIN
     BEGIN
         RAISERROR ('Error: Se ha alcanzado el limite de huespedes para esta habitacion.', 16, 1);
         RETURN;
-    END   
-    INSERT INTO Reserva_Huesped 
+    END
+    INSERT INTO Reserva_Huesped
         (ID_Reserva, ID_Huesped)
-    VALUES 
+    VALUES
         (@ID_Reserva, @ID_Huesped);
 
 END
@@ -293,30 +323,34 @@ BEGIN
         RETURN;
     END
 
-    IF NOT EXISTS (SELECT 1 FROM Huesped WHERE ID_Huesped = @Titular_Reserva)
+    IF NOT EXISTS (SELECT 1
+    FROM Huesped
+    WHERE ID_Huesped = @Titular_Reserva)
     BEGIN
         RAISERROR ('Error: El Huesped titular indicado no existe.', 16, 1);
         RETURN;
     END
 
-    IF NOT EXISTS (SELECT 1 FROM Habitacion WHERE ID_Nro_Habitacion = @ID_Habitacion)
+    IF NOT EXISTS (SELECT 1
+    FROM Habitacion
+    WHERE ID_Nro_Habitacion = @ID_Habitacion)
     BEGIN
         RAISERROR ('Error: La Habitacion indicada no existe.', 16, 1);
         RETURN;
     END
 
--- Esta activa la habitacion
+    -- Esta activa la habitacion
     IF NOT EXISTS (
-        SELECT 1 
-        FROM Habitacion 
-        WHERE ID_Nro_Habitacion = @ID_Habitacion
-          AND Estado_Habitacion = 1
+        SELECT 1
+    FROM Habitacion
+    WHERE ID_Nro_Habitacion = @ID_Habitacion
+        AND Estado_Habitacion = 1
     )
     BEGIN
         RAISERROR ('Error: La Habitacion indicada no esta activa.', 16, 1);
         RETURN;
     END
-    
+
     IF @Fecha_Reserva_Fin <= @Fecha_Reserva_Inicio
     BEGIN
         RAISERROR ('Error: La fecha de fin de reserva debe ser posterior a la fecha de inicio.', 16, 1);
@@ -334,8 +368,8 @@ BEGIN
         SET @Fecha_Reserva = GETDATE();
     END
 
-    INSERT INTO Reserva 
-    (
+    INSERT INTO Reserva
+        (
         Fecha_Reserva,
         Titular_Reserva,
         ID_Habitacion,
@@ -343,16 +377,16 @@ BEGIN
         Fecha_Reserva_Fin,
         Fecha_CheckIn,
         Fecha_CheckOut
-    )
-    VALUES 
-    (
-        @Fecha_Reserva,
-        @Titular_Reserva,
-        @ID_Habitacion,
-        @Fecha_Reserva_Inicio,
-        @Fecha_Reserva_Fin,
-        @Fecha_CheckIn,
-        @Fecha_CheckOut
+        )
+    VALUES
+        (
+            @Fecha_Reserva,
+            @Titular_Reserva,
+            @ID_Habitacion,
+            @Fecha_Reserva_Inicio,
+            @Fecha_Reserva_Fin,
+            @Fecha_CheckIn,
+            @Fecha_CheckOut
     );
 
 END
@@ -408,17 +442,19 @@ BEGIN
         RETURN;
     END
 
-    INSERT INTO Producto (
+    INSERT INTO Producto
+        (
         Nombre_Producto,
         Precio_Unidad_Producto,
         Stock_Alerta,
         Stock_Producto
-    )
-    VALUES (
-        @Nombre_Producto,
-        @Precio_Unidad_Producto,
-        @Stock_Alerta,
-        @Stock_Producto
+        )
+    VALUES
+        (
+            @Nombre_Producto,
+            @Precio_Unidad_Producto,
+            @Stock_Alerta,
+            @Stock_Producto
     );
 
 END
@@ -457,13 +493,17 @@ BEGIN
         RETURN;
     END
 
-    IF EXISTS (SELECT 1 FROM Proveedor WHERE CUIL_CUIT_Proveedor = @CUIL_CUIT_Proveedor)
+    IF EXISTS (SELECT 1
+    FROM Proveedor
+    WHERE CUIL_CUIT_Proveedor = @CUIL_CUIT_Proveedor)
     BEGIN
         RAISERROR ('Error: El CUIL/CUIT ingresado ya existe.', 16, 1);
         RETURN;
     END
 
-    IF EXISTS (SELECT 1 FROM Proveedor WHERE Email_Proveedor = @Email_Proveedor)
+    IF EXISTS (SELECT 1
+    FROM Proveedor
+    WHERE Email_Proveedor = @Email_Proveedor)
     BEGIN
         RAISERROR ('Error: El email ingresado ya esta registrado.', 16, 1);
         RETURN;
@@ -479,17 +519,19 @@ BEGIN
         RETURN;
     END
 
-    INSERT INTO Proveedor (
+    INSERT INTO Proveedor
+        (
         CUIL_CUIT_Proveedor,
         Razon_Social_Proveedor,
         Telefono_Proveedor,
         Email_Proveedor
-    )
-    VALUES (
-        @CUIL_CUIT_Proveedor,
-        @Razon_Social_Proveedor,
-        @Telefono_Proveedor,
-        @Email_Proveedor
+        )
+    VALUES
+        (
+            @CUIL_CUIT_Proveedor,
+            @Razon_Social_Proveedor,
+            @Telefono_Proveedor,
+            @Email_Proveedor
     );
 
 END
@@ -502,16 +544,20 @@ CREATE PROCEDURE SP_Insert_Habitacion
     @Tipo_Habitacion int
 
 AS
-BEGIN 
--- Verificar que la habitacion exista
-        IF NOT EXISTS (SELECT 1 FROM TipoHabitacion WHERE ID_Tipo_Habitacion = @Tipo_Habitacion)
+BEGIN
+    -- Verificar que la habitacion exista
+    IF NOT EXISTS (SELECT 1
+    FROM TipoHabitacion
+    WHERE ID_Tipo_Habitacion = @Tipo_Habitacion)
         BEGIN
-            RAISERROR('El tipo de habitacion especificado no existe.', 16, 1);
-            RETURN;
-        END
+        RAISERROR('El tipo de habitacion especificado no existe.', 16, 1);
+        RETURN;
+    END
 
-    INSERT INTO Habitacion (ID_Nro_Habitacion, Estado_Habitacion, Tipo_Habitacion)
-    VALUES (@ID_Nro_Habitacion, @Estado_Habitacion, @Tipo_Habitacion);
+    INSERT INTO Habitacion
+        (ID_Nro_Habitacion, Estado_Habitacion, Tipo_Habitacion)
+    VALUES
+        (@ID_Nro_Habitacion, @Estado_Habitacion, @Tipo_Habitacion);
 END;
 GO
 
@@ -527,24 +573,27 @@ CREATE PROCEDURE SP_Insert_Personal
 AS
 BEGIN
     SET NOCOUNT ON;
-    
+
     DECLARE @EmailCount INT;
-    
+
     -- Verificar si el email existe en Huesped
-    SELECT @EmailCount = COUNT(*) 
-    FROM Huesped 
+    SELECT @EmailCount = COUNT(*)
+    FROM Huesped
     WHERE Email_Huesped = @Email_Personal;
-    
+
     IF @EmailCount = 0
     BEGIN
         -- Verificar que el rol exista
-        IF NOT EXISTS (SELECT 1 FROM Rol WHERE ID_Rol = @ID_Rol)
+        IF NOT EXISTS (SELECT 1
+        FROM Rol
+        WHERE ID_Rol = @ID_Rol)
         BEGIN
             RAISERROR('El rol especificado no existe.', 16, 1);
             RETURN;
         END
-        
-        INSERT INTO Personal (
+
+        INSERT INTO Personal
+            (
             Cedula_Personal,
             Email_Personal,
             Nombre1_Personal,
@@ -553,16 +602,17 @@ BEGIN
             Apellido2_Personal,
             Fecha_Nacimiento_Personal,
             ID_Rol
-        )
-        VALUES (
-            @Cedula_Personal,
-            @Email_Personal,
-            @Nombre1_Personal,
-            @Nombre2_Personal,
-            @Apellido1_Personal,
-            @Apellido2_Personal,
-            @Fecha_Nacimiento_Personal,
-            @ID_Rol
+            )
+        VALUES
+            (
+                @Cedula_Personal,
+                @Email_Personal,
+                @Nombre1_Personal,
+                @Nombre2_Personal,
+                @Apellido1_Personal,
+                @Apellido2_Personal,
+                @Fecha_Nacimiento_Personal,
+                @ID_Rol
         );
     END
     ELSE
@@ -584,12 +634,14 @@ BEGIN
 
         IF @Nombre_MetodoPago = ''
         BEGIN
-            RAISERROR('El nombre del metodo de pago no puede ser vacio.', 16, 1);
-            RETURN;
-        END
+        RAISERROR('El nombre del metodo de pago no puede ser vacio.', 16, 1);
+        RETURN;
+    END
 
-        INSERT INTO MetodoPago (Nombre_MetodoPago)
-        VALUES (@Nombre_MetodoPago);
+        INSERT INTO MetodoPago
+        (Nombre_MetodoPago)
+    VALUES
+        (@Nombre_MetodoPago);
 
     END TRY
     BEGIN CATCH
@@ -607,17 +659,19 @@ CREATE PROCEDURE SP_Insert_TipoHabitacion
 AS
 BEGIN
     SET NOCOUNT ON;
-    
+
     -- Insertar el tipo de habitacion
-    INSERT INTO TipoHabitacion (
+    INSERT INTO TipoHabitacion
+        (
         Nombre_Tipo_Habitacion,
         Precio_Habitacion,
         Capacidad_Habitacion
-    )
-    VALUES (
-        @Nombre_Tipo_Habitacion,
-        @Precio_Habitacion,
-        @Capacidad_Habitacion
+        )
+    VALUES
+        (
+            @Nombre_Tipo_Habitacion,
+            @Precio_Habitacion,
+            @Capacidad_Habitacion
     );
 END;
 GO
@@ -639,26 +693,32 @@ BEGIN
 
     BEGIN TRY
         -- Verificar email no exista en Personal
-        SELECT @EmailCount = COUNT(*) FROM Personal WHERE Email_Personal = @Email_Huesped;
+        SELECT @EmailCount = COUNT(*)
+    FROM Personal
+    WHERE Email_Personal = @Email_Huesped;
         IF @EmailCount > 0
         BEGIN
-            RAISERROR('El email ya existe en la tabla PERSONAL.', 16, 1);
-            RETURN;
-        END
+        RAISERROR('El email ya existe en la tabla PERSONAL.', 16, 1);
+        RETURN;
+    END
 
         -- Verificar categorÃ­a vÃ¡lida
-        IF @ID_Categoria IS NOT NULL AND NOT EXISTS (SELECT 1 FROM Categoria WHERE ID_Categoria = @ID_Categoria)
+        IF @ID_Categoria IS NOT NULL AND NOT EXISTS (SELECT 1
+        FROM Categoria
+        WHERE ID_Categoria = @ID_Categoria)
         BEGIN
-            RAISERROR('La categoria especificada no existe.', 16, 1);
-            RETURN;
-        END
+        RAISERROR('La categoria especificada no existe.', 16, 1);
+        RETURN;
+    END
 
-        INSERT INTO Huesped (
-            Cedula_Huesped, Estado_Huesped, Email_Huesped,
-            Nombre1_Huesped, Nombre2_Huesped, Apellido1_Huesped, Apellido2_Huesped,
-            Fecha_Nacimiento_Huesped, ID_Categoria
+        INSERT INTO Huesped
+        (
+        Cedula_Huesped, Estado_Huesped, Email_Huesped,
+        Nombre1_Huesped, Nombre2_Huesped, Apellido1_Huesped, Apellido2_Huesped,
+        Fecha_Nacimiento_Huesped, ID_Categoria
         )
-        VALUES (
+    VALUES
+        (
             @Cedula_Huesped, @Estado_Huesped, @Email_Huesped,
             @Nombre1_Huesped, @Nombre2_Huesped, @Apellido1_Huesped, @Apellido2_Huesped,
             @Fecha_Nacimiento_Huesped, @ID_Categoria

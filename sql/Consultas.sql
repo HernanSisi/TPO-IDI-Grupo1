@@ -1,5 +1,5 @@
 ﻿-- CONSULTA 1: Categorias y sus descuentos
-SELECT 
+SELECT
     ID_Categoria,
     Nombre_Categoria,
     Descuento_Categoria
@@ -17,7 +17,7 @@ SELECT
     C.Nombre_Categoria,
     C.Descuento_Categoria
 FROM Huesped AS H
-LEFT JOIN Categoria AS C
+    LEFT JOIN Categoria AS C
     ON H.ID_Categoria = C.ID_Categoria;
 
 GO
@@ -31,7 +31,7 @@ SELECT
     R.Nombre_Rol,
     R.Descripcion_Rol
 FROM Personal AS P
-INNER JOIN Rol AS R
+    INNER JOIN Rol AS R
     ON P.ID_Rol = R.ID_Rol;
 
 GO
@@ -47,16 +47,16 @@ SELECT
     T.Precio_Habitacion,
     H.Estado_Habitacion
 FROM Habitacion AS H
-INNER JOIN TipoHabitacion AS T
+    INNER JOIN TipoHabitacion AS T
     ON H.Tipo_Habitacion = T.ID_Tipo_Habitacion
 WHERE 
     H.Estado_Habitacion = 1
     AND H.ID_Nro_Habitacion NOT IN (
         SELECT R.ID_Habitacion
-        FROM Reserva AS R
-        WHERE 
+    FROM Reserva AS R
+    WHERE 
             R.Fecha_Reserva_Inicio < @FechaFin
-            AND R.Fecha_Reserva_Fin > @FechaInicio
+        AND R.Fecha_Reserva_Fin > @FechaInicio
     );
 
 GO
@@ -70,7 +70,7 @@ SELECT
     R.Fecha_Reserva_Inicio,
     R.Fecha_Reserva_Fin
 FROM Reserva AS R
-INNER JOIN Huesped AS H
+    INNER JOIN Huesped AS H
     ON R.Titular_Reserva = H.ID_Huesped;
 
 GO
@@ -80,7 +80,7 @@ SELECT
     O.Nombre_Origen,
     SUM(G.Importe) AS Total_Gastos
 FROM Gasto AS G
-INNER JOIN Origen AS O
+    INNER JOIN Origen AS O
     ON G.Origen_Gasto = O.ID_Origen
 WHERE G.Fecha_Gasto 
     BETWEEN '2024-01-01' AND '2024-12-31'
@@ -95,7 +95,7 @@ SELECT
     H.Apellido1_Huesped,
     COUNT(R.ID_Reserva) AS CantidadReservas
 FROM Huesped AS H
-INNER JOIN Reserva AS R
+    INNER JOIN Reserva AS R
     ON H.ID_Huesped = R.Titular_Reserva
 GROUP BY
     H.Nombre1_Huesped,
@@ -121,7 +121,7 @@ SELECT
     PR.Nombre_Producto,
     SUM(PP.Cantidad_Producto) AS Cantidad_Total_Pedida
 FROM Pedido_Producto AS PP
-INNER JOIN Producto AS PR
+    INNER JOIN Producto AS PR
     ON PP.ID_Producto = PR.ID_Producto
 GROUP BY
     PR.ID_Producto,
@@ -136,9 +136,9 @@ SELECT
     H.Apellido1_Huesped,
     SUM(G.Importe) AS Total_Gastos_Reserva
 FROM Reserva AS R
-INNER JOIN Huesped AS H
+    INNER JOIN Huesped AS H
     ON R.Titular_Reserva = H.ID_Huesped
-INNER JOIN Gasto AS G
+    INNER JOIN Gasto AS G
     ON G.ID_Reserva = R.ID_Reserva
 GROUP BY
     R.ID_Reserva,
@@ -170,12 +170,12 @@ SELECT
         END
     ) AS Total_Pendiente
 FROM Reserva AS R
-INNER JOIN Huesped AS H
+    INNER JOIN Huesped AS H
     ON R.Titular_Reserva = H.ID_Huesped
-INNER JOIN Gasto AS G
+    INNER JOIN Gasto AS G
     ON G.ID_Reserva = R.ID_Reserva
-LEFT JOIN Cobro_Gasto AS CG
-    ON CG.ID_Gasto = G.ID_Gasto  
+    LEFT JOIN Cobro_Gasto AS CG
+    ON CG.ID_Gasto = G.ID_Gasto
 GROUP BY
     R.ID_Reserva,
     H.Nombre1_Huesped,

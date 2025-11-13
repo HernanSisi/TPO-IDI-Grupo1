@@ -1,13 +1,15 @@
 CREATE PROCEDURE SP_Update_Proveedor
     @CUIL_CUIT_Proveedor VARCHAR(15),
-	@Razon_Social_Proveedor VARCHAR(150) = NULL,
+    @Razon_Social_Proveedor VARCHAR(150) = NULL,
     @Telefono_Proveedor VARCHAR(20) = NULL,
     @Email_Proveedor VARCHAR(100) = NULL
-AS 
+AS
 BEGIN
     SET NOCOUNT ON;
-    
-    IF @Email_Proveedor is NOT NULL AND EXISTS (SELECT 1 FROM Proveedor WHERE Email_Proveedor = @Email_Proveedor)
+
+    IF @Email_Proveedor is NOT NULL AND EXISTS (SELECT 1
+        FROM Proveedor
+        WHERE Email_Proveedor = @Email_Proveedor)
     BEGIN
         RAISERROR ('Error: el email esta asignado a otro proveedor', 16, 1);
         RETURN;
@@ -43,27 +45,33 @@ BEGIN
     DECLARE @EmailCount INT;
 
     BEGIN TRY
-        IF NOT EXISTS (SELECT 1 FROM Huesped WHERE ID_Huesped = @ID_Huesped)
+        IF NOT EXISTS (SELECT 1
+    FROM Huesped
+    WHERE ID_Huesped = @ID_Huesped)
         BEGIN
-            RAISERROR('No existe huesped con ese ID.', 16, 1);
-            RETURN;
-        END
+        RAISERROR('No existe huesped con ese ID.', 16, 1);
+        RETURN;
+    END
 
         IF @Email_Huesped IS NOT NULL
         BEGIN
-            SELECT @EmailCount = COUNT(*) FROM Personal WHERE Email_Personal = @Email_Huesped;
-            IF @EmailCount > 0
+        SELECT @EmailCount = COUNT(*)
+        FROM Personal
+        WHERE Email_Personal = @Email_Huesped;
+        IF @EmailCount > 0
             BEGIN
-                RAISERROR('El email ya existe en la tabla Personal.', 16, 1);
-                RETURN;
-            END
-        END
-
-        IF @ID_Categoria IS NOT NULL AND NOT EXISTS (SELECT 1 FROM Categoria WHERE ID_Categoria = @ID_Categoria)
-        BEGIN
-            RAISERROR('La categoria especificada no existe.', 16, 1);
+            RAISERROR('El email ya existe en la tabla Personal.', 16, 1);
             RETURN;
         END
+    END
+
+        IF @ID_Categoria IS NOT NULL AND NOT EXISTS (SELECT 1
+        FROM Categoria
+        WHERE ID_Categoria = @ID_Categoria)
+        BEGIN
+        RAISERROR('La categoria especificada no existe.', 16, 1);
+        RETURN;
+    END
 
         UPDATE Huesped
         SET 
@@ -97,33 +105,35 @@ CREATE PROCEDURE SP_Update_Personal
 AS
 BEGIN
     SET NOCOUNT ON;
-    
+
     DECLARE @EmailCount INT;
-    
+
     -- Solo verificar email en Huesped si se estA¡ intentando cambiar
     IF @Email_Personal IS NOT NULL
     BEGIN
-        SELECT @EmailCount = COUNT(*) 
-        FROM Huesped 
+        SELECT @EmailCount = COUNT(*)
+        FROM Huesped
         WHERE Email_Huesped = @Email_Personal;
-        
+
         IF @EmailCount > 0
         BEGIN
             RAISERROR('El email ya existe en la tabla Huesped.', 16, 1);
             RETURN;
         END
     END
-    
+
     -- Verificar que el rol exista si se estA¡ intentando cambiar
     IF @ID_Rol IS NOT NULL
     BEGIN
-        IF NOT EXISTS (SELECT 1 FROM Rol WHERE ID_Rol = @ID_Rol)
+        IF NOT EXISTS (SELECT 1
+        FROM Rol
+        WHERE ID_Rol = @ID_Rol)
         BEGIN
             RAISERROR('El rol especificado no existe.', 16, 1);
             RETURN;
         END
     END
-    
+
     -- UPDATE manteniendo valores actuales si el parA¡metro es NULL
     UPDATE Personal
     SET 
@@ -135,7 +145,7 @@ BEGIN
         Fecha_Nacimiento_Personal = COALESCE(@Fecha_Nacimiento_Personal, Fecha_Nacimiento_Personal),
         ID_Rol = COALESCE(@ID_Rol, ID_Rol)
     WHERE ID_Personal = @ID_Personal;
-    
+
     IF @@ROWCOUNT = 0
     BEGIN
         RAISERROR('No existe personal con ese ID.', 16, 1);
@@ -149,12 +159,12 @@ CREATE PROCEDURE SP_Update_MetodoPago
 AS
 BEGIN
     SET NOCOUNT ON;
-    
+
     UPDATE MetodoPago
     SET 
         Nombre_MetodoPago = COALESCE(@Nombre_MetodoPago, Nombre_MetodoPago)
     WHERE ID_MetodoPago = @ID_MetodoPago;
-    
+
     IF @@ROWCOUNT = 0
     BEGIN
         RAISERROR('No existe metodo de pago con ese ID.', 16, 1);
@@ -171,7 +181,7 @@ CREATE PROCEDURE SP_Update_Producto
 AS
 BEGIN
     SET NOCOUNT ON;
-    
+
     -- UPDATE manteniendo valores actuales si el parA¡metro es NULL
     UPDATE Producto
     SET 
@@ -180,7 +190,7 @@ BEGIN
         Stock_Alerta = COALESCE(@Stock_Alerta, Stock_Alerta),
         Stock_Producto = COALESCE(@Stock_Producto, Stock_Producto)
     WHERE ID_Producto = @ID_Producto;
-    
+
     IF @@ROWCOUNT = 0
     BEGIN
         RAISERROR('No existe producto con ese ID.', 16, 1);
@@ -196,7 +206,7 @@ CREATE PROCEDURE SP_Update_TipoHabitacion
 AS
 BEGIN
     SET NOCOUNT ON;
-    
+
     -- UPDATE manteniendo valores actuales si el parA¡metro es NULL
     UPDATE TipoHabitacion
     SET 
@@ -204,7 +214,7 @@ BEGIN
         Precio_Habitacion = COALESCE(@Precio_Habitacion, Precio_Habitacion),
         Capacidad_Habitacion = COALESCE(@Capacidad_Habitacion, Capacidad_Habitacion)
     WHERE ID_Tipo_Habitacion = @ID_Tipo_Habitacion;
-    
+
     IF @@ROWCOUNT = 0
     BEGIN
         RAISERROR('No existe tipo de habitaciA3n con ese ID.', 16, 1);
@@ -218,11 +228,13 @@ CREATE PROCEDURE SP_Update_Habitacion
     @Tipo_Habitacion int
 AS
 BEGIN
-        IF NOT EXISTS (SELECT 1 FROM Habitacion WHERE Tipo_Habitacion = @Tipo_Habitacion)
+    IF NOT EXISTS (SELECT 1
+    FROM Habitacion
+    WHERE Tipo_Habitacion = @Tipo_Habitacion)
         BEGIN
-            RAISERROR('El tipo de habitacion especificado no existe.', 16, 1);
-            RETURN;
-        END
+        RAISERROR('El tipo de habitacion especificado no existe.', 16, 1);
+        RETURN;
+    END
     UPDATE Habitacion 
     SET
         Estado_Habitacion = COALESCE(@Estado_Habitacion, Estado_Habitacion),

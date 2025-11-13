@@ -9,12 +9,12 @@ AS
 BEGIN
     DECLARE @TotalCobrado DECIMAL(18,2);
 
-    SELECT 
+    SELECT
         @TotalCobrado = ISNULL(SUM(G.Importe), 0)
     FROM Cobro AS C
-    JOIN Cobro_Gasto AS CG
+        JOIN Cobro_Gasto AS CG
         ON C.ID_Cobro = CG.ID_Cobro
-    JOIN Gasto AS G
+        JOIN Gasto AS G
         ON CG.ID_Gasto = G.ID_Gasto
     WHERE 
         C.Fecha_Cobro BETWEEN @FechaInicio AND @FechaFin;
@@ -35,10 +35,10 @@ AS
 BEGIN
     DECLARE @TotalGastado DECIMAL(18,2);
 
-    SELECT 
+    SELECT
         @TotalGastado = ISNULL(SUM(PP.Cantidad_Producto * PP.Costo_unidad), 0)
     FROM Pedido AS P
-    JOIN Pedido_Producto AS PP
+        JOIN Pedido_Producto AS PP
         ON P.ID_Pedido = PP.ID_Pedido
     WHERE 
         P.Fecha_Pedido BETWEEN @FechaInicio AND @FechaFin;
@@ -63,11 +63,11 @@ BEGIN
     SET @Gastado = dbo.FN_TotalGastado(@FechaInicio, @FechaFin);
     SET @Neto    = @Cobrado - @Gastado;
 
-    SELECT 
+    SELECT
         @Cobrado AS Total_Cobrado,
         @Gastado AS Total_Gastado,
         @Neto    AS Dinero_Neto;
 END;
 GO
 
-EXEC SP_Read_DineroNeto '2024-11-01', '2024-11-30';
+-- EXEC SP_Read_DineroNeto '2024-11-01', '2024-11-30';

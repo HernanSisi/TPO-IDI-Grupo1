@@ -162,44 +162,54 @@ EXEC SP_Insert_Gasto @Fecha_Gasto = '2024-11-03 21:00:00', @Producto_Gasto = 2, 
 
 -- Cobro_Gasto
 DECLARE @ID_Gasto_1 INT = (
-    SELECT ID_Gasto FROM Gasto
-    WHERE Fecha_Gasto = '2024-11-01 18:30:00' AND ID_Reserva = 1 AND Producto_Gasto = 1 AND Importe = 450.0
+    SELECT ID_Gasto
+FROM Gasto
+WHERE Fecha_Gasto = '2024-11-01 18:30:00' AND ID_Reserva = 1 AND Producto_Gasto = 1
 );
 DECLARE @ID_Gasto_2 INT = (
-    SELECT ID_Gasto FROM Gasto
-    WHERE Fecha_Gasto = '2024-11-02 20:15:00' AND ID_Reserva = 1 AND Producto_Gasto = 3 AND Importe = 2500.0
+    SELECT ID_Gasto
+FROM Gasto
+WHERE Fecha_Gasto = '2024-11-02 20:15:00' AND ID_Reserva = 1 AND Producto_Gasto = 3
 );
 DECLARE @ID_Gasto_3 INT = (
-    SELECT ID_Gasto FROM Gasto
-    WHERE Fecha_Gasto = '2024-11-03 19:45:00' AND ID_Reserva = 2 AND Producto_Gasto = 2 AND Importe = 700.0
+    SELECT ID_Gasto
+FROM Gasto
+WHERE Fecha_Gasto = '2024-11-03 19:45:00' AND ID_Reserva = 2 AND Producto_Gasto = 2
 );
 DECLARE @ID_Gasto_4 INT = (
-    SELECT ID_Gasto FROM Gasto
-    WHERE Fecha_Gasto = '2024-11-04 21:30:00' AND ID_Reserva = 2 AND Producto_Gasto = 1 AND Importe = 1200.0
+    SELECT ID_Gasto
+FROM Gasto
+WHERE Fecha_Gasto = '2024-11-04 21:30:00' AND ID_Reserva = 2 AND Producto_Gasto = 1
 );
 DECLARE @ID_Gasto_5 INT = (
-    SELECT ID_Gasto FROM Gasto
-    WHERE Fecha_Gasto = '2024-11-05 17:20:00' AND ID_Reserva = 3 AND Producto_Gasto = 4 AND Importe = 350.0
+    SELECT ID_Gasto
+FROM Gasto
+WHERE Fecha_Gasto = '2024-11-05 17:20:00' AND ID_Reserva = 3 AND Producto_Gasto = 4
 );
 DECLARE @ID_Gasto_6 INT = (
-    SELECT ID_Gasto FROM Gasto
-    WHERE Fecha_Gasto = '2024-11-07 20:00:00' AND ID_Reserva = 4 AND Producto_Gasto = 7 AND Importe = 1500.0
+    SELECT ID_Gasto
+FROM Gasto
+WHERE Fecha_Gasto = '2024-11-07 20:00:00' AND ID_Reserva = 4 AND Producto_Gasto = 7
 );
 DECLARE @ID_Gasto_7 INT = (
-    SELECT ID_Gasto FROM Gasto
-    WHERE Fecha_Gasto = '2024-11-08 18:15:00' AND ID_Reserva = 7 AND Producto_Gasto = 9 AND Importe = 800.0
+    SELECT ID_Gasto
+FROM Gasto
+WHERE Fecha_Gasto = '2024-11-08 18:15:00' AND ID_Reserva = 7 AND Producto_Gasto = 9
 );
 DECLARE @ID_Gasto_8 INT = (
-    SELECT ID_Gasto FROM Gasto
-    WHERE Fecha_Gasto = '2024-11-09 19:30:00' AND ID_Reserva = 8 AND Producto_Gasto = 1 AND Importe = 2200.0
+    SELECT ID_Gasto
+FROM Gasto
+WHERE Fecha_Gasto = '2024-11-09 19:30:00' AND ID_Reserva = 8 AND Producto_Gasto = 1
 );
 DECLARE @ID_Gasto_9 INT = (
-    SELECT ID_Gasto FROM Gasto
-    WHERE Fecha_Gasto = '2024-11-10 17:45:00' AND ID_Reserva = 3 AND Producto_Gasto = 10 AND Importe = 600.0
+    SELECT ID_Gasto
+FROM Gasto
+WHERE Fecha_Gasto = '2024-11-10 17:45:00' AND ID_Reserva = 3 AND Producto_Gasto = 10
 );
 DECLARE @ID_Gasto_10 INT = (
-    SELECT ID_Gasto FROM Gasto
-    WHERE Fecha_Gasto = '2024-11-02 21:00:00' AND ID_Reserva = 2 AND Producto_Gasto = 2 AND Importe = 1800.0
+    SELECT ID_Gasto
+FROM Gasto
+WHERE Fecha_Gasto = '2024-11-03 21:00:00' AND ID_Reserva = 2 AND Producto_Gasto = 2
 );
 
 EXEC SP_Insert_Cobro_Gasto @ID_Cobro = 1, @ID_Gasto = @ID_Gasto_1;

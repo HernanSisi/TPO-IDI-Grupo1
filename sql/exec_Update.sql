@@ -40,5 +40,3 @@ EXEC SP_Update_Personal
     @ID_Personal = 10,
     @Email_Personal = 'silvia.cortes@hotelmacacookie.com',
     @ID_Rol = 9;
-
-select * from Personal
