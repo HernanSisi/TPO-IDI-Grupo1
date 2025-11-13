@@ -118,7 +118,3 @@ BEGIN
 END;
 GO
 
-EXEC SP_Insert_Gasto @Importe = 450.0, @Fecha_Gasto = '2024-11-01 18:30:00', @Producto_Gasto = 3, @Cantidad_Producto = 30, @ID_Personal = 1, @ID_Reserva = 1, @Origen_Gasto = 1;
-
-select * from Producto
-select * from pedido
