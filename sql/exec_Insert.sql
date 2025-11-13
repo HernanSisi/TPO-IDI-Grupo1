@@ -1,14 +1,14 @@
--- HUESPED
-EXEC SP_Insert_Huesped @Cedula_Huesped = '20-35789456-3', @Estado_Huesped = 1, @Email_Huesped = 'juan.perez@gmail.com', @Nombre1_Huesped = 'Juan', @Nombre2_Huesped = 'Carlos', @Apellido1_Huesped = 'Pérez', @Apellido2_Huesped = 'González', @Fecha_Nacimiento_Huesped = '1985-03-15', @ID_Categoria = 1;
-EXEC SP_Insert_Huesped @Cedula_Huesped = '27-42156789-5', @Estado_Huesped = 1, @Email_Huesped = 'maria.rodriguez@hotmail.com', @Nombre1_Huesped = 'María', @Nombre2_Huesped = 'Laura', @Apellido1_Huesped = 'Rodríguez', @Apellido2_Huesped = 'Fernández', @Fecha_Nacimiento_Huesped = '1990-07-22', @ID_Categoria = 2;
-EXEC SP_Insert_Huesped @Cedula_Huesped = '23-38456123-9', @Estado_Huesped = 1, @Email_Huesped = 'carlos.lopez@yahoo.com', @Nombre1_Huesped = 'Carlos', @Nombre2_Huesped = NULL, @Apellido1_Huesped = 'López', @Apellido2_Huesped = 'Martínez', @Fecha_Nacimiento_Huesped = '1978-11-08', @ID_Categoria = 3;
-EXEC SP_Insert_Huesped @Cedula_Huesped = '24-41789654-2', @Estado_Huesped = 1, @Email_Huesped = 'ana.garcia@outlook.com', @Nombre1_Huesped = 'Ana', @Nombre2_Huesped = 'Sofía', @Apellido1_Huesped = 'García', @Apellido2_Huesped = 'Ramírez', @Fecha_Nacimiento_Huesped = '1995-02-14', @ID_Categoria = 1;
-EXEC SP_Insert_Huesped @Cedula_Huesped = '20-36541289-7', @Estado_Huesped = 1, @Email_Huesped = 'roberto.sanchez@gmail.com', @Nombre1_Huesped = 'Roberto', @Nombre2_Huesped = 'Andrés', @Apellido1_Huesped = 'Sánchez', @Apellido2_Huesped = 'Torres', @Fecha_Nacimiento_Huesped = '1982-09-30', @ID_Categoria = 4;
-EXEC SP_Insert_Huesped @Cedula_Huesped = '27-43892156-1', @Estado_Huesped = 1, @Email_Huesped = 'laura.martinez@hotmail.com', @Nombre1_Huesped = 'Laura', @Nombre2_Huesped = 'Patricia', @Apellido1_Huesped = 'Martínez', @Apellido2_Huesped = 'Díaz', @Fecha_Nacimiento_Huesped = '1988-05-18', @ID_Categoria = 2;
-EXEC SP_Insert_Huesped @Cedula_Huesped = '23-39784512-4', @Estado_Huesped = 1, @Email_Huesped = 'dice@gmail.com', @Nombre1_Huesped = 'Diego', @Nombre2_Huesped = 'César', @Apellido1_Huesped = 'Topa', @Apellido2_Huesped = NULL, @Fecha_Nacimiento_Huesped = '1992-12-05', @ID_Categoria = 5;
-EXEC SP_Insert_Huesped @Cedula_Huesped = '24-40156987-8', @Estado_Huesped = 1, @Email_Huesped = 'sofia.gomez@yahoo.com', @Nombre1_Huesped = 'Sofía', @Nombre2_Huesped = 'Isabel', @Apellido1_Huesped = 'Gómez', @Apellido2_Huesped = 'Moreno', @Fecha_Nacimiento_Huesped = '1987-08-25', @ID_Categoria = 1;
-EXEC SP_Insert_Huesped @Cedula_Huesped = '20-37894561-6', @Estado_Huesped = 1, @Email_Huesped = 'mariposasilvestre@outlook.com', @Nombre1_Huesped = 'Celso', @Nombre2_Huesped = 'Javier', @Apellido1_Huesped = 'Díaz', @Apellido2_Huesped = 'Castro', @Fecha_Nacimiento_Huesped = '1980-04-12', @ID_Categoria = 3;
-EXEC SP_Insert_Huesped @Cedula_Huesped = '27-44123789-3', @Estado_Huesped = 1, @Email_Huesped = 'valentina.romero@gmail.com', @Nombre1_Huesped = 'Valentina', @Nombre2_Huesped = 'Lucía', @Apellido1_Huesped = 'Romero', @Apellido2_Huesped = 'Herrera', @Fecha_Nacimiento_Huesped = '1998-01-20', @ID_Categoria = 6;
+-- Huesped
+EXEC SP_Insert_Huesped @Cedula_Huesped = '20-35789456-3', @Estado_Huesped = 1, @Email_Huesped = 'juan.perez@gmail.com', @Nombre1_Huesped = 'Juan', @Nombre2_Huesped = 'Carlos', @Apellido1_Huesped = 'Perez', @Apellido2_Huesped = 'Gonzalez', @Fecha_Nacimiento_Huesped = '1985-03-15', @ID_Categoria = 1;
+EXEC SP_Insert_Huesped @Cedula_Huesped = '27-42156789-5', @Estado_Huesped = 1, @Email_Huesped = 'maria.rodriguez@hotmail.com', @Nombre1_Huesped = 'Maria', @Nombre2_Huesped = 'Laura', @Apellido1_Huesped = 'Rodriguez', @Apellido2_Huesped = 'Fernandez', @Fecha_Nacimiento_Huesped = '1990-07-22', @ID_Categoria = 2;
+EXEC SP_Insert_Huesped @Cedula_Huesped = '23-38456123-9', @Estado_Huesped = 1, @Email_Huesped = 'carlos.lopez@yahoo.com', @Nombre1_Huesped = 'Carlos', @Nombre2_Huesped = NULL, @Apellido1_Huesped = 'Lopez', @Apellido2_Huesped = 'Martinez', @Fecha_Nacimiento_Huesped = '1978-11-08', @ID_Categoria = 3;
+EXEC SP_Insert_Huesped @Cedula_Huesped = '24-41789654-2', @Estado_Huesped = 1, @Email_Huesped = 'ana.garcia@outlook.com', @Nombre1_Huesped = 'Ana', @Nombre2_Huesped = 'Sofia', @Apellido1_Huesped = 'Garcia', @Apellido2_Huesped = 'Ramirez', @Fecha_Nacimiento_Huesped = '1995-02-14', @ID_Categoria = 1;
+EXEC SP_Insert_Huesped @Cedula_Huesped = '20-36541289-7', @Estado_Huesped = 1, @Email_Huesped = 'roberto.sanchez@gmail.com', @Nombre1_Huesped = 'Roberto', @Nombre2_Huesped = 'Andres', @Apellido1_Huesped = 'Sanchez', @Apellido2_Huesped = 'Torres', @Fecha_Nacimiento_Huesped = '1982-09-30', @ID_Categoria = 4;
+EXEC SP_Insert_Huesped @Cedula_Huesped = '27-43892156-1', @Estado_Huesped = 1, @Email_Huesped = 'laura.martinez@hotmail.com', @Nombre1_Huesped = 'Laura', @Nombre2_Huesped = 'Patricia', @Apellido1_Huesped = 'Martinez', @Apellido2_Huesped = 'Diaz', @Fecha_Nacimiento_Huesped = '1988-05-18', @ID_Categoria = 2;
+EXEC SP_Insert_Huesped @Cedula_Huesped = '23-39784512-4', @Estado_Huesped = 1, @Email_Huesped = 'dice@gmail.com', @Nombre1_Huesped = 'Diego', @Nombre2_Huesped = 'Cesar', @Apellido1_Huesped = 'Topa', @Apellido2_Huesped = NULL, @Fecha_Nacimiento_Huesped = '1992-12-05', @ID_Categoria = 5;
+EXEC SP_Insert_Huesped @Cedula_Huesped = '24-40156987-8', @Estado_Huesped = 1, @Email_Huesped = 'sofia.gomez@yahoo.com', @Nombre1_Huesped = 'Sofia', @Nombre2_Huesped = 'Isabel', @Apellido1_Huesped = 'Gomez', @Apellido2_Huesped = 'Moreno', @Fecha_Nacimiento_Huesped = '1987-08-25', @ID_Categoria = 1;
+EXEC SP_Insert_Huesped @Cedula_Huesped = '20-37894561-6', @Estado_Huesped = 1, @Email_Huesped = 'mariposasilvestre@outlook.com', @Nombre1_Huesped = 'Celso', @Nombre2_Huesped = 'Javier', @Apellido1_Huesped = 'Diaz', @Apellido2_Huesped = 'Castro', @Fecha_Nacimiento_Huesped = '1980-04-12', @ID_Categoria = 3;
+EXEC SP_Insert_Huesped @Cedula_Huesped = '27-44123789-3', @Estado_Huesped = 1, @Email_Huesped = 'valentina.romero@gmail.com', @Nombre1_Huesped = 'Valentina', @Nombre2_Huesped = 'Lucia', @Apellido1_Huesped = 'Romero', @Apellido2_Huesped = 'Herrera', @Fecha_Nacimiento_Huesped = '1998-01-20', @ID_Categoria = 6;
 
 -- TipoHabitacion
 EXEC SP_Insert_TipoHabitacion @Nombre_Tipo_Habitacion = 'Individual', @Precio_Habitacion = 50.0, @Capacidad_Habitacion = 1;
@@ -20,7 +20,7 @@ EXEC SP_Insert_TipoHabitacion @Nombre_Tipo_Habitacion = 'Suite Presidencial', @P
 EXEC SP_Insert_TipoHabitacion @Nombre_Tipo_Habitacion = 'Familiar', @Precio_Habitacion = 100, @Capacidad_Habitacion = 4;
 EXEC SP_Insert_TipoHabitacion @Nombre_Tipo_Habitacion = 'Deluxe', @Precio_Habitacion = 80, @Capacidad_Habitacion = 2;
 EXEC SP_Insert_TipoHabitacion @Nombre_Tipo_Habitacion = 'Matrimonial', @Precio_Habitacion = 100, @Capacidad_Habitacion = 2;
-EXEC SP_Insert_TipoHabitacion @Nombre_Tipo_Habitacion = 'Cuádruple', @Precio_Habitacion = 200, @Capacidad_Habitacion = 4;
+EXEC SP_Insert_TipoHabitacion @Nombre_Tipo_Habitacion = 'Cuadruple', @Precio_Habitacion = 200, @Capacidad_Habitacion = 4;
 
 -- Habitacion
 EXEC SP_Insert_Habitacion @ID_Nro_Habitacion = 101, @Estado_Habitacion = 1, @Tipo_Habitacion = 1;
@@ -36,8 +36,8 @@ EXEC SP_Insert_Habitacion @ID_Nro_Habitacion = 401, @Estado_Habitacion = 1, @Tip
 
 -- MetodoPago
 EXEC SP_Insert_MetodoPago @Nombre_MetodoPago = 'Efectivo';
-EXEC SP_Insert_MetodoPago @Nombre_MetodoPago = 'Tarjeta de Débito';
-EXEC SP_Insert_MetodoPago @Nombre_MetodoPago = 'Tarjeta de Crédito';
+EXEC SP_Insert_MetodoPago @Nombre_MetodoPago = 'Tarjeta de Debito';
+EXEC SP_Insert_MetodoPago @Nombre_MetodoPago = 'Tarjeta de Credito';
 EXEC SP_Insert_MetodoPago @Nombre_MetodoPago = 'Transferencia Bancaria';
 EXEC SP_Insert_MetodoPago @Nombre_MetodoPago = 'MercadoPago';
 EXEC SP_Insert_MetodoPago @Nombre_MetodoPago = 'PayPal';
@@ -47,16 +47,16 @@ EXEC SP_Insert_MetodoPago @Nombre_MetodoPago = 'QR';
 EXEC SP_Insert_MetodoPago @Nombre_MetodoPago = 'Astro';
 
 -- Personal
-EXEC SP_Insert_Personal @Cedula_Personal = '20-28456789-1', @Email_Personal = 'pedro.alvarez@hotelstaff.com', @Nombre1_Personal = 'Pedro', @Nombre2_Personal = 'Luis', @Apellido1_Personal = 'Álvarez', @Apellido2_Personal = 'Gómez', @Fecha_Nacimiento_Personal = '1985-06-15', @ID_Rol = 1;
-EXEC SP_Insert_Personal @Cedula_Personal = '27-32789456-4', @Email_Personal = 'lucia.silva@hotelstaff.com', @Nombre1_Personal = 'Lucía', @Nombre2_Personal = 'Andrea', @Apellido1_Personal = 'Silva', @Apellido2_Personal = 'Morales', @Fecha_Nacimiento_Personal = '1988-09-22', @ID_Rol = 2;
+EXEC SP_Insert_Personal @Cedula_Personal = '20-28456789-1', @Email_Personal = 'pedro.alvarez@hotelstaff.com', @Nombre1_Personal = 'Pedro', @Nombre2_Personal = 'Luis', @Apellido1_Personal = 'Alvarez', @Apellido2_Personal = 'Gomez', @Fecha_Nacimiento_Personal = '1985-06-15', @ID_Rol = 1;
+EXEC SP_Insert_Personal @Cedula_Personal = '27-32789456-4', @Email_Personal = 'lucia.silva@hotelstaff.com', @Nombre1_Personal = 'Lucia', @Nombre2_Personal = 'Andrea', @Apellido1_Personal = 'Silva', @Apellido2_Personal = 'Morales', @Fecha_Nacimiento_Personal = '1988-09-22', @ID_Rol = 2;
 EXEC SP_Insert_Personal @Cedula_Personal = '23-30156789-7', @Email_Personal = 'miguel.torres@hotelstaff.com', @Nombre1_Personal = 'Miguel', @Nombre2_Personal = NULL, @Apellido1_Personal = 'Torres', @Apellido2_Personal = 'Vega', @Fecha_Nacimiento_Personal = '1990-12-03', @ID_Rol = 3;
-EXEC SP_Insert_Personal @Cedula_Personal = '24-33894561-2', @Email_Personal = 'carmen.ramirez@hotelstaff.com', @Nombre1_Personal = 'Carmen', @Nombre2_Personal = 'Rosa', @Apellido1_Personal = 'Ramírez', @Apellido2_Personal = 'Ortiz', @Fecha_Nacimiento_Personal = '1986-04-18', @ID_Rol = 4;
+EXEC SP_Insert_Personal @Cedula_Personal = '24-33894561-2', @Email_Personal = 'carmen.ramirez@hotelstaff.com', @Nombre1_Personal = 'Carmen', @Nombre2_Personal = 'Rosa', @Apellido1_Personal = 'Ramirez', @Apellido2_Personal = 'Ortiz', @Fecha_Nacimiento_Personal = '1986-04-18', @ID_Rol = 4;
 EXEC SP_Insert_Personal @Cedula_Personal = '20-29741852-5', @Email_Personal = 'jorge.castro@hotelstaff.com', @Nombre1_Personal = 'Jorge', @Nombre2_Personal = 'Alberto', @Apellido1_Personal = 'Castro', @Apellido2_Personal = 'Reyes', @Fecha_Nacimiento_Personal = '1983-08-30', @ID_Rol = 5;
-EXEC SP_Insert_Personal @Cedula_Personal = '27-34567891-8', @Email_Personal = 'patricia.mendez@hotelstaff.com', @Nombre1_Personal = 'Patricia', @Nombre2_Personal = 'Elena', @Apellido1_Personal = 'Méndez', @Apellido2_Personal = 'Flores', @Fecha_Nacimiento_Personal = '1991-02-14', @ID_Rol = 6;
-EXEC SP_Insert_Personal @Cedula_Personal = '23-31478963-3', @Email_Personal = 'fernando.herrera@hotelstaff.com', @Nombre1_Personal = 'Fernando', @Nombre2_Personal = 'José', @Apellido1_Personal = 'Herrera', @Apellido2_Personal = 'Luna', @Fecha_Nacimiento_Personal = '1987-11-25', @ID_Rol = 7;
-EXEC SP_Insert_Personal @Cedula_Personal = '24-35789123-6', @Email_Personal = 'gabriela.vargas@hotelstaff.com', @Nombre1_Personal = 'Gabriela', @Nombre2_Personal = 'María', @Apellido1_Personal = 'Vargas', @Apellido2_Personal = 'Cruz', @Fecha_Nacimiento_Personal = '1989-05-07', @ID_Rol = 8;
+EXEC SP_Insert_Personal @Cedula_Personal = '27-34567891-8', @Email_Personal = 'patricia.mendez@hotelstaff.com', @Nombre1_Personal = 'Patricia', @Nombre2_Personal = 'Elena', @Apellido1_Personal = 'Mendez', @Apellido2_Personal = 'Flores', @Fecha_Nacimiento_Personal = '1991-02-14', @ID_Rol = 6;
+EXEC SP_Insert_Personal @Cedula_Personal = '23-31478963-3', @Email_Personal = 'fernando.herrera@hotelstaff.com', @Nombre1_Personal = 'Fernando', @Nombre2_Personal = 'Jose', @Apellido1_Personal = 'Herrera', @Apellido2_Personal = 'Luna', @Fecha_Nacimiento_Personal = '1987-11-25', @ID_Rol = 7;
+EXEC SP_Insert_Personal @Cedula_Personal = '24-35789123-6', @Email_Personal = 'gabriela.vargas@hotelstaff.com', @Nombre1_Personal = 'Gabriela', @Nombre2_Personal = 'Maria', @Apellido1_Personal = 'Vargas', @Apellido2_Personal = 'Cruz', @Fecha_Nacimiento_Personal = '1989-05-07', @ID_Rol = 8;
 EXEC SP_Insert_Personal @Cedula_Personal = '20-30258741-9', @Email_Personal = 'ricardo.molina@hotelstaff.com', @Nombre1_Personal = 'Ricardo', @Nombre2_Personal = 'David', @Apellido1_Personal = 'Molina', @Apellido2_Personal = 'Rojas', @Fecha_Nacimiento_Personal = '1984-03-12', @ID_Rol = 9;
-EXEC SP_Insert_Personal @Cedula_Personal = '27-36123789-4', @Email_Personal = 'silvia.cortes@hotelstaff.com', @Nombre1_Personal = 'Silvia', @Nombre2_Personal = 'Carolina', @Apellido1_Personal = 'Cortés', @Apellido2_Personal = 'Navarro', @Fecha_Nacimiento_Personal = '1992-10-20', @ID_Rol = 10;
+EXEC SP_Insert_Personal @Cedula_Personal = '27-36123789-4', @Email_Personal = 'silvia.cortes@hotelstaff.com', @Nombre1_Personal = 'Silvia', @Nombre2_Personal = 'Carolina', @Apellido1_Personal = 'Cortes', @Apellido2_Personal = 'Navarro', @Fecha_Nacimiento_Personal = '1992-10-20', @ID_Rol = 10;
 
 -- Proveedor
 EXEC SP_Insert_Proveedor @CUIL_CUIT_Proveedor = '30-71234567-8', @Razon_Social_Proveedor = 'Labubu SA', @Telefono_Proveedor = '11-4567-8901', @Email_Proveedor = 'ventas@alimentoslabubu.com';
@@ -64,11 +64,11 @@ EXEC SP_Insert_Proveedor @CUIL_CUIT_Proveedor = '30-71345678-9', @Razon_Social_P
 EXEC SP_Insert_Proveedor @CUIL_CUIT_Proveedor = '30-71456789-0', @Razon_Social_Proveedor = 'Guepardex Co', @Telefono_Proveedor = '11-4789-0123', @Email_Proveedor = 'pedidos@kickbuttoswki.com';
 EXEC SP_Insert_Proveedor @CUIL_CUIT_Proveedor = '30-71567890-1', @Razon_Social_Proveedor = 'Limpieza Total SRL', @Telefono_Proveedor = '11-4890-1234', @Email_Proveedor = 'ventas@limpiezatotal.com';
 EXEC SP_Insert_Proveedor @CUIL_CUIT_Proveedor = '30-71678901-2', @Razon_Social_Proveedor = 'Muebles Confort SA', @Telefono_Proveedor = '11-4901-2345', @Email_Proveedor = 'info@mueblesconfort.com';
-EXEC SP_Insert_Proveedor @CUIL_CUIT_Proveedor = '30-71789012-3', @Razon_Social_Proveedor = 'Electrónica Moderna SRL', @Telefono_Proveedor = '11-4012-3456', @Email_Proveedor = 'ventas@electronicamoderna.com';
+EXEC SP_Insert_Proveedor @CUIL_CUIT_Proveedor = '30-71789012-3', @Razon_Social_Proveedor = 'Electronica Moderna SRL', @Telefono_Proveedor = '11-4012-3456', @Email_Proveedor = 'ventas@electronicamoderna.com';
 EXEC SP_Insert_Proveedor @CUIL_CUIT_Proveedor = '30-71890123-4', @Razon_Social_Proveedor = 'Decoraciones Arte SA', @Telefono_Proveedor = '11-4123-4567', @Email_Proveedor = 'contacto@decoracionesarte.com';
 EXEC SP_Insert_Proveedor @CUIL_CUIT_Proveedor = '30-71901234-5', @Razon_Social_Proveedor = 'Equipamiento Pro SRL', @Telefono_Proveedor = '11-4234-5678', @Email_Proveedor = 'pedidos@equipamientopro.com';
 EXEC SP_Insert_Proveedor @CUIL_CUIT_Proveedor = '30-72012345-6', @Razon_Social_Proveedor = 'Servicios Bom dia SA', @Telefono_Proveedor = '11-4345-6789', @Email_Proveedor = 'info@serviciosgeneralesbd.com';
-EXEC SP_Insert_Proveedor @CUIL_CUIT_Proveedor = '30-72123456-7', @Razon_Social_Proveedor = 'Tecnología Avanzada SRL', @Telefono_Proveedor = '11-4456-7890', @Email_Proveedor = 'ventas@tecnologiaavanzada.com';
+EXEC SP_Insert_Proveedor @CUIL_CUIT_Proveedor = '30-72123456-7', @Razon_Social_Proveedor = 'Tecnologia Avanzada SRL', @Telefono_Proveedor = '11-4456-7890', @Email_Proveedor = 'ventas@tecnologiaavanzada.com';
 
 -- Producto
 EXEC SP_Insert_Producto @Nombre_Producto = 'Agua Mineral 500ml', @Precio_Unidad_Producto = 2.0, @Stock_Producto = 150, @Stock_Alerta = 20;
@@ -76,11 +76,11 @@ EXEC SP_Insert_Producto @Nombre_Producto = 'Chocolate Dubai Premium', @Precio_Un
 EXEC SP_Insert_Producto @Nombre_Producto = 'Caipirinha', @Precio_Unidad_Producto = 20.0, @Stock_Producto = 45, @Stock_Alerta = 5;
 EXEC SP_Insert_Producto @Nombre_Producto = 'Shampoo Hotel', @Precio_Unidad_Producto = 5.0, @Stock_Producto = 200, @Stock_Alerta = 15;
 EXEC SP_Insert_Producto @Nombre_Producto = 'Toalla Grande', @Precio_Unidad_Producto = 10.0, @Stock_Producto = 120, @Stock_Alerta = 10;
-EXEC SP_Insert_Producto @Nombre_Producto = 'Sábanas King Size', @Precio_Unidad_Producto = 50.0, @Stock_Producto = 60, @Stock_Alerta = 8;
+EXEC SP_Insert_Producto @Nombre_Producto = 'Sabanas King Size', @Precio_Unidad_Producto = 50.0, @Stock_Producto = 60, @Stock_Alerta = 8;
 EXEC SP_Insert_Producto @Nombre_Producto = 'Commodities Pack', @Precio_Unidad_Producto = 100.0, @Stock_Producto = 180, @Stock_Alerta = 20;
-EXEC SP_Insert_Producto @Nombre_Producto = 'Café de la Selva 250g', @Precio_Unidad_Producto = 120.0, @Stock_Producto = 40, @Stock_Alerta = 5;
+EXEC SP_Insert_Producto @Nombre_Producto = 'Cafe de la Selva 250g', @Precio_Unidad_Producto = 120.0, @Stock_Producto = 40, @Stock_Alerta = 5;
 EXEC SP_Insert_Producto @Nombre_Producto = 'Galletas Surtidas', @Precio_Unidad_Producto = 2.0, @Stock_Producto = 90, @Stock_Alerta = 15;
-EXEC SP_Insert_Producto @Nombre_Producto = 'Jabón de Tocador', @Precio_Unidad_Producto = 9.0, @Stock_Producto = 250, @Stock_Alerta = 25;
+EXEC SP_Insert_Producto @Nombre_Producto = 'Jabon de Tocador', @Precio_Unidad_Producto = 9.0, @Stock_Producto = 250, @Stock_Alerta = 25;
 
 -- Pedido
 EXEC SP_Insert_Pedido @CUIL_CUIT_Proveedor = '30-71234567-8', @Fecha_Pedido = '2024-10-15 10:00:00';

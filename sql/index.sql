@@ -1,4 +1,4 @@
--- HUESPED
+-- Huesped
 CREATE INDEX IX_Huesped_Cedula ON Huesped (Cedula_Huesped);
 
 -- GASTO

@@ -1,4 +1,4 @@
--- FUNCIÓN 1: Devuelve el total cobrado entre dos fechas
+-- FUNCION 1: Devuelve el total cobrado entre dos fechas
 CREATE FUNCTION FN_TotalCobrado
 (
     @FechaInicio DATETIME,
@@ -24,7 +24,7 @@ END;
 GO
 
 
--- FUNCIÓN 2: Devuelve el total gastado entre dos fechas
+-- FUNCION 2: Devuelve el total gastado entre dos fechas
 CREATE FUNCTION FN_TotalGastado
 (
     @FechaInicio DATETIME,

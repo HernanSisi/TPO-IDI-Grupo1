@@ -4,7 +4,7 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
-    -- Validación de existencia
+    -- Validacion de existencia
     IF NOT EXISTS (SELECT 1 FROM Pedido WHERE ID_Pedido = @ID_Pedido)
     BEGIN
         RAISERROR('No existe pedido con ese ID.', 16, 1);
@@ -184,7 +184,7 @@ BEGIN
         tit.Apellido1_Huesped       AS Apellido1_Titular,
         tit.Email_Huesped           AS Email_Titular,
 
-        -- Habitación + Tipo
+        -- Habitacion + Tipo
         hab.ID_Nro_Habitacion,
         hab.Estado_Habitacion,
         th.ID_Tipo_Habitacion,
@@ -192,14 +192,14 @@ BEGIN
         th.Precio_Habitacion,
         th.Capacidad_Habitacion,
 
-        -- Huéspedes asociados vía Reserva_Huesped
+        -- Huespedes asociados via Reserva_Huesped
         rh.ID_Huesped               AS ID_Huesped_Reserva,
         h2.Cedula_Huesped           AS Cedula_Huesped_Reserva,
         h2.Nombre1_Huesped          AS Nombre1_Huesped_Reserva,
         h2.Apellido1_Huesped        AS Apellido1_Huesped_Reserva,
         h2.Email_Huesped            AS Email_Huesped_Reserva
     FROM Reserva r
-    INNER JOIN HUESPED tit
+    INNER JOIN Huesped tit
         ON tit.ID_Huesped = r.Titular_Reserva
     INNER JOIN Habitacion hab
         ON hab.ID_Nro_Habitacion = r.ID_Habitacion
@@ -207,7 +207,7 @@ BEGIN
         ON th.ID_Tipo_Habitacion = hab.Tipo_Habitacion
     LEFT JOIN Reserva_Huesped rh
         ON rh.ID_Reserva = r.ID_Reserva
-    LEFT JOIN HUESPED h2
+    LEFT JOIN Huesped h2
         ON h2.ID_Huesped = rh.ID_Huesped
     WHERE r.ID_Reserva = @ID_Reserva
     ORDER BY rh.ID_Huesped;

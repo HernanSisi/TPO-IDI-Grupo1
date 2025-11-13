@@ -161,7 +161,7 @@ BEGIN
 
     IF @CUIL_CUIT_Proveedor IS NULL OR @CUIL_CUIT_Proveedor = ''
     BEGIN
-        RAISERROR ('Error: El CUIL/CUIT del proveedor no puede estar vacÃ­o.', 16, 1);
+        RAISERROR ('Error: El CUIL/CUIT del proveedor no puede estar vacio.', 16, 1);
         RETURN;
     END
 
@@ -193,13 +193,13 @@ BEGIN
 
     IF @ID_MetodoPago IS NULL
     BEGIN
-        RAISERROR ('Error: El mÃ©todo de pago no puede estar vacÃ­o.', 16, 1);
+        RAISERROR ('Error: El metodo de pago no puede estar vacio.', 16, 1);
         RETURN;
     END
 
     IF NOT EXISTS (SELECT 1 FROM MetodoPago WHERE ID_MetodoPago = @ID_MetodoPago)
     BEGIN
-        RAISERROR ('Error: El mÃ©todo de pago indicado no existe.', 16, 1);
+        RAISERROR ('Error: El metodo de pago indicado no existe.', 16, 1);
         RETURN;
     END
 
@@ -225,13 +225,13 @@ BEGIN
 
     IF @ID_Reserva IS NULL
     BEGIN
-        RAISERROR ('Error: El ID de Reserva no puede estar vacÃ­o.', 16, 1);
+        RAISERROR ('Error: El ID de Reserva no puede estar vacio.', 16, 1);
         RETURN;
     END
 
     IF @ID_Huesped IS NULL
     BEGIN
-        RAISERROR ('Error: El ID de HuÃ©sped no puede estar vacÃ­o.', 16, 1);
+        RAISERROR ('Error: El ID de Huesped no puede estar vacio.', 16, 1);
         RETURN;
     END
 
@@ -241,15 +241,15 @@ BEGIN
         RETURN;
     END
 
-    IF NOT EXISTS (SELECT 1 FROM HUESPED WHERE ID_Huesped = @ID_Huesped)
+    IF NOT EXISTS (SELECT 1 FROM Huesped WHERE ID_Huesped = @ID_Huesped)
     BEGIN
-        RAISERROR ('Error: El HuÃ©sped indicado no existe.', 16, 1);
+        RAISERROR ('Error: El Huesped indicado no existe.', 16, 1);
         RETURN;
     END
 
     IF EXISTS (SELECT 1 FROM Reserva_Huesped WHERE ID_Reserva = @ID_Reserva AND ID_Huesped = @ID_Huesped)
     BEGIN
-        RAISERROR ('Error: Este HuÃ©sped ya estÃ¡ asignado a esta Reserva.', 16, 1);
+        RAISERROR ('Error: Este Huesped ya esta asignado a esta Reserva.', 16, 1);
         RETURN;
     END
 
@@ -265,7 +265,7 @@ BEGIN
 
     IF @CantidadHuespedes >= @LimiteHabitacion
     BEGIN
-        RAISERROR ('Error: Se ha alcanzado el lÃ­mite de huÃ©spedes para esta habitaciÃ³n.', 16, 1);
+        RAISERROR ('Error: Se ha alcanzado el limite de huespedes para esta habitacion.', 16, 1);
         RETURN;
     END   
     INSERT INTO Reserva_Huesped 
@@ -291,23 +291,23 @@ BEGIN
 
     IF @Titular_Reserva IS NULL or @ID_Habitacion IS NULL OR @Fecha_Reserva_Inicio IS NULL OR @Fecha_Reserva_Fin IS NULL
     BEGIN
-        RAISERROR ('Error: Los campos Habitacion, Fecha de inicio de la reserva, fecha de fin de la reserva o titular no pueden estar vacÃ­os.', 16, 1);
+        RAISERROR ('Error: Los campos Habitacion, Fecha de inicio de la reserva, fecha de fin de la reserva o titular no pueden estar vacios.', 16, 1);
         RETURN;
     END
 
-    IF NOT EXISTS (SELECT 1 FROM HUESPED WHERE ID_Huesped = @Titular_Reserva)
+    IF NOT EXISTS (SELECT 1 FROM Huesped WHERE ID_Huesped = @Titular_Reserva)
     BEGIN
-        RAISERROR ('Error: El HuÃ©sped titular indicado no existe.', 16, 1);
+        RAISERROR ('Error: El Huesped titular indicado no existe.', 16, 1);
         RETURN;
     END
 
     IF NOT EXISTS (SELECT 1 FROM Habitacion WHERE ID_Nro_Habitacion = @ID_Habitacion)
     BEGIN
-        RAISERROR ('Error: La HabitaciÃ³n indicada no existe.', 16, 1);
+        RAISERROR ('Error: La Habitacion indicada no existe.', 16, 1);
         RETURN;
     END
 
--- EstÃ¡ activa la habitaciÃ³n
+-- Esta activa la habitacion
     IF NOT EXISTS (
         SELECT 1 
         FROM Habitacion 
@@ -315,7 +315,7 @@ BEGIN
           AND Estado_Habitacion = 1
     )
     BEGIN
-        RAISERROR ('Error: La HabitaciÃ³n indicada no estÃ¡ activa.', 16, 1);
+        RAISERROR ('Error: La Habitacion indicada no esta activa.', 16, 1);
         RETURN;
     END
     
@@ -370,19 +370,19 @@ BEGIN
 
     IF @Nombre_Producto IS NULL OR @Nombre_Producto = ''
     BEGIN
-        RAISERROR ('Error: El nombre del producto no puede estar vacÃ­o.', 16, 1);
+        RAISERROR ('Error: El nombre del producto no puede estar vacio.', 16, 1);
         RETURN;
     END
 
     IF @Precio_Unidad_Producto IS NULL
     BEGIN
-        RAISERROR ('Error: El precio del producto no puede estar vacÃ­o.', 16, 1);
+        RAISERROR ('Error: El precio del producto no puede estar vacio.', 16, 1);
         RETURN;
     END
 
     IF @Stock_Producto IS NULL
     BEGIN
-        RAISERROR ('Error: El stock del producto no puede estar vacÃ­o.', 16, 1);
+        RAISERROR ('Error: El stock del producto no puede estar vacio.', 16, 1);
         RETURN;
     END
 
@@ -436,25 +436,25 @@ BEGIN
 
     IF @CUIL_CUIT_Proveedor IS NULL OR @CUIL_CUIT_Proveedor = ''
     BEGIN
-        RAISERROR ('Error: El CUIL/CUIT del proveedor no puede estar vacÃ­o.', 16, 1);
+        RAISERROR ('Error: El CUIL/CUIT del proveedor no puede estar vacio.', 16, 1);
         RETURN;
     END
 
     IF @Razon_Social_Proveedor IS NULL OR @Razon_Social_Proveedor = ''
     BEGIN
-        RAISERROR ('Error: La razÃ³n social no puede estar vacÃ­a.', 16, 1);
+        RAISERROR ('Error: La razon social no puede estar vacia.', 16, 1);
         RETURN;
     END
 
     IF @Telefono_Proveedor IS NULL OR @Telefono_Proveedor = ''
     BEGIN
-        RAISERROR ('Error: El telÃ©fono no puede estar vacÃ­o.', 16, 1);
+        RAISERROR ('Error: El telefono no puede estar vacio.', 16, 1);
         RETURN;
     END
 
     IF @Email_Proveedor IS NULL OR @Email_Proveedor = ''
     BEGIN
-        RAISERROR ('Error: El email no puede estar vacÃ­o.', 16, 1);
+        RAISERROR ('Error: El email no puede estar vacio.', 16, 1);
         RETURN;
     END
 
@@ -466,7 +466,7 @@ BEGIN
 
     IF EXISTS (SELECT 1 FROM Proveedor WHERE Email_Proveedor = @Email_Proveedor)
     BEGIN
-        RAISERROR ('Error: El email ingresado ya estÃ¡ registrado.', 16, 1);
+        RAISERROR ('Error: El email ingresado ya esta registrado.', 16, 1);
         RETURN;
     END
 
@@ -476,7 +476,7 @@ BEGIN
         AND LEN(@Email_Proveedor) BETWEEN 5 AND 100
     )
     BEGIN
-        RAISERROR ('Error: El formato del email no es vÃ¡lido.', 16, 1);
+        RAISERROR ('Error: El formato del email no es valido.', 16, 1);
         RETURN;
     END
 
@@ -529,9 +529,9 @@ BEGIN
     
     DECLARE @EmailCount INT;
     
-    -- Verificar si el email existe en HUESPED
+    -- Verificar si el email existe en Huesped
     SELECT @EmailCount = COUNT(*) 
-    FROM HUESPED 
+    FROM Huesped 
     WHERE Email_Huesped = @Email_Personal;
     
     IF @EmailCount = 0
@@ -566,7 +566,7 @@ BEGIN
     END
     ELSE
     BEGIN
-        RAISERROR('El email ya existe en la tabla HUESPED.', 16, 1);
+        RAISERROR('El email ya existe en la tabla Huesped.', 16, 1);
     END;
 END;
 
@@ -582,7 +582,7 @@ BEGIN
 
         IF @Nombre_MetodoPago = ''
         BEGIN
-            RAISERROR('El nombre del mÃ©todo de pago no puede ser vacÃ­o.', 16, 1);
+            RAISERROR('El nombre del metodo de pago no puede ser vacio.', 16, 1);
             RETURN;
         END
 
@@ -647,11 +647,11 @@ BEGIN
         -- Verificar categorÃ­a vÃ¡lida
         IF @ID_Categoria IS NOT NULL AND NOT EXISTS (SELECT 1 FROM Categoria WHERE ID_Categoria = @ID_Categoria)
         BEGIN
-            RAISERROR('La categorÃ­a especificada no existe.', 16, 1);
+            RAISERROR('La categoria especificada no existe.', 16, 1);
             RETURN;
         END
 
-        INSERT INTO HUESPED (
+        INSERT INTO Huesped (
             Cedula_Huesped, Estado_Huesped, Email_Huesped,
             Nombre1_Huesped, Nombre2_Huesped, Apellido1_Huesped, Apellido2_Huesped,
             Fecha_Nacimiento_Huesped, ID_Categoria

@@ -5,14 +5,14 @@ AS
 BEGIN
     SET NOCOUNT ON;
     
-    -- Eliminar la relaciÃ³n entre reserva y huÃ©sped
+    -- Eliminar la relaciA3n entre reserva y huA©sped
     DELETE FROM Reserva_Huesped
     WHERE ID_Reserva = @ID_Reserva 
       AND ID_Huesped = @ID_Huesped;
     
     IF @@ROWCOUNT = 0
     BEGIN
-        RAISERROR('No existe esa relaciÃ³n entre reserva y huÃ©sped.', 16, 1);
+        RAISERROR('No existe esa relacion entre reserva y Huesped.', 16, 1);
     END
 END;
 
@@ -23,7 +23,7 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
-    -- Validar que exista la relaciÃ³n
+    -- Validar que exista la relaciA3n
     IF NOT EXISTS (
         SELECT 1 
         FROM Cobro_Gasto
@@ -31,16 +31,16 @@ BEGIN
           AND ID_Gasto = @ID_Gasto
     )
     BEGIN
-        RAISERROR('No existe esa relaciÃ³n entre cobro y gasto.', 16, 1);
+        RAISERROR('No existe esa relacion entre cobro y gasto.', 16, 1);
         RETURN;
     END
 
-    -- Eliminar la relaciÃ³n
+    -- Eliminar la relaciA3n
     DELETE FROM Cobro_Gasto
     WHERE ID_Cobro = @ID_Cobro
       AND ID_Gasto = @ID_Gasto;
 
-    PRINT 'RelaciÃ³n cobro-gasto eliminada correctamente.';
+    PRINT 'Relacion cobro-gasto eliminada correctamente.';
 END
 
 CREATE PROCEDURE SP_Delete_Rol
@@ -94,7 +94,7 @@ BEGIN
     BEGIN TRY
         IF NOT EXISTS (SELECT 1 FROM Categoria WHERE ID_Categoria = @ID_Categoria)
         BEGIN
-            RAISERROR('No existe una categorÃ­a con ese ID.', 16, 1);
+            RAISERROR('No existe una categoria con ese ID.', 16, 1);
             RETURN;
         END
 

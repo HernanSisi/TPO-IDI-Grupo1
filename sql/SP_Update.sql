@@ -22,7 +22,7 @@ BEGIN
 
     IF @@ROWCOUNT = 0
     BEGIN
-        RAISERROR('No existe tipo de habitaciÃ³n con ese ID.', 16, 1);
+        RAISERROR('No existe tipo de habitacion con ese ID.', 16, 1);
     END
 END;
 
@@ -42,9 +42,9 @@ BEGIN
     DECLARE @EmailCount INT;
 
     BEGIN TRY
-        IF NOT EXISTS (SELECT 1 FROM HUESPED WHERE ID_Huesped = @ID_Huesped)
+        IF NOT EXISTS (SELECT 1 FROM Huesped WHERE ID_Huesped = @ID_Huesped)
         BEGIN
-            RAISERROR('No existe huÃ©sped con ese ID.', 16, 1);
+            RAISERROR('No existe huesped con ese ID.', 16, 1);
             RETURN;
         END
 
@@ -53,18 +53,18 @@ BEGIN
             SELECT @EmailCount = COUNT(*) FROM Personal WHERE Email_Personal = @Email_Huesped;
             IF @EmailCount > 0
             BEGIN
-                RAISERROR('El email ya existe en la tabla PERSONAL.', 16, 1);
+                RAISERROR('El email ya existe en la tabla Personal.', 16, 1);
                 RETURN;
             END
         END
 
         IF @ID_Categoria IS NOT NULL AND NOT EXISTS (SELECT 1 FROM Categoria WHERE ID_Categoria = @ID_Categoria)
         BEGIN
-            RAISERROR('La categorÃ­a especificada no existe.', 16, 1);
+            RAISERROR('La categoria especificada no existe.', 16, 1);
             RETURN;
         END
 
-        UPDATE HUESPED
+        UPDATE Huesped
         SET 
             Email_Huesped = COALESCE(@Email_Huesped, Email_Huesped),
             Estado_Huesped = COALESCE(@Estado_Huesped, Estado_Huesped),
@@ -98,21 +98,21 @@ BEGIN
     
     DECLARE @EmailCount INT;
     
-    -- Solo verificar email en HUESPED si se estÃ¡ intentando cambiar
+    -- Solo verificar email en Huesped si se estA¡ intentando cambiar
     IF @Email_Personal IS NOT NULL
     BEGIN
         SELECT @EmailCount = COUNT(*) 
-        FROM HUESPED 
+        FROM Huesped 
         WHERE Email_Huesped = @Email_Personal;
         
         IF @EmailCount > 0
         BEGIN
-            RAISERROR('El email ya existe en la tabla HUESPED.', 16, 1);
+            RAISERROR('El email ya existe en la tabla Huesped.', 16, 1);
             RETURN;
         END
     END
     
-    -- Verificar que el rol exista si se estÃ¡ intentando cambiar
+    -- Verificar que el rol exista si se estA¡ intentando cambiar
     IF @ID_Rol IS NOT NULL
     BEGIN
         IF NOT EXISTS (SELECT 1 FROM Rol WHERE ID_Rol = @ID_Rol)
@@ -122,7 +122,7 @@ BEGIN
         END
     END
     
-    -- UPDATE manteniendo valores actuales si el parÃ¡metro es NULL
+    -- UPDATE manteniendo valores actuales si el parA¡metro es NULL
     UPDATE Personal
     SET 
         Email_Personal = COALESCE(@Email_Personal, Email_Personal),
@@ -154,7 +154,7 @@ BEGIN
     
     IF @@ROWCOUNT = 0
     BEGIN
-        RAISERROR('No existe mÃ©todo de pago con ese ID.', 16, 1);
+        RAISERROR('No existe metodo de pago con ese ID.', 16, 1);
     END
 END;
 
@@ -169,7 +169,7 @@ AS
 BEGIN
     SET NOCOUNT ON;
     
-    -- UPDATE manteniendo valores actuales si el parÃ¡metro es NULL
+    -- UPDATE manteniendo valores actuales si el parA¡metro es NULL
     UPDATE Producto
     SET 
         Nombre_Producto = COALESCE(@Nombre_Producto, Nombre_Producto),
@@ -193,7 +193,7 @@ AS
 BEGIN
     SET NOCOUNT ON;
     
-    -- UPDATE manteniendo valores actuales si el parÃ¡metro es NULL
+    -- UPDATE manteniendo valores actuales si el parA¡metro es NULL
     UPDATE TipoHabitacion
     SET 
         Nombre_Tipo_Habitacion = COALESCE(@Nombre_Tipo_Habitacion, Nombre_Tipo_Habitacion),
@@ -203,7 +203,7 @@ BEGIN
     
     IF @@ROWCOUNT = 0
     BEGIN
-        RAISERROR('No existe tipo de habitaciÃ³n con ese ID.', 16, 1);
+        RAISERROR('No existe tipo de habitaciA3n con ese ID.', 16, 1);
     END
 END;
 

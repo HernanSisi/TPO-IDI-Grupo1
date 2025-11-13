@@ -14,26 +14,26 @@ INSERT INTO Categoria (Nombre_Categoria, Descuento_Categoria) VALUES
 
 -- Tabla: Rol
 INSERT INTO Rol (Nombre_Rol, Descripcion_Rol) VALUES
-('Recepcionista', 'Recepción'),
-('Gerente', 'Administración'),
+('Recepcionista', 'Recepcion'),
+('Gerente', 'Administracion'),
 ('Conserje', 'Limpieza'),
-('Técnico', 'Mantenimiento'),
-('Contador', 'Administración'),
+('Tecnico', 'Mantenimiento'),
+('Contador', 'Administracion'),
 ('Chef', 'Catering'),
-('Botones', 'Recepción'),
+('Botones', 'Recepcion'),
 ('Supervisor', 'Mantenimiento'),
 ('Guardia', 'Seguridad'),
-('Recursos Humanos', 'Administración');
+('Recursos Humanos', 'Administracion');
 
 -- Tabla: Origen
 INSERT INTO Origen (Nombre_Origen) VALUES
 ('Minibar'),
 ('Room Service'),
-('Lavandería'),
+('Lavanderia'),
 ('Restaurante'),
 ('Spa'),
 ('Estacionamiento'),
-('Teléfono'),
+('Telefono'),
 ('Internet Premium'),
 ('Excursiones'),
 ('Transporte');

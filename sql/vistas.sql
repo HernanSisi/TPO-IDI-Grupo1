@@ -1,5 +1,5 @@
 -------------------------- VISTAS -------------------------
--- Vista de Productos más demandados (top por cantidad total consumida) — agregado general
+-- Vista de Productos mas demandados (top por cantidad total consumida) — agregado general
 CREATE VIEW vw_ProductosMasDemandados AS
 SELECT
     pr.ID_Producto,
@@ -11,7 +11,7 @@ GROUP BY pr.ID_Producto, pr.Nombre_Producto
 ORDER BY SUM(g.Cantidad_Producto) DESC;
 GO
 
--- Vista de Consumo mensual de productos (cantidad) — útil para ver tendencia de consumo
+-- Vista de Consumo mensual de productos (cantidad) — util para ver tendencia de consumo
 CREATE VIEW vw_ConsumoMensualProducto AS
 SELECT
     PR.ID_Producto,

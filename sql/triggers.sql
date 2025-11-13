@@ -6,7 +6,7 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
-    -- Asegurar existencia de valores por defecto (creamos mínimos si falta)
+    -- Asegurar existencia de valores por defecto (creamos minimos si falta)
     IF NOT EXISTS (SELECT 1 FROM Origen WHERE Nombre_Origen = 'Sistema')
         INSERT INTO Origen (Nombre_Origen) VALUES ('Sistema');
 
@@ -41,10 +41,10 @@ BEGIN
     IF @Origen_Default IS NULL
         SELECT TOP 1 @Origen_Default = ID_Origen FROM Origen;
 
-    -- Si no encontramos defaults críticos, abortamos con mensaje claro
+    -- Si no encontramos defaults criticos, abortamos con mensaje claro
     IF @Personal_Default IS NULL OR @Origen_Default IS NULL
     BEGIN
-        -- Mensaje sencillo y rollback explícito (más fácil de explicar en la presentación)
+        -- Mensaje sencillo y rollback explicito (mas facil de explicar en la presentacion)
         RAISERROR('Faltan datos por defecto (Personal/Origen).', 16, 1);
         ROLLBACK TRANSACTION;
         RETURN;
@@ -59,7 +59,7 @@ BEGIN
             CASE
                 -- Si faltan fechas de reserva, cobrar 1 unidad por defecto
                 WHEN i.Fecha_Reserva_Inicio IS NULL OR i.Fecha_Reserva_Fin IS NULL THEN 1
-                -- Calculamos días como diferencia entre las fechas convertidas a DATE y casteadas a FLOAT
+                -- Calculamos dias como diferencia entre las fechas convertidas a DATE y casteadas a FLOAT
                 WHEN CAST(CONVERT(date, i.Fecha_Reserva_Fin) AS float) - CAST(CONVERT(date, i.Fecha_Reserva_Inicio) AS float) > 0
                     -- entonces redondeamos convirtiendo la resta a INT
                     THEN CONVERT(INT, CAST(CONVERT(date, i.Fecha_Reserva_Fin) AS float) - CAST(CONVERT(date, i.Fecha_Reserva_Inicio) AS float))
@@ -90,7 +90,7 @@ BEGIN
 
     -- Proposito: Controlar que no se pueda insertar un gasto que reduzca el stock de un producto por debajo de cero.
 
-    -- (1) Verificar si algún producto no tiene stock suficiente
+    -- (1) Verificar si algun producto no tiene stock suficiente
     IF EXISTS (
         SELECT 1
         FROM (
@@ -117,7 +117,7 @@ BEGIN
         JOIN Producto p ON p.ID_Producto = c.ID_Producto
         WHERE p.Stock_Producto < c.ConsumoTotal;
 
-        RAISERROR('¡Stock insuficiente para producto ID=%d (stock=%d, requerido=%d)! Operación cancelada.',
+        RAISERROR('¡Stock insuficiente para producto ID=%d (stock=%d, requerido=%d)! Operacion cancelada.',
                 16, 1, @EjID, @StockActual, @Requerido);
         ROLLBACK TRANSACTION;
         RETURN;

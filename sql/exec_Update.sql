@@ -1,24 +1,24 @@
 -- Actualizaciones de ejemplo ligadas a los datos sembrados por insert.sql y exec_Insert.sql
 
--- Ajusta correo y estado del huésped con ID 1
+-- Ajusta correo y estado del huesped con ID 1
 EXEC SP_Update_Huesped
     @ID_Huesped = 1,
     @Email_Huesped = 'juan.perezvip@gmail.com',
     @Estado_Huesped = 1;
 
--- Actualiza precio/capacidad del tipo de habitación Individual (ID 1)
+-- Actualiza precio/capacidad del tipo de habitacion Individual (ID 1)
 EXEC SP_Update_TipoHabitacion
     @ID_Tipo_Habitacion = 1,
     @Precio_Habitacion = 55,
     @Capacidad_Habitacion = 1;
 
--- Habilita la habitación 203 y la reasigna al tipo 5
+-- Habilita la habitacion 203 y la reasigna al tipo 5
 EXEC SP_Update_Habitacion
     @ID_Nro_Habitacion = 203,
     @Estado_Habitacion = 1,
     @Tipo_Habitacion = 5;
 
--- Renombra el método de pago "Efectivo" (ID 1)
+-- Renombra el metodo de pago "Efectivo" (ID 1)
 EXEC SP_Update_MetodoPago
     @ID_MetodoPago = 1,
     @Nombre_MetodoPago = 'Efectivo Caja';

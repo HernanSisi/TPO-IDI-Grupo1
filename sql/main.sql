@@ -1,4 +1,4 @@
--- Tabla: Categoria — Define categorías de huéspedes con su nombre y descuento aplicable.
+-- Tabla: Categoria — Define categorias de huespedes con su nombre y descuento aplicable.
 CREATE TABLE Categoria(
     ID_Categoria INT IDENTITY(1,1) PRIMARY KEY,
     Nombre_Categoria VARCHAR(75) NOT NULL,
@@ -6,7 +6,7 @@ CREATE TABLE Categoria(
         CONSTRAINT chk_DescuentoValido CHECK (Descuento_Categoria BETWEEN 0 AND 100)
         DEFAULT 0
 );
--- Tabla: Rol — Define los roles del personal (nombre y descripción).
+-- Tabla: Rol — Define los roles del personal (nombre y descripcion).
 CREATE TABLE Rol(
 	ID_Rol INT IDENTITY(1,1) PRIMARY KEY,
 	Nombre_Rol VARCHAR(50) NOT NULL UNIQUE,
@@ -14,13 +14,13 @@ CREATE TABLE Rol(
 )
 
 
--- Tabla: Origen — Catálogo de orígenes para gastos/u otras referencias.
+-- Tabla: Origen — Catalogo de origenes para gastos/u otras referencias.
 CREATE TABLE Origen(
     ID_Origen INT IDENTITY(1,1) PRIMARY KEY,
     Nombre_Origen VARCHAR(100) NOT NULL UNIQUE
 )
 
--- Tabla: HUESPED — Registra huéspedes (CUIL, email, nombres, apellidos, fecha de nacimiento y categoría).
+-- Tabla: Huesped — Registra huespedes (CUIL, email, nombres, apellidos, fecha de nacimiento y categoria).
 CREATE TABLE Huesped (
     ID_Huesped INT PRIMARY KEY IDENTITY(1,1),
     Cedula_Huesped VARCHAR(50) NOT NULL UNIQUE,
@@ -48,7 +48,7 @@ CREATE TABLE TipoHabitacion(
     Precio_Habitacion DECIMAL(10,2) NOT NULL CHECK (Precio_Habitacion >= 0),
     Capacidad_Habitacion INT NOT NULL CHECK (Capacidad_Habitacion > 0)
 )
--- Tabla: Habitacion — Define habitaciones (número, estado, tipo, precio y capacidad).
+-- Tabla: Habitacion — Define habitaciones (numero, estado, tipo, precio y capacidad).
 CREATE TABLE Habitacion(
     ID_Nro_Habitacion INT PRIMARY KEY,
     Estado_Habitacion BIT NOT NULL DEFAULT 1,
@@ -56,20 +56,20 @@ CREATE TABLE Habitacion(
     
 )
 
--- Tabla: MetodoPago — Lista de métodos de pago disponibles.
+-- Tabla: MetodoPago — Lista de metodos de pago disponibles.
 CREATE TABLE MetodoPago(
     ID_MetodoPago INT IDENTITY(1,1) PRIMARY KEY,
     Nombre_MetodoPago VARCHAR(50)  NOT NULL UNIQUE
 )
 
--- Tabla: Cobro — Registra cobros realizados (fecha y método de cobro).
+-- Tabla: Cobro — Registra cobros realizados (fecha y metodo de cobro).
 CREATE TABLE Cobro(
     ID_Cobro INT IDENTITY(1,1) PRIMARY KEY,
     Fecha_Cobro DATETIME NOT NULL DEFAULT GETDATE(),
     Metodo_Cobro INT FOREIGN KEY REFERENCES MetodoPago(ID_MetodoPago)
 )
 
--- Tabla: Personal — Registra al personal (CUIL, email, datos personales, fecha de contratación y rol).
+-- Tabla: Personal — Registra al personal (CUIL, email, datos personales, fecha de contratacion y rol).
 CREATE TABLE Personal(
     ID_Personal INT PRIMARY KEY IDENTITY(1,1),
     Cedula_Personal VARCHAR(50) NOT NULL UNIQUE,
@@ -92,11 +92,11 @@ CREATE TABLE Personal(
         FOREIGN KEY (ID_Rol) REFERENCES Rol(ID_Rol)
 );
 
--- Tabla: Reserva — Registra reservas (titular, habitación, fechas de check-in/out y fecha de reserva).
+-- Tabla: Reserva — Registra reservas (titular, habitacion, fechas de check-in/out y fecha de reserva).
 CREATE TABLE Reserva(
     ID_Reserva INT IDENTITY(1,1) PRIMARY KEY,
     Fecha_Reserva DATETIME NOT NULL DEFAULT GETDATE(),
-    Titular_Reserva INT NOT NULL CONSTRAINT FK_Reserva_Huesped FOREIGN KEY REFERENCES HUESPED(ID_Huesped),
+    Titular_Reserva INT NOT NULL CONSTRAINT FK_Reserva_Huesped FOREIGN KEY REFERENCES Huesped(ID_Huesped),
     ID_Habitacion INT NOT NULL CONSTRAINT FK_Reserva_Habitacion FOREIGN KEY REFERENCES Habitacion(ID_Nro_Habitacion),
     Fecha_Reserva_Inicio DATETIME NOT NULL,
     Fecha_Reserva_Fin DATETIME NOT NULL,
@@ -105,17 +105,17 @@ CREATE TABLE Reserva(
     CONSTRAINT chk_Fecha_Reserva_Fin CHECK (Fecha_Reserva_Fin > Fecha_Reserva_Inicio),
     CONSTRAINT chk_Fecha_CheckOut CHECK (Fecha_CheckOut > Fecha_CheckIn)
 );
--- Tabla: Reserva_Huesped — Relación N:N entre reservas y huéspedes (participantes en una reserva).
+-- Tabla: Reserva_Huesped — Relacion N:N entre reservas y huespedes (participantes en una reserva).
 CREATE TABLE Reserva_Huesped(
     ID_Reserva INT NOT NULL CONSTRAINT FK_ReservaHuesped_Reserva FOREIGN KEY REFERENCES Reserva(ID_Reserva),
-    ID_Huesped INT NOT NULL CONSTRAINT FK_ReservaHuesped_Huesped FOREIGN KEY REFERENCES HUESPED(ID_Huesped),
+    ID_Huesped INT NOT NULL CONSTRAINT FK_ReservaHuesped_Huesped FOREIGN KEY REFERENCES Huesped(ID_Huesped),
     PRIMARY KEY (ID_Reserva, ID_Huesped)
 );
 
--- Tabla: Proovedor — Registra proveedores (CUIL/CUIT, contacto, razón social y email).
+-- Tabla: Proovedor — Registra proveedores (CUIL/CUIT, contacto, razon social y email).
 CREATE TABLE Proveedor(
     CUIL_CUIT_Proveedor VARCHAR(15) PRIMARY KEY,
-	Razon_Social_Proveedor VARCHAR(150) NOT NULL, --Una razón social es el nombre legal/ de fantasía de una persona jurídica.
+	Razon_Social_Proveedor VARCHAR(150) NOT NULL, --Una razon social es el nombre legal/ de fantasia de una persona juridica.
     Telefono_Proveedor VARCHAR(20) NOT NULL,
     Email_Proveedor VARCHAR(100) NOT NULL UNIQUE
         CONSTRAINT chk_Email_Formato_Proveedor
@@ -125,7 +125,7 @@ CREATE TABLE Proveedor(
             AND LEN(Email_Proveedor) BETWEEN 5 AND 100)
 );   
 
--- Tabla: Producto — Catálogo de productos con precio, stock y umbral de alerta.
+-- Tabla: Producto — Catalogo de productos con precio, stock y umbral de alerta.
 CREATE TABLE Producto(
     ID_Producto INT IDENTITY(1,1) PRIMARY KEY,
     Nombre_Producto VARCHAR(100) NOT NULL UNIQUE,

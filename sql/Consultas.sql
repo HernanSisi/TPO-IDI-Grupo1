@@ -15,7 +15,7 @@ SELECT
     H.Email_Huesped,
     C.Nombre_Categoria,
     C.Descuento_Categoria
-FROM HUESPED AS H
+FROM Huesped AS H
 LEFT JOIN Categoria AS C
     ON H.ID_Categoria = C.ID_Categoria;
 
@@ -69,7 +69,7 @@ SELECT
     R.Fecha_Reserva_Inicio,
     R.Fecha_Reserva_Fin
 FROM Reserva AS R
-INNER JOIN HUESPED AS H
+INNER JOIN Huesped AS H
     ON R.Titular_Reserva = H.ID_Huesped;
 
 GO
@@ -93,7 +93,7 @@ SELECT
     H.Nombre1_Huesped,
     H.Apellido1_Huesped,
     COUNT(R.ID_Reserva) AS CantidadReservas
-FROM HUESPED AS H
+FROM Huesped AS H
 INNER JOIN Reserva AS R
     ON H.ID_Huesped = R.Titular_Reserva
 GROUP BY
@@ -135,7 +135,7 @@ SELECT
     H.Apellido1_Huesped,
     SUM(G.Importe) AS Total_Gastos_Reserva
 FROM Reserva AS R
-INNER JOIN HUESPED AS H
+INNER JOIN Huesped AS H
     ON R.Titular_Reserva = H.ID_Huesped
 INNER JOIN Gasto AS G
     ON G.ID_Reserva = R.ID_Reserva
@@ -169,7 +169,7 @@ SELECT
         END
     ) AS Total_Pendiente
 FROM Reserva AS R
-JOIN HUESPED AS H
+JOIN Huesped AS H
     ON R.Titular_Reserva = H.ID_Huesped
 JOIN Gasto AS G
     ON G.ID_Reserva = R.ID_Reserva
