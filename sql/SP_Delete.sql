@@ -52,11 +52,9 @@ BEGIN
     SET NOCOUNT ON;
 
     BEGIN TRY
-        IF NOT EXISTS (SELECT 1
-    FROM Rol
-    WHERE ID_Rol = @ID_Rol)
+        IF NOT EXISTS (SELECT 1 FROM Rol WHERE ID_Rol = @ID_Rol)
         BEGIN
-        RAISERROR('No existe un rol con ese ID.', 16, 1);
+            RAISERROR('No existe un rol con ese ID.', 16, 1);
         RETURN;
     END
 

@@ -11,7 +11,6 @@ AS
     GROUP BY pr.ID_Producto, pr.Nombre_Producto;
 GO
 
--- select * from vw_ProductosMasDemandados order by Total_Consumido desc
 -- Vista de Consumo mensual de productos (cantidad) — útil para ver tendencia de consumo
 
 CREATE VIEW vw_ConsumoMensualProducto

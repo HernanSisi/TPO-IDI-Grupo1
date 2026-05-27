@@ -27,7 +27,7 @@ BEGIN
         pp.Costo_unidad,
         Subtotal     = pp.Cantidad_Producto * pp.Costo_unidad,
         Total_Pedido = SUM(pp.Cantidad_Producto * pp.Costo_unidad) 
-                       OVER (PARTITION BY p.ID_Pedido)
+                    OVER (PARTITION BY p.ID_Pedido)
     FROM Pedido p
         INNER JOIN Proveedor pr ON pr.CUIL_CUIT_Proveedor = p.CUIL_CUIT_Proveedor
         LEFT JOIN Pedido_Producto pp ON pp.ID_Pedido = p.ID_Pedido

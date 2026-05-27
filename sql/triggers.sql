@@ -89,15 +89,15 @@ BEGIN
     -- (1) Verificar si algun producto no tiene stock suficiente
     IF EXISTS (
         SELECT 1
-    FROM (
-            SELECT Producto_Gasto AS ID_Producto, SUM(Cantidad_Producto) AS ConsumoTotal
-        FROM inserted
-        WHERE Producto_Gasto IS NOT NULL
-        GROUP BY Producto_Gasto
-        ) AS c
-        JOIN Producto p ON p.ID_Producto = c.ID_Producto
-    WHERE p.Stock_Producto < c.ConsumoTotal
-    )
+            FROM (
+                    SELECT Producto_Gasto AS ID_Producto, SUM(Cantidad_Producto) AS ConsumoTotal
+                FROM inserted
+                WHERE Producto_Gasto IS NOT NULL
+                GROUP BY Producto_Gasto
+                ) AS c
+                JOIN Producto p ON p.ID_Producto = c.ID_Producto
+            WHERE p.Stock_Producto < c.ConsumoTotal
+            )
     BEGIN
         DECLARE @EjID INT, @StockActual INT, @Requerido INT;
         SELECT TOP (1)

@@ -111,9 +111,6 @@ EXEC SP_Insert_Pedido_Producto @ID_Pedido = 8, @ID_Producto = 9, @Cantidad_Produ
 
 -- Reserva
 EXEC SP_Insert_Reserva @Titular_Reserva = 1, @ID_Habitacion = 101, @Fecha_Reserva_Inicio = '2024-11-01 15:00:00', @Fecha_Reserva_Fin = '2024-11-05 11:00:00', @Fecha_Reserva = '2024-10-25 10:30:00', @Fecha_CheckIn = '2024-11-01 15:30:00', @Fecha_CheckOut = '2024-11-05 10:45:00';
-
-
-
 EXEC SP_Insert_Reserva @Titular_Reserva = 2, @ID_Habitacion = 303, @Fecha_Reserva_Inicio = '2024-11-03 14:00:00', @Fecha_Reserva_Fin = '2024-11-08 12:00:00', @Fecha_Reserva = '2024-10-26 14:20:00', @Fecha_CheckIn = '2024-11-03 14:20:00', @Fecha_CheckOut = '2024-11-08 11:30:00';
 EXEC SP_Insert_Reserva @Titular_Reserva = 3, @ID_Habitacion = 103, @Fecha_Reserva_Inicio = '2024-11-05 16:00:00', @Fecha_Reserva_Fin = '2024-11-10 10:00:00', @Fecha_Reserva = '2024-10-27 09:15:00', @Fecha_CheckIn = '2024-11-05 16:15:00', @Fecha_CheckOut = '2024-11-10 09:50:00';
 EXEC SP_Insert_Reserva @Titular_Reserva = 4, @ID_Habitacion = 201, @Fecha_Reserva_Inicio = '2024-11-07 13:00:00', @Fecha_Reserva_Fin = '2024-11-12 11:00:00', @Fecha_Reserva = '2024-10-28 16:45:00', @Fecha_CheckIn = '2024-11-07 13:30:00', @Fecha_CheckOut = '2024-11-12 05:00:00';

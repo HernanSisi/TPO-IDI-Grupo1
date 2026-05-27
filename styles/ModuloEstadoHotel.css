@@ -1,13 +1,131 @@
-.estado-general-hotel{
+/* ══════════════════════════════════════
+   MÓDULO ESTADO DEL HOTEL - STAT CARDS
+   ══════════════════════════════════════ */
+
+/* ── Animación de entrada escalonada ── */
+@keyframes cardSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.97);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* ── Grid de tarjetas ── */
+.estado-general-hotel {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     gap: 1rem;
 }
-.estado-hotel-slot{
-    background-color: rgb(1, 91, 1);
+
+/* ── Tarjeta base ── */
+.estado-hotel-slot {
+    position: relative;
     color: white;
-    font-weight: bold;
-    height: 11rem;
-    border-radius: 1rem;
-    padding: 0.5rem;
+    font-weight: 600;
+    min-height: 10rem;
+    border-radius: 16px;
+    padding: 1.4rem 1.2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
+    transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    animation: cardSlideUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* ── Delay escalonado para cada card ── */
+.estado-hotel-slot:nth-child(1) { animation-delay: 0.05s; }
+.estado-hotel-slot:nth-child(2) { animation-delay: 0.12s; }
+.estado-hotel-slot:nth-child(3) { animation-delay: 0.19s; }
+.estado-hotel-slot:nth-child(4) { animation-delay: 0.26s; }
+.estado-hotel-slot:nth-child(5) { animation-delay: 0.33s; }
+.estado-hotel-slot:nth-child(6) { animation-delay: 0.40s; }
+.estado-hotel-slot:nth-child(7) { animation-delay: 0.47s; }
+.estado-hotel-slot:nth-child(8) { animation-delay: 0.54s; }
+
+/* ── Elemento decorativo circular de fondo ── */
+.estado-hotel-slot::before {
+    content: '';
+    position: absolute;
+    top: -30%;
+    right: -20%;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.08);
+    pointer-events: none;
+}
+
+.estado-hotel-slot::after {
+    content: '';
+    position: absolute;
+    bottom: -15%;
+    left: -10%;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.05);
+    pointer-events: none;
+}
+
+/* ── Hover Premium ── */
+.estado-hotel-slot:hover {
+    transform: translateY(-6px) scale(1.02);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+}
+
+/* ── Gradientes individuales por tarjeta ── */
+#estado-hotel-1 {
+    background: linear-gradient(135deg, #0d7a3e 0%, #15a856 100%);
+}
+#estado-hotel-2 {
+    background: linear-gradient(135deg, #1a5276 0%, #2980b9 100%);
+}
+#estado-hotel-3 {
+    background: linear-gradient(135deg, #7d3c98 0%, #a569bd 100%);
+}
+#estado-hotel-4 {
+    background: linear-gradient(135deg, #c0392b 0%, #e74c3c 100%);
+}
+#estado-hotel-5 {
+    background: linear-gradient(135deg, #b8860b 0%, #d4a853 100%);
+}
+#estado-hotel-6 {
+    background: linear-gradient(135deg, #1a6e5e 0%, #1abc9c 100%);
+}
+#estado-hotel-7 {
+    background: linear-gradient(135deg, #2c3e6b 0%, #3d5a99 100%);
+}
+#estado-hotel-8 {
+    background: linear-gradient(135deg, #6c3461 0%, #9b59b6 100%);
+}
+
+/* ── Tipografía de las tarjetas ── */
+.estado-hotel-slot-titulo {
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    opacity: 0.85;
+    line-height: 1.3;
+}
+
+.estado-hotel-slot-dato {
+    font-size: 2.4rem;
+    font-weight: 700;
+    line-height: 1;
+    margin-top: auto;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* ── Iconos decorativos (pseudo-elementos) ── */
+.estado-hotel-slot-icon {
+    font-size: 1.8rem;
+    opacity: 0.7;
+    margin-bottom: 0.3rem;
 }
